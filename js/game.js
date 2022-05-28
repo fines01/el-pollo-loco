@@ -14,8 +14,8 @@ function init() {
 }
 
 // handle keypresses (class Keyboard?)
-window.addEventListener('keydown', (event) => {
-    console.log(event.key, event.code);
-    let keys = [];
-})
+// window.addEventListener('keydown', (event) => {
+//     console.log(event.key, event.code);
+//     let keys = [];
+// })
 

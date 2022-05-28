@@ -5,13 +5,8 @@ class MovableObject extends DrawableObject {
     acceleration = 2;
     currentImage = 0;
     isReversed_x = false;
-    groundLevel_y = canvasHeight - this.height - 45; //TEST 45px geschätzt
+    groundLevel_y = canvasHeight - this.height - 45; //TEST 45px ca.
     energy = 100; // energy reserve
-
-
-    // constructor(){
-    //     super();
-    // }
 
     playAnimation(images){
         setInterval( () => {
@@ -20,11 +15,11 @@ class MovableObject extends DrawableObject {
             this.img = this.imgCache[imgPath];
             //console.log(this.imgCache);
             this.currentImage++;
-        }, this.speedX * 350);
+        }, 90 / this.speedX); // 
     }
 
     applyGravity() {
-        if (this.isAboveGround(this.initialY) || this.speedY > 0) { // 110: initial y of jew object
+        if (this.isAboveGround(this.initialY) || this.speedY > 0) { // 110: initial y of resp object
             this.y -= this.speedY;
             this.speedY -= this.acceleration;
         } else { // um Ungenauigkeiten zu vermeiden. (sonst ev. zu viel zu y angerechnet in letztem Schleifendurchlauf. Gibt auch noch eine Art "Federung" durch die Korrektur).

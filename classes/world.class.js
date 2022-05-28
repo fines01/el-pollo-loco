@@ -7,6 +7,8 @@ class World {
     //level = level1;
 
     enemies = [ new Chicken(), new Chicken(), new Chicken() ];
+    character = new Pepe();
+    keyboard = new Keyboard();
 
     backgroundObjects = [
         new Cloud('img/5.Fondo/Capas/4.nubes/1.png',0),
@@ -39,7 +41,7 @@ class World {
         // 'Kamera-Ausschnitt' verschieben (Verschiebt Koordinatensystem/ Position an der 'gezeichnet' wird)
         //this.ctx.translate(this.camera_x, 0);
 
-        this.addToMap(...this.backgroundObjects, ...this.enemies);
+        this.addToMap(...this.backgroundObjects, ...this.enemies, this.character);
 
         // 'Kamera-Ausschnitt' zurückverschieben
         //this.ctx.translate(-this.camera_x, 0);
@@ -51,12 +53,12 @@ class World {
         });
     }
 
-    addToMap(...movableObjects){
-        for(let i = 0; i < movableObjects.length; i++){
-            movableObjects[i].drawObject(this.ctx);
+    addToMap(...objects){
+        for(let i = 0; i < objects.length; i++){
+            objects[i].drawObject(this.ctx);
         }
     }
-    // into one function via spread operator
+    // into one function via spread operator?
     addObjectsToMap(objects){
         objects.forEach( o => {
             this.addToMap(o);

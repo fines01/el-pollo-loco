@@ -2,12 +2,13 @@ class Pepe extends MovableObject {
 
     x = 100;
     y = 135;
-    groundLevel_y = 135; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
-    heiht = 300;
+    //groundLevel_y = 135; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
+    height = 300;
     width = 150;
     sound_walking = new Audio('audio/step1.mp3');
     speedX = 1.5;
 
+    keyboard = new Keyboard();
     world;
 
     IMAGES_WALKING = 
@@ -54,11 +55,16 @@ class Pepe extends MovableObject {
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
-        this.animate();
-        this.applyGravity(); // TEST
+        // this.animate();
+        // this.applyGravity(); // TEST
     }
 
-    animate(){}
+    animate(){
+        // pepe walking animation
+        if(this.keyboard.RIGHT || this.keyboard.LEFT){
+            this.playAnimation(this.IMAGES_WALKING);
+        }
+    }
 
     move(){}
 }
