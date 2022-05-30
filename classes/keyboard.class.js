@@ -13,16 +13,22 @@ class Keyboard {
     
     handleKeypress(){
 
-        let codes = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space', 'KeyD' ];
+        // const keys = [ {'key': this.LEFT, 'code': 'ArrowLeft'}, {'key': this.RIGHT, 'code': 'ArrowRight'}, {'key': this.UP, 'code': 'ArrowUp'}, {'key': this.DOWN, 'code': 'ArrowDown'}, {'key': this.SPACE, 'code': 'Space'}, {'key': this.D, 'code': 'KeyD'}];
 
         window.addEventListener('keydown', (event) => {
-            
             //console.log(event.key, event.code);
+
+            // this.keys.forEach((k) => {
+            //     if(event.code == k.code){
+            //         k.key = true;
+            //     }
+            // });
+            // console.log(this, keys);
 
             switch (event.code) {
                 case 'ArrowRight':
                     this.RIGHT = true;
-                    console.log('this:', this);
+                    //console.log('this:', this);
                     break;
                 case 'ArrowLeft':
                     this.LEFT = true;
@@ -48,7 +54,7 @@ class Keyboard {
             switch (event.code) {
                 case 'ArrowRight':
                     this.RIGHT = false;
-                    console.log(this);
+                    //console.log(this);
                     break;
                 case 'ArrowLeft':
                     this.LEFT = false;

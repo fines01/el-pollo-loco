@@ -21,11 +21,11 @@ class Chicken extends MovableObject {
     }
 
     animateChicken() {
-        // setInterval( () => {
+        setInterval(() => {
             this.playAnimation(this.IMAGES_WALKING);
-        // }, 150);
+        }, 90 / this.speedX); // 
         this.move();
-        console.log(this.speedX);
+        console.log('chicken start:',this.x, 'speed:',this.speedX);
     }
         
     move(){

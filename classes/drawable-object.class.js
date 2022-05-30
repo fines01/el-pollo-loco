@@ -6,6 +6,7 @@ class DrawableObject {
     width;
     height;
     imgCache = [];
+    // world;
 
 
     loadImage(imgPath){
