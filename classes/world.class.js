@@ -7,7 +7,7 @@ class World {
     //level = level1;
     levelEnd_x = 2*canvasWidth; //in level1
 
-    enemies = [ new Chicken(), new Chicken(), new Chicken() ];
+    enemies = [ new Chicken(),  ];
     character = new Pepe();
     keyboard = new Keyboard();
     // TEST:
@@ -35,7 +35,7 @@ class World {
         this.ctx = this.canvas.getContext('2d');
         this.draw();
         this.setWorld(); // set/connect world w movable object
-
+        this.run();
     }
 
     setWorld(){
@@ -71,6 +71,7 @@ class World {
                 this.flipImage(objects[i]);
             }
             objects[i].drawObject(this.ctx);
+            objects[i].drawFrame(this.ctx);
             // if isReversed: wieder resetten, dh Spiegelung wieder rückgängig machen nach draw()
             if (objects[i].isReversed_x) {
                 this.flipImageBack(objects[i]);
@@ -97,5 +98,45 @@ class World {
     flipImageBack(obj){
         obj.x = obj.x * -1;
         this.ctx.restore();
+    }
+
+    checkCollisions(){
+        this.enemies.forEach((enemy) => {
+        
+            if (this.character.isCollidingVertically(enemy)) {
+                this.character.receivePoint();               
+                console.log('CRASH Y: ');
+            }
+            else if (this.character.isCollidingHorizonatlly(enemy)) {
+                this.character.receiveHit();
+                console.log('CRASH X-energy left:', this.character.energy); // Todo (maybe): for each enemy - only count one collision
+            }
+            
+        });
+
+        // let collided = false;
+        // for (let i = 0; i < this.enemies.length; i++ ){
+        //     let enemy = this.enemies[i];
+        //     if( !collided && this.character.isCollidingHorizonatlly(enemy)){
+        //         collided = true;
+        //         console.log('CRASH X: ');
+        //         if(collided){ break; }
+        //     }
+        // }
+
+        // let self=this;
+        // requestAnimationFrame( ()=>{
+        //     self.checkCollisions();
+        // });
+    }
+
+    run(){
+
+        this.checkCollisions();
+
+        let self = this;
+        requestAnimationFrame(() => {
+            self.run();
+        });
     }
 }

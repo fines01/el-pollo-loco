@@ -25,7 +25,7 @@ class Chicken extends MovableObject {
             this.playAnimation(this.IMAGES_WALKING);
         }, 90 / this.speedX); // 
         this.move();
-        console.log('chicken start:',this.x, 'speed:',this.speedX);
+        //console.log('chicken start:',this.x, 'speed:',this.speedX);
     }
         
     move(){

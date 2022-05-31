@@ -9,9 +9,6 @@ class Pepe extends MovableObject {
     speedY = 0;
     speedX = 6;//1.5;
 
-    // keyboard = new Keyboard();
-    world; //
-
     IMAGES_WALKING = 
     [
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/2.Secuencia_caminata/W-21.png',
@@ -47,7 +44,7 @@ class Pepe extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-54.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-55.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-56.png',
-        'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-57.png',
+        //'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-57.png',
     ];
 
     constructor() {
@@ -76,8 +73,17 @@ class Pepe extends MovableObject {
 
         setInterval(() => {
 
+            if(this.isDead()){
+                this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
+                // gameOver();
+            }
+
+            else if(this.isHurt()){
+                this.playAnimation(this.IMAGES_HURT);
+            }
+
             // pepe jumping animation
-            if(this.isAboveGround()) {
+            else if(this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
                 //this.jump();
             }
@@ -96,7 +102,6 @@ class Pepe extends MovableObject {
 
         if(this.isJumping()){
             this.jump();
-            
         }
 
         if(this.keyboard.RIGHT){
