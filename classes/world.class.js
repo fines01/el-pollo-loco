@@ -7,11 +7,16 @@ class World {
     //level = level1;
     levelEnd_x = 2*canvasWidth; //in level1
 
-    enemies = [ new Chicken(),  ];
+    enemies = [ 
+        //new Chicken(), 
+        //new Chicken(),
+        new Chicken(),
+        new Endboss()
+    ];
     character = new Pepe();
     keyboard = new Keyboard();
-    // TEST:
-    movableObject = new MovableObject(); // to connect World with MovableObject ???
+
+    statusbar = new StatusBar();
 
     backgroundObjects = [
         new Cloud('img/5.Fondo/Capas/4.nubes/1.png',0),
@@ -51,6 +56,12 @@ class World {
         this.ctx.translate(this.camera_x, 0); // translate(x,y) verändert Position des Canvas
 
         this.addToMap(...this.backgroundObjects, ...this.enemies, this.character);
+
+        // Objects that should stay in place:
+        this.ctx.translate(-this.camera_x,0);
+        this.addToMap(this.statusbar);
+        this.ctx.translate(this.camera_x,0);
+        // End Objects that should stay in place
 
         //'Kameraauschnitt' zurückverschieben
         this.ctx.translate(- this.camera_x, 0);
@@ -105,11 +116,12 @@ class World {
         
             if (this.character.isCollidingVertically(enemy)) {
                 this.character.receivePoint();               
-                console.log('CRASH Y: ');
+                console.log('CRASH-Y: ');
             }
             else if (this.character.isCollidingHorizonatlly(enemy)) {
                 this.character.receiveHit();
-                console.log('CRASH X-energy left:', this.character.energy); // Todo (maybe): for each enemy - only count one collision
+                this.statusbar.setPercentage(this.character.energy);
+                console.log('CRASH-X, energy left:', this.character.energy); // Todo (maybe): for each enemy - only count one collision
             }
             
         });
