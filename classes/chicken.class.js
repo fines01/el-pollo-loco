@@ -9,14 +9,21 @@ class Chicken extends MovableObject {
          'img/3.Secuencias_Enemy_b sico/Versi¢n_Gallinita (estas salen por orden de la gallina gigantona)/3.Ga_paso izquierdo.png',
     ];
 
+    IMAGE_DEAD = [
+        'img/3.Secuencias_Enemy_b sico/Versi¢n_Gallinita (estas salen por orden de la gallina gigantona)/4.G_muerte.png'
+    ];
+
     // speedX = 0.3;
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.x = 200 + Math.random() * 1040; // * levelEnd_x  - 200
         this.y = 340 - Math.random() * 9; 
-        this.speedX = 0.2 + Math.random() * 0.45;
+        this.groundLevel_y = this.y;
+        this.speedX = 0.5 + Math.random() * 0.45;
         this.loadImages(this.IMAGES_WALKING);
+        this.jumpHeight = Math.random() * 6;
+        this.applyGravity();
         this.animateChicken();
     }
 
@@ -30,6 +37,7 @@ class Chicken extends MovableObject {
         
     move(){
         this.moveLeft();
+        this.randomBounce();
         (this.x < 0 - this.width) && (this.x = 2 * canvasWidth); //move back into frame 2 ^⁼= amount of canvas-lengths for bgs
         let self = this;
         requestAnimationFrame( () => {

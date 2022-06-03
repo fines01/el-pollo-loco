@@ -6,8 +6,13 @@ class Pepe extends MovableObject {
     height = 300;
     width = 150;
     sound_walking = new Audio('audio/step1.mp3');
-    speedY = 0;
+    //speedY = 0;
     speedX = 6;//1.5;
+    jumpHeight = 25;
+
+    IMAGES_IDLE = [];
+    IMAGES_SLEEPING = [];
+    IMAGES_ANGRY = []; //zusammenstellen
 
     IMAGES_WALKING = 
     [
@@ -59,16 +64,6 @@ class Pepe extends MovableObject {
         this.move();
     }
 
-    // checkKeypress(){
-    //     let self = this;
-    //     requestAnimationFrame( () => {
-    //         if( self.isWalking() ){
-    //             self.startAnimation(); // just start animation...
-    //         } else{ stopAnimation() }
-    //         self.checkKeypress();
-    //     })
-    // }
-
     animate(){
 
         setInterval(() => {
@@ -107,13 +102,13 @@ class Pepe extends MovableObject {
         if(this.keyboard.RIGHT){
             this.moveRight();
             this.isReversed_x = false;
-            (this.x + this.width > this.world.levelEnd_x) && (this.x = 100); // TEMPORARY(?) for testing: move back into frame
+            (this.x + this.width > this.world.level.levelEnd_x) && (this.x = 100); // TEMPORARY(?) for testing: move back into frame
         }
 
         if(this.keyboard.LEFT) {
             this.moveLeft();
             this.isReversed_x = true;
-            (this.x - this.width < 0 - this.width) && (this.x = this.world.levelEnd_x - this.width - 100); // TEMPORARY(?): move back into frame
+            (this.x - this.width < 0 - this.width) && (this.x = this.world.level.levelEnd_x - this.width - 100); // TEMPORARY(?): move back into frame
         }
 
         // if(this.isWalkingRight()){

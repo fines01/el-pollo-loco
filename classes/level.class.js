@@ -1,16 +1,17 @@
 class Level {
     
-    character;
+    //character;
     enemies;
     backgroundObjects;
+    collectibles;
     levelEnd_x;
-    world;
 
-    constructor(character,enemies,bgo,endX){
-        this.character = character;
+    constructor(enemies,bgo, endX){
+        //this.character = character;
         this.enemies = enemies;
         this.backgroundObjects = bgo;
+        //this.collectibles = collectibles;
         this.levelEnd_x = endX;
-        console.log('level:', this);
     }
+
 }

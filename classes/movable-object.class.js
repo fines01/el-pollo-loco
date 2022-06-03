@@ -2,6 +2,7 @@ class MovableObject extends DrawableObject {
 
     speedX;
     speedY = 0;
+    jumpHeight = 25; 
     acceleration = 2;
     currentImage = 0;
     isReversed_x = false;
@@ -55,11 +56,16 @@ class MovableObject extends DrawableObject {
     }
 
     jump() {
-        this.speedY = 23;
+        this.speedY = this.jumpHeight;
     }
     
+    randomBounce() { // bounce left
+        Math.random() < 0.3 && !this.isAboveGround() && this.jump();
+        Math.random() < 0.4 && this.moveLeft(); // makes it a bit more dynamic? maybe? (if moving left at all)
+    }
+
     isWalkingRight() {
-        return (this.keyboard.RIGHT && this.x < this.world.levelEnd_x);
+        return (this.keyboard.RIGHT && this.x < this.world.level.levelEnd_x);
     }
 
     isWalkingLeft() {
@@ -74,7 +80,7 @@ class MovableObject extends DrawableObject {
         return this.y < this.groundLevel_y;
     }
     
-    // Todo: improve collision-detecting functions 
+    // Todo: improve collision-detecting functions!! 
     isCollidingHorizonatlly(object) { // or 'isCollidingX()'? // !!attention: some pictures are a bit bigger than the chracter (Pepe pic much higher and bit wider)
         return ( this.x + this.width > object.x
             && this.x < object.x + object.width 
@@ -83,9 +89,9 @@ class MovableObject extends DrawableObject {
             && !this.isAboveGround()
             && !this.isHurt());
             // && this.x < object.x 
-        }
+    }
 
-    isCollidingVertically(object) { // or isCollidingY ?
+    isCollidingVertically(object) { 
         return (this.x + this.width > object.x
             && this.x < object.x + object.width
             && this.y + this.height > object.y 

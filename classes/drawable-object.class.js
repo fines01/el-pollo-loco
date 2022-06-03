@@ -26,7 +26,7 @@ class DrawableObject {
 
     drawFrame(ctx){
         // in case of character or enemy: draw a frame around images for illustration/testing purposes for collision-detection functionalities etc.
-        if(this instanceof Pepe || this instanceof Chicken){
+        if(this instanceof Pepe || this instanceof Chicken || this instanceof Chick || this instanceof Coin){
             ctx.beginPath();
             ctx.lineswidth = '3.5';
             ctx.strokeStyle = 'yellow';

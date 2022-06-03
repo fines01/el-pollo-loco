@@ -1,10 +1,12 @@
 // get css variables
 // remove string 'px' and keep only the numeric values
 // GN only inline setting of width and height in js?
+
 const root = document.documentElement;
 const canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '');
 const canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '');
-let world, keyboard;
+
+let world;
 
 function init() {
     // get an instance of the CanvasRenderingContext2D interface (provides 2d rendering context for the canvas element)

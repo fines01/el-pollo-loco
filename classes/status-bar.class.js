@@ -9,12 +9,30 @@ class StatusBar extends DrawableObject {
         'img/7.Marcadores/Barra/Marcador vida/azul/100_.png',
     ];
 
+    IMAGES_COINS = [
+        'img/7.Marcadores/Barra/Marcador moneda/Naranja/0_.png',
+        'img/7.Marcadores/Barra/Marcador moneda/Naranja/20_.png',
+        'img/7.Marcadores/Barra/Marcador moneda/Naranja/40_.png',
+        'img/7.Marcadores/Barra/Marcador moneda/Naranja/60_.png',
+        'img/7.Marcadores/Barra/Marcador moneda/Naranja/80_.png',
+        'img/7.Marcadores/Barra/Marcador moneda/Naranja/100_.png',
+    ];
+
+    IMAGES_BOTTLES = [
+        'img/7.Marcadores/Barra/Marcador_botella/Verde/0_.png',
+        'img/7.Marcadores/Barra/Marcador_botella/Verde/20_.png',
+        'img/7.Marcadores/Barra/Marcador_botella/Verde/40_.png',
+        'img/7.Marcadores/Barra/Marcador_botella/Verde/60_.png',
+        'img/7.Marcadores/Barra/Marcador_botella/Verde/80_.png',
+        'img/7.Marcadores/Barra/Marcador_botella/Verde/100_.png',
+    ]
+
     // life/energy - statusbar:
     percentage;
     x = 10;
     y = 0;
-    height = 45;
-    width = 200;
+    height = 40;
+    width = 180;
 
     constructor() {
         super();

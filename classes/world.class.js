@@ -4,48 +4,29 @@ class World {
     canvas;
     ctx;
     camera_x = 0;
-    //level = level1;
-    levelEnd_x = 2*canvasWidth; //in level1
-
-    enemies = [ 
-        //new Chicken(), 
-        //new Chicken(),
-        new Chicken(),
-        new Endboss()
-    ];
-    character = new Pepe();
-    keyboard = new Keyboard();
-
+    //keyboard = new Keyboard();//in mo
     statusbar = new StatusBar();
+    character = new Pepe(); // in level: gn
+    level = level1;
 
-    backgroundObjects = [
-        new Cloud('img/5.Fondo/Capas/4.nubes/1.png',0),
-        //new BackgroundObject('img/5.Fondo/Capas/5.cielo_1920-1080px.png', 0),
-        new BackgroundObject('img/5.Fondo/Capas/3.Fondo3/1.png', 0),
-        new BackgroundObject('img/5.Fondo/Capas/2.Fondo2/1.png', 0),
-        new BackgroundObject('img/5.Fondo/Capas/1.suelo-fondo1/1.png',0),
-        // 720
-        new Cloud('img/5.Fondo/Capas/4.nubes/2.png', 720),
-        new BackgroundObject('img/5.Fondo/Capas/3.Fondo3/2.png', 720),
-        new BackgroundObject('img/5.Fondo/Capas/2.Fondo2/2.png', 720),
-        new BackgroundObject('img/5.Fondo/Capas/1.suelo-fondo1/2.png', 720),
-
-        new Cloud('img/5.Fondo/Capas/4.nubes/1.png', 1440),
-        // new Cloud('img/5.Fondo/Capas/4.nubes/1.png', 0),
-        // wieder wh mit 720 * 2 etc. --> besser lösen/wh
-    ]; // into level --> level1
+    coins = [
+        new Coin(),
+        new Coin(),
+        new Coin(),
+    ];
 
     constructor(){
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
+        //this.character = setCharacter() (zB?)
         this.draw();
         this.setWorld(); // set/connect world w movable object
         this.run();
     }
 
     setWorld(){
-        //this.movableObject.world = this; // connect World with MO Class, st that properties like camera_x are available there ????? TEST
         this.character.world = this;
+        //this.level.character.world = this;
     }
 
     draw() {
@@ -55,7 +36,7 @@ class World {
         // 'Kamera-Ausschnitt' verschieben (Verschiebt Koordinatensystem/ Position an der 'gezeichnet' wird)
         this.ctx.translate(this.camera_x, 0); // translate(x,y) verändert Position des Canvas
 
-        this.addToMap(...this.backgroundObjects, ...this.enemies, this.character);
+        this.addToMap(...this.level.backgroundObjects, ...this.level.enemies, ...this.coins, this.character);
 
         // Objects that should stay in place:
         this.ctx.translate(-this.camera_x,0);
@@ -112,16 +93,16 @@ class World {
     }
 
     checkCollisions(){
-        this.enemies.forEach((enemy) => {
+        this.level.enemies.forEach((enemy) => {
         
             if (this.character.isCollidingVertically(enemy)) {
                 this.character.receivePoint();               
-                console.log('CRASH-Y: ');
+                //console.log('CRASH-Y: ', this.character.energy);
             }
             else if (this.character.isCollidingHorizonatlly(enemy)) {
                 this.character.receiveHit();
                 this.statusbar.setPercentage(this.character.energy);
-                console.log('CRASH-X, energy left:', this.character.energy); // Todo (maybe): for each enemy - only count one collision
+                //console.log('CRASH-X, energy left:', this.level.character.energy); // Todo (maybe): for each enemy - only count one collision
             }
             
         });
