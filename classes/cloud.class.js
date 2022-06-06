@@ -9,6 +9,7 @@ class Cloud extends BackgroundObject {
     constructor(imgPath, x){
         super().loadImage(imgPath);
         this.x = x;
+        this.speedX = 0.09 + Math.random() * 0.11;
         //this.x = 200 + Math.random() * 500; // random number between 200 & 700
         //this.x = Math.random() * 1440; // 0r between 0 - 1440
         this.animate(); // or move()
@@ -17,7 +18,7 @@ class Cloud extends BackgroundObject {
     animate() {
 
         this.moveLeft();
-        (this.x < 0 - this.width) && (this.x = 2 * canvasWidth); //move back into frame 2 ^⁼= amount of canvas-lengths for bgs
+        (this.x < 0 - this.width) && (this.x = world.level.levelEnd_x); //move back into frame 2 ^⁼= amount of canvas-lengths for bgs
 
         let self = this;
         requestAnimationFrame( () => {

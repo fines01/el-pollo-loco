@@ -36,7 +36,7 @@ class World {
         // 'Kamera-Ausschnitt' verschieben (Verschiebt Koordinatensystem/ Position an der 'gezeichnet' wird)
         this.ctx.translate(this.camera_x, 0); // translate(x,y) verändert Position des Canvas
 
-        this.addToMap(...this.level.backgroundObjects, ...this.level.enemies, ...this.coins, this.character);
+        this.addToMap(...this.level.backgroundObjects, ...this.coins, ...this.level.enemies, this.character);
 
         // Objects that should stay in place:
         this.ctx.translate(-this.camera_x,0);

@@ -20,9 +20,9 @@ class Chicken extends MovableObject {
         this.x = 200 + Math.random() * 1040; // * levelEnd_x  - 200
         this.y = 340 - Math.random() * 9; 
         this.groundLevel_y = this.y;
-        this.speedX = 0.5 + Math.random() * 0.45;
+        this.speedX = 1 + Math.random() * 0.5;
         this.loadImages(this.IMAGES_WALKING);
-        this.jumpHeight = Math.random() * 6;
+        this.jumpHeight = Math.random() * 5;
         this.applyGravity();
         this.animateChicken();
     }

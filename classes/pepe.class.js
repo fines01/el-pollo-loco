@@ -8,7 +8,7 @@ class Pepe extends MovableObject {
     sound_walking = new Audio('audio/step1.mp3');
     //speedY = 0;
     speedX = 6;//1.5;
-    jumpHeight = 25;
+    jumpHeight = 28;
 
     IMAGES_IDLE = [];
     IMAGES_SLEEPING = [];
@@ -103,12 +103,14 @@ class Pepe extends MovableObject {
             this.moveRight();
             this.isReversed_x = false;
             (this.x + this.width > this.world.level.levelEnd_x) && (this.x = 100); // TEMPORARY(?) for testing: move back into frame
+            // (this.x + this.width > this.world.level.levelEnd_x) && (this.x = world.level.levelEnd_x); // don't move out of range
         }
 
         if(this.keyboard.LEFT) {
             this.moveLeft();
             this.isReversed_x = true;
             (this.x - this.width < 0 - this.width) && (this.x = this.world.level.levelEnd_x - this.width - 100); // TEMPORARY(?): move back into frame
+            // (this.x - this.width < 0 - this.width) && (this.x = 0); 
         }
 
         // if(this.isWalkingRight()){

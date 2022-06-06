@@ -18,8 +18,8 @@ class Chick extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.x = 300 + Math.random() * 1040;
         this.y = this.groundLevel_y;
-        this.speedX = 2 + Math.random() * 0.45;
-        this.jumpHeight = Math.random() * 20;
+        this.speedX = 0.75 + Math.random() * 0.45;
+        this.jumpHeight = Math.random() * 22;
         this.applyGravity();
         this.animateChick();
     }

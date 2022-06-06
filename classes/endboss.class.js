@@ -18,20 +18,34 @@ class Gallina extends MovableObject { // or Gallina
         'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/2.Ateci¢n-ataque/1.Alerta/G12.png',
     ];
 
-    IMAGES_WALKING = [];
+    IMAGES_WALKING = [
+        'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/1.Caminata/G1.png',
+        'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/1.Caminata/G2.png',
+        'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/1.Caminata/G3.png',
+        'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/1.Caminata/G4.png',
+    ];
+
+    IMAGES_ATTACKING = [];
     IMAGES_HURT = [];
     IMAGES_DYING = [];
 
     constructor() {
         super().loadImage(this.IMAGES_ALERT[0]);
         this.loadImages(this.IMAGES_ALERT);
+        this.loadImages(this.IMAGES_WALKING);
         //this.speed = 0.15 + Math.random() * 0.45; // maybe pass & increase with Level?
         this.animate();
     }
 
     animate() {
         setInterval( ()=>{
-            this.playAnimation(this.IMAGES_ALERT);
+
+            if (this.keyboard.RIGHT || this.keyboard.LEFT){
+                this.playAnimation(this.IMAGES_WALKING);
+            }
+            else {
+                this.playAnimation(this.IMAGES_ALERT);
+            }
         }, 200)
     }
 }
