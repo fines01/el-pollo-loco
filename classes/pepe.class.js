@@ -113,19 +113,6 @@ class Pepe extends MovableObject {
             // (this.x - this.width < 0 - this.width) && (this.x = 0); 
         }
 
-        // if(this.isWalkingRight()){
-        //     this.moveRight();
-        //     this.isReversed_x = false;
-        // }
-
-        // if(this.isWalkingLeft()){
-        //     this.moveLeft();
-        //     (this.x + 100 < 0 - this.width) && (this.x = 2 * canvasWidth + 100); //move back into frame 2 ^⁼= amount of canvas-lengths for bgs
-        //     this.isReversed_x = true;
-        // }
-
-        //this.world.camera_x = -this.x + 100; // hier GN???
-
         let self = this;
         requestAnimationFrame( ()=>{
             self.world.camera_x = -this.x + 100;

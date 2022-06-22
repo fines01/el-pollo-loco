@@ -1,6 +1,5 @@
 class World {
 
-    //canvas = document.getElementById('canvas');
     canvas;
     ctx;
     camera_x = 0;
@@ -15,6 +14,9 @@ class World {
         new Coin(),
         new Coin(),
     ];
+    score = 0;
+    gameOver = false;
+   // animationFps = 20;
 
     constructor(){
         this.canvas = document.getElementById('canvas');
@@ -94,24 +96,37 @@ class World {
     }
 
     checkCollisions(){
+        // check enemy collisions
         this.level.enemies.forEach((enemy) => {
-        
-            if (this.character.isCollidingVertically(enemy)) {
-                this.character.receivePoint();               
-                //console.log('CRASH-Y: ', this.character.energy);
+            if (this.character.isJumpingOn(enemy)) {
+                this.score++;
+                this.character.receiveEnergy(); // renamed receivePoint()
+                enemy.receiveHit();
+               // enemy.markedForDeletion = true;             
             }
-            else if (this.character.isCollidingHorizonatlly(enemy)) {
+            else if (this.character.isColliding(enemy, 0.25) && !this.character.isHurt()) {
                 this.character.receiveHit();
                 this.statusbar.setPercentage(this.character.energy);
-                //console.log('CRASH-X, energy left:', this.level.character.energy); // Todo (maybe): for each enemy - only count one collision
             }
-            
+        // check collectible objects-collisions
+        this.coins.forEach(coin => {
+            if (this.character.isColliding(coin, 0.5)) { // correction-value of 0.5 because coin-img is bigger than actual coin
+                this.score++; //or life?
+                coin.markedForDeletion = true;
+                console.log('score: ', this.score);
+            }
+        })
+        this.coins = this.coins.filter( coin => !coin.markedForDeletion); 
+        this.level.enemies = this.level.enemies.filter( enemy => !enemy.markedForDeletion);
         });
     }
 
         checkThrowObjects() {
-            if(this.character.keyboard.D) {
-                let bottle = new ThrowableObject(this.character.x + this.character.width * 0.5, this.character.y + 115);
+            if(this.character.keyboard.D && !this.character.isHurt()) { //
+                let bottleX;
+                if (this.character.isReversed_x) bottleX = this.character.x ;
+                else bottleX = this.character.x + this.character.width * 0.5;
+                let bottle = new ThrowableObject(bottleX, this.character.y + 115);
                 this.throwableObjects.push(bottle);
             }
         }

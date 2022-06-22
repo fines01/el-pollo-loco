@@ -34,13 +34,14 @@ class MovableObject extends DrawableObject {
     applyGravity() {
 
         setInterval( ()=>{
-
+            
             if (this.isAboveGround() || this.speedY > 0) { 
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             } 
             else {  
                 this.y = this.groundLevelY;
+                this.speedY = 0;
             }
 
         }, 1000/25);
@@ -76,37 +77,48 @@ class MovableObject extends DrawableObject {
         return (this.keyboard.UP || this.keyboard.SPACE) && !this.isAboveGround();
     }
 
+    isFalling() {
+        return (this.speedY < 0);
+    }
+
     isAboveGround(){
         return this.y < this.groundLevelY;
     }
+
+    isColliding(object, correction = 0) { // second parameter: optional (estimated) correction factor, as some img files are bigger than actual image
+        let objectX = object.x + object.width * correction;
+        let objectY = object.y + object.height * correction;
+        let objectWidth = object.width - object.width * correction;
+        let objectHeight = object.height - object.height * correction;
+        // Na toll pepe bild ist auch zu hoch        
+        return (
+        //horizontal collision
+        objectX  < this.x + this.width &&
+        objectX  + objectWidth  > this.x &&
+        //vertical collision
+        objectY  < this.y + this.height &&
+        objectY  + objectHeight  > this.y
+        )
+    }
+
+    isJumpingOn(object) {
+        return ( 
+            this.isColliding(object, 0.5) &&
+            this.isFalling() &&
+            //this.y + this.height == object.y
+            this.y + this.height >= object.y + object.height * 0.25
+        );
+    }
     
-    // Todo: improve collision-detecting functions!! 
-    isCollidingHorizonatlly(object) { // or 'isCollidingX()'? // !!attention: some pictures are a bit bigger than the chracter (Pepe pic much higher and bit wider)
-        return ( this.x + this.width > object.x
-            && this.x < object.x + object.width 
-            && this.y + this.height > object.y + object.height*0.25
-            //&& !object.isDead()
-            && !this.isAboveGround()
-            && !this.isHurt());
-            // && this.x < object.x 
-    }
-
-    isCollidingVertically(object) { 
-        return (this.x + this.width > object.x
-            && this.x < object.x + object.width
-            && this.y + this.height > object.y 
-            && this.y + this.height < object.y + object.height*0.25);
-    }
-
     receiveHit(){
         this.energy -= 2;
         (this.energy < 0) && (this.energy = 0);
         (this.energy > 0) && (this.lastHit = new Date().getTime() ); // Timestamp: ms since 1.1.1970
     }
 
-    receivePoint(){
+    receiveEnergy(){
         this.energy += 2;
-        (this.energy > 100) && (this.energy = 100 );
+        if (this.energy > 100) this.energy = 100;
     }
     
     isHurt(){

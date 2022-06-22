@@ -3,6 +3,7 @@ class ThrowableObject extends MovableObject {
     width = 100; //60
     height = 100; // 50
     groundLevelY = canvasHeight - this.width;
+    initialY = 370;
     //acceleration;
 
     constructor(x,y){
@@ -10,18 +11,22 @@ class ThrowableObject extends MovableObject {
         this.loadImage('img/7.Marcadores/Icono/Botella.png');
         this.x = x;
         this.y = y;
-        this.initialY = 370;
         // TEST
-        this.throw();//100,350
+        this.throw();
     }
 
     // maybe apply some curve
     throw(){ // TODO: only one object should be thrown at a time & check throw-direction (if is reversed etc)
         this.speedY = 20;
         this.applyGravity();
+        //this.throwing = true;
+        console.log(world.character.isReversed_x);
 
         setInterval( () => {
-            if (this.y < this.groundLevelY) this.x += 8;
-        }, 25);
+            if (this.y < this.groundLevelY) {
+                if (!world.character.isReversed_x) this.x += 8;
+                if (world.character.isReversed_x) this.x -=8;
+            }
+        }, 1000/50);
     }
 }

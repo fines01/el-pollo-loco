@@ -13,7 +13,7 @@ class BackgroundObject extends MovableObject {
         this.move();
     }
 
-    // move: add parallax effects when walking
+    // move: add parallax effects when walking TODO. fix (parallax) backgrounds
     move() {
 
         if (!(this instanceof Cloud)){
@@ -28,8 +28,7 @@ class BackgroundObject extends MovableObject {
                 // (this.x + this.width > world.level.levelEnd_x ) && (this.x = 0 - this.width);
             }
         }
-            
-        
+
         let self = this;
         requestAnimationFrame( ()=>{
             self.move();

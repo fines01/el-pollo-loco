@@ -1,4 +1,4 @@
-class Chick extends MovableObject {
+class Chick extends Enemy {
 
     height = 75;
     width = 90;
@@ -21,30 +21,8 @@ class Chick extends MovableObject {
         this.speedX = 0.75 + Math.random() * 0.45;
         this.jumpHeight = Math.random() * 22;
         this.applyGravity();
-        this.animateChick();
-    }
-
-    // same as for all 'enemies' (for now: chick, chicken) --> maybe class Enemy? function animateEnemy()
-    animateChick(){
-        setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
-        }, 90 / this.speedX); // 
-        this.move();
-    }
-    
-    // randomBounce(){
-    //     Math.random() < 0.3 && !this.isAboveGround() && this.jump(); 
-    //     Math.random() < 0.4 && this.moveLeft(); // makes it a bit more dynamic? maybe? (if moving left at all)
-    // }
-    
-    move() {
-        this.moveLeft();
-        this.randomBounce();
-        (this.x < 0 - this.width) && (this.x = 2 * canvasWidth); //move back into frame 2 ^⁼= amount of canvas-lengths for bgs
-        let self = this;
-            requestAnimationFrame(() => {
-            self.move();
-        });
+        //this.animateChick();
+        this.animateEnemies();
     }
 
 }

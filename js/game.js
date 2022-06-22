@@ -1,6 +1,6 @@
 // get css variables
 // remove string 'px' and keep only the numeric values
-// GN only inline setting of width and height in js?
+// Actually not necessary
 
 const root = document.documentElement;
 const canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '');

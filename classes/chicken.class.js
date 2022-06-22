@@ -1,4 +1,4 @@
-class Chicken extends MovableObject {
+class Chicken extends Enemy {
 
     height = 90;
     width = 95;
@@ -24,25 +24,7 @@ class Chicken extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.jumpHeight = Math.random() * 5;
         this.applyGravity();
-        this.animateChicken();
-    }
-
-    animateChicken() {
-        setInterval(() => {
-            this.playAnimation(this.IMAGES_WALKING);
-        }, 90 / this.speedX); // 
-        this.move();
-        //console.log('chicken start:',this.x, 'speed:',this.speedX);
-    }
-        
-    move(){
-        this.moveLeft();
-        this.randomBounce();
-        (this.x < 0 - this.width) && (this.x = 2 * canvasWidth); //move back into frame 2 ^⁼= amount of canvas-lengths for bgs
-        let self = this;
-        requestAnimationFrame( () => {
-            self.move();
-        });
+        this.animateEnemies();
     }
 
 }
