@@ -24,7 +24,7 @@ class Gallina extends MovableObject { // or Gallina
         'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/1.Caminata/G3.png',
         'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/1.Caminata/G4.png',
     ];
-
+    IMAGES_ANGRY = [];
     IMAGES_ATTACKING = [];
     IMAGES_HURT = [];
     IMAGES_DYING = [];

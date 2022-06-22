@@ -2,7 +2,7 @@ class Pepe extends MovableObject {
 
     x = 100;
     y = 135;
-    groundLevel_y = 135; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
+    groundLevelY = 135; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
     height = 300;
     width = 150;
     sound_walking = new Audio('audio/step1.mp3');

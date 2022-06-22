@@ -8,7 +8,8 @@ class World {
     statusbar = new StatusBar();
     character = new Pepe(); // in level: gn
     level = level1;
-
+    throwableObjects = [];
+    //collectibleObjects = [];
     coins = [
         new Coin(),
         new Coin(),
@@ -36,7 +37,7 @@ class World {
         // 'Kamera-Ausschnitt' verschieben (Verschiebt Koordinatensystem/ Position an der 'gezeichnet' wird)
         this.ctx.translate(this.camera_x, 0); // translate(x,y) verändert Position des Canvas
 
-        this.addToMap(...this.level.backgroundObjects, ...this.coins, ...this.level.enemies, this.character);
+        this.addToMap(...this.level.backgroundObjects, ...this.coins, ...this.level.enemies, this.character, ...this.throwableObjects);
 
         // Objects that should stay in place:
         this.ctx.translate(-this.camera_x,0);
@@ -106,30 +107,41 @@ class World {
             }
             
         });
-
-        // let collided = false;
-        // for (let i = 0; i < this.enemies.length; i++ ){
-        //     let enemy = this.enemies[i];
-        //     if( !collided && this.character.isCollidingHorizonatlly(enemy)){
-        //         collided = true;
-        //         console.log('CRASH X: ');
-        //         if(collided){ break; }
-        //     }
-        // }
-
-        // let self=this;
-        // requestAnimationFrame( ()=>{
-        //     self.checkCollisions();
-        // });
     }
 
-    run(){
+        checkThrowObjects() {
+            if(this.character.keyboard.D) {
+                let bottle = new ThrowableObject(this.character.x + this.character.width * 0.5, this.character.y + 115);
+                this.throwableObjects.push(bottle);
+            }
+        }
 
-        this.checkCollisions();
+        
+        run(){
+            
+            this.checkCollisions();
+            this.checkThrowObjects();
+            
+            let self = this;
+            requestAnimationFrame(() => {
+                self.run();
+            });
 
-        let self = this;
-        requestAnimationFrame(() => {
-            self.run();
-        });
-    }
+            // let collided = false;
+            // for (let i = 0; i < this.enemies.length; i++ ){
+            //     let enemy = this.enemies[i];
+            //     if( !collided && this.character.isCollidingHorizonatlly(enemy)){
+            //         collided = true;
+            //         console.log('CRASH X: ');
+            //         if(collided){ break; }
+            //     }
+            // }
+    
+            // let self=this;
+            // requestAnimationFrame( ()=>{
+            //     self.checkCollisions();
+            // });
+        }
+
+
 }

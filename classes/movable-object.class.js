@@ -6,7 +6,7 @@ class MovableObject extends DrawableObject {
     acceleration = 2;
     currentImage = 0;
     isReversed_x = false;
-    groundLevel_y;// = canvasHeight - this.height - 45; //TEST 45px ca. // GN
+    groundLevelY;// = canvasHeight - this.height - 45; //TEST 45px ca. // GN
     energy = 100;
     keyboard = new Keyboard();
     //animationPlaying = false;
@@ -39,9 +39,9 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             } 
-            // else { // um Ungenauigkeiten zu vermeiden. (sonst ev. zu viel zu y angerechnet in letztem Schleifendurchlauf. 
-            //     this.y = this.groundLevel_y;
-            // }
+            else {  
+                this.y = this.groundLevelY;
+            }
 
         }, 1000/25);
 
@@ -77,7 +77,7 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround(){
-        return this.y < this.groundLevel_y;
+        return this.y < this.groundLevelY;
     }
     
     // Todo: improve collision-detecting functions!! 

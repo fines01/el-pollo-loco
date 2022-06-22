@@ -2,7 +2,7 @@ class Chick extends MovableObject {
 
     height = 75;
     width = 90;
-    groundLevel_y = 350;
+    groundLevelY = 350;
 
     IMAGES_WALKING = [
         'img/3.Secuencias_Enemy_b sico/Versi¢n_pollito/1.Paso_derecho.png',
@@ -17,7 +17,7 @@ class Chick extends MovableObject {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
         this.x = 300 + Math.random() * 1040;
-        this.y = this.groundLevel_y;
+        this.y = this.groundLevelY;
         this.speedX = 0.75 + Math.random() * 0.45;
         this.jumpHeight = Math.random() * 22;
         this.applyGravity();
