@@ -5,6 +5,7 @@ class Level {
     backgroundObjects;
     collectibles;
     levelEnd_x;
+    //amountEnemies
 
     constructor(enemies,bgo, endX){
         //this.character = character;

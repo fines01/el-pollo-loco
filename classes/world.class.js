@@ -4,7 +4,10 @@ class World {
     ctx;
     camera_x = 0;
     //keyboard = new Keyboard();//in mo
-    statusbar = new StatusBar();
+    
+    //statusbar = new StatusBar();
+    statusbars = [new StatusBar(0, 'energy', 100), new StatusBar(35, 'coins', 0), new StatusBar(70, 'bottles', 20)];
+
     character = new Pepe(); // in level: gn
     level = level1;
     throwableObjects = [];
@@ -43,7 +46,7 @@ class World {
 
         // Objects that should stay in place:
         this.ctx.translate(-this.camera_x,0);
-        this.addToMap(this.statusbar);
+        this.addToMap(...this.statusbars);
         this.ctx.translate(this.camera_x,0);
         // End Objects that should stay in place
 
@@ -106,7 +109,7 @@ class World {
             }
             else if (this.character.isColliding(enemy, 0.25) && !this.character.isHurt()) {
                 this.character.receiveHit();
-                this.statusbar.setPercentage(this.character.energy);
+                this.statusbars[0].setPercentage(this.character.energy);
             }
         // check collectible objects-collisions
         this.coins.forEach(coin => {
@@ -136,6 +139,7 @@ class World {
             
             this.checkCollisions();
             this.checkThrowObjects();
+            // this.addEnemies(); // in certain timeframe add new enemies (if enemies under certain number)
             
             let self = this;
             requestAnimationFrame(() => {
