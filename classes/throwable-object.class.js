@@ -19,13 +19,13 @@ class ThrowableObject extends MovableObject {
     throw(){ // TODO: only one object should be thrown at a time & check throw-direction (if is reversed etc)
         this.speedY = 20;
         this.applyGravity();
-        //this.throwing = true;
-        console.log(world.character.isReversed_x);
 
         setInterval( () => {
             if (this.y < this.groundLevelY) {
                 if (!world.character.isReversed_x) this.x += 8;
                 if (world.character.isReversed_x) this.x -=8;
+            } else {
+                this.markedForDeletion = true;
             }
         }, 1000/50);
     }

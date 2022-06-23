@@ -5,7 +5,8 @@ class Keyboard {
     UP = false;
     DOWN = false;
     SPACE = false;
-    D = false;
+    F = false;
+    ENTER = false; //start game and throw instead of D
 
     constructor(){
         this.handleKeypress();
@@ -33,8 +34,11 @@ class Keyboard {
                 case 'Space':
                     this.SPACE = true;
                     break;
-                case 'KeyD':
-                    this.D = true;
+                case 'KeyF':
+                    this.F = true;
+                    break;
+                case 'Enter':
+                    this.ENTER = true;
                     break;
             }
 
@@ -59,8 +63,11 @@ class Keyboard {
                 case 'Space':
                     this.SPACE = false;
                     break;
-                case 'KeyD':
-                    this.D = false;
+                case 'KeyF':
+                    this.F = false;
+                    break;
+                case 'Enter':
+                    this.ENTER = false;
                     break;
             }
             

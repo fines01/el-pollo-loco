@@ -61,23 +61,6 @@ class StatusBar extends DrawableObject {
 
     resolveImageIndex() {
         return Math.floor(this.percentage / 20); 
-        // // ( TODO: simplify)
-        // let val = this.percentage;
-        // switch(true){
-        //     case val == 100:
-        //         return 5;
-        //         break;
-        //     case val > 80:
-        //         return 4;
-        //     case val > 60:
-        //         return 3;
-        //     case val > 40:
-        //         return 2;
-        //     case val > 20:
-        //         return 1;
-        //     default:
-        //         return 0;
-        // }
     }
 
 }

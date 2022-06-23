@@ -34,7 +34,7 @@ class Pepe extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-37.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-38.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-39.png', // TODO: nach Sprung-Ende/Landung IMMER dieses Bild anzeigen
-        'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-40.png', // wenn als letzteb bild angezeigt: ev. ein anderes nehmen (sonst verschwindet Pepe manchmal)
+        //'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-40.png', // wenn als letzteb bild angezeigt: ev. ein anderes nehmen (sonst verschwindet Pepe manchmal)
     ];
     IMAGES_HURT = [
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/4.Herido/H-41.png',
@@ -67,6 +67,8 @@ class Pepe extends MovableObject {
     animate(){
 
         setInterval(() => {
+
+            //this.checkMode();
 
             if(this.isDead()){
                 this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence

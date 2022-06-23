@@ -85,12 +85,13 @@ class MovableObject extends DrawableObject {
         return this.y < this.groundLevelY;
     }
 
+    // TODO (maybe) correctionX AND correctionY ?
     isColliding(object, correction = 0) { // second parameter: optional (estimated) correction factor, as some img files are bigger than actual image
         let objectX = object.x + object.width * correction;
         let objectY = object.y + object.height * correction;
         let objectWidth = object.width - object.width * correction;
         let objectHeight = object.height - object.height * correction;
-        // Na toll pepe bild ist auch zu hoch        
+        // reminder: pepe bild ist auch zu hoch (aber Überschuss nur nach oben)       
         return (
         //horizontal collision
         objectX  < this.x + this.width &&
@@ -101,9 +102,18 @@ class MovableObject extends DrawableObject {
         )
     }
 
+    // mb better function name??
+    isCollidingMultiple(correction = 0, ...objects){
+        for (let i = 0; i < objects.length; i++){
+            this.isColliding(objects[i], correction);
+            //console.log(this,' HIT BY ', objects[i]);
+            this.receiveHit();
+        }
+    }
+
     isJumpingOn(object) {
         return ( 
-            this.isColliding(object, 0.5) &&
+            this.isColliding(object, 0.7) &&
             this.isFalling() &&
             //this.y + this.height == object.y
             this.y + this.height >= object.y + object.height * 0.25
@@ -114,6 +124,7 @@ class MovableObject extends DrawableObject {
         this.energy -= 2;
         (this.energy < 0) && (this.energy = 0);
         (this.energy > 0) && (this.lastHit = new Date().getTime() ); // Timestamp: ms since 1.1.1970
+        // if (this instanceof Gallina) console.log('OUCH', this.energy);
     }
 
     receiveEnergy(){

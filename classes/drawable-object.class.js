@@ -7,6 +7,7 @@ class DrawableObject {
     height;
     imgCache = [];
     markedForDeletion = false;
+    showHitboxes = true;
 
     loadImage(imgPath){
         this.img = new Image(); // creates new <img id="image">
@@ -25,9 +26,19 @@ class DrawableObject {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
+    toggleHitboxes() {
+        this.showHitboxes = !this.showHitboxes;
+    }
+
+    checkMode() {
+        if (this.keyboard.F) {
+            this.toggleHitboxes();
+        }
+    }
+
     drawFrame(ctx){
         // in case of character or enemy: draw a frame around images for illustration/testing purposes for collision-detection functionalities etc.
-        if(this instanceof Pepe || this instanceof Chicken || this instanceof Chick || this instanceof Coin || this instanceof Gallina){
+        if(this.showHitboxes && (this instanceof Pepe || this instanceof Chicken || this instanceof Chick || this instanceof Coin || this instanceof Endboss) ){
             ctx.beginPath();
             ctx.lineswidth = '3.5';
             ctx.strokeStyle = 'yellow';

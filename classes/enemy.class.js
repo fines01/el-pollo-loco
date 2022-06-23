@@ -3,6 +3,8 @@ class Enemy extends MovableObject {
     energy = 2;
 
     animateEnemies() {
+
+        
         setInterval(() => {
 
             if (this.isDead()) this.loadImage(this.IMAGE_DEAD);
@@ -17,7 +19,7 @@ class Enemy extends MovableObject {
         if (this.isDead()) {
             setTimeout(() => {
                 this.markedForDeletion = true;
-            }, 500);
+            }, 600);
         } else {
             this.moveLeft();
             this.randomBounce();

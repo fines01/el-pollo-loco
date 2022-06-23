@@ -10,14 +10,19 @@ class World {
 
     character = new Pepe(); // in level: gn
     level = level1;
-    throwableObjects = [];
+    throwableObjects = [ ];
     //collectibleObjects = [];
-    coins = [
+    collectibleObjects = [
+        new Coin(),
+        new Coin(),
+        new Coin(),
         new Coin(),
         new Coin(),
         new Coin(),
     ];
     score = 0;
+    collectedCoins = 0;
+
     gameOver = false;
    // animationFps = 20;
 
@@ -42,7 +47,7 @@ class World {
         // 'Kamera-Ausschnitt' verschieben (Verschiebt Koordinatensystem/ Position an der 'gezeichnet' wird)
         this.ctx.translate(this.camera_x, 0); // translate(x,y) verändert Position des Canvas
 
-        this.addToMap(...this.level.backgroundObjects, ...this.coins, ...this.level.enemies, this.character, ...this.throwableObjects);
+        this.addToMap(...this.level.backgroundObjects, ...this.collectibleObjects, ...this.level.enemies, this.character, ...this.throwableObjects);
 
         // Objects that should stay in place:
         this.ctx.translate(-this.camera_x,0);
@@ -101,31 +106,34 @@ class World {
     checkCollisions(){
         // check enemy collisions
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isJumpingOn(enemy)) {
+            if (this.character.isJumpingOn(enemy) || enemy.isCollidingMultiple(0.5, ...this.throwableObjects)) {
                 this.score++;
                 this.character.receiveEnergy(); // renamed receivePoint()
                 enemy.receiveHit();
-               // enemy.markedForDeletion = true;             
             }
             else if (this.character.isColliding(enemy, 0.25) && !this.character.isHurt()) {
                 this.character.receiveHit();
                 this.statusbars[0].setPercentage(this.character.energy);
             }
-        // check collectible objects-collisions
-        this.coins.forEach(coin => {
-            if (this.character.isColliding(coin, 0.5)) { // correction-value of 0.5 because coin-img is bigger than actual coin
-                this.score++; //or life?
+        // check coin collisions
+        this.collectibleObjects.forEach(coin => {
+            if (this.character.isColliding(coin, 0.7)) { // correction-value of 0.5 because coin-img is bigger than actual coin
+                this.collectedCoins+=10; // 10 only for testing purposes
+                this.statusbars[1].setPercentage(this.collectedCoins);
                 coin.markedForDeletion = true;
-                console.log('score: ', this.score);
+                console.log('coins: ', this.collectedCoins);
             }
-        })
-        this.coins = this.coins.filter( coin => !coin.markedForDeletion); 
+        });
+        // check character collisions with collectible objects (bottles)
+        // delete objects (TODO: maybe DRY it --> in extra function etc)
+        this.collectibleObjects = this.collectibleObjects.filter( coin => !coin.markedForDeletion);
+        this.throwableObjects = this.throwableObjects.filter(coin => !coin.markedForDeletion);
         this.level.enemies = this.level.enemies.filter( enemy => !enemy.markedForDeletion);
         });
     }
 
         checkThrowObjects() {
-            if(this.character.keyboard.D && !this.character.isHurt()) { //
+            if(this.character.keyboard.ENTER && !this.character.isHurt()) { //
                 let bottleX;
                 if (this.character.isReversed_x) bottleX = this.character.x ;
                 else bottleX = this.character.x + this.character.width * 0.5;
@@ -134,7 +142,6 @@ class World {
             }
         }
 
-        
         run(){
             
             this.checkCollisions();
@@ -146,21 +153,6 @@ class World {
                 self.run();
             });
 
-            // let collided = false;
-            // for (let i = 0; i < this.enemies.length; i++ ){
-            //     let enemy = this.enemies[i];
-            //     if( !collided && this.character.isCollidingHorizonatlly(enemy)){
-            //         collided = true;
-            //         console.log('CRASH X: ');
-            //         if(collided){ break; }
-            //     }
-            // }
-    
-            // let self=this;
-            // requestAnimationFrame( ()=>{
-            //     self.checkCollisions();
-            // });
         }
-
 
 }
