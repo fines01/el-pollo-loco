@@ -6,12 +6,14 @@ class World {
     //keyboard = new Keyboard();//in mo
     
     //statusbar = new StatusBar();
-    statusbars = [new StatusBar(0, 'energy', 100), new StatusBar(35, 'coins', 0), new StatusBar(70, 'bottles', 20)];
-
-    character = new Pepe(); // in level: gn
+    statusbars = [new StatusBar(0, 'energy', 100), new StatusBar(35, 'coins', 0), new StatusBar(70, 'bottles', 0)];
+    character = new Pepe();
     level = level1;
-    throwableObjects = [ ];
     //collectibleObjects = [];
+    collectedCoins = 0;
+    collectedBottles = 0;
+    throwableObjects = [];
+    //collectedBottles = [ ];
     collectibleObjects = [
         new Coin(),
         new Coin(),
@@ -19,9 +21,14 @@ class World {
         new Coin(),
         new Coin(),
         new Coin(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
+        new ThrowableObject(),
     ];
     score = 0;
-    collectedCoins = 0;
 
     gameOver = false;
    // animationFps = 20;
@@ -105,7 +112,7 @@ class World {
 
     checkCollisions(){
         // check enemy collisions
-        this.level.enemies.forEach((enemy) => {
+        this.level.enemies.forEach( enemy => {
             if (this.character.isJumpingOn(enemy) || enemy.isCollidingMultiple(0.5, ...this.throwableObjects)) {
                 this.score++;
                 this.character.receiveEnergy(); // renamed receivePoint()
@@ -115,31 +122,57 @@ class World {
                 this.character.receiveHit();
                 this.statusbars[0].setPercentage(this.character.energy);
             }
+        });
         // check coin collisions
-        this.collectibleObjects.forEach(coin => {
-            if (this.character.isColliding(coin, 0.7)) { // correction-value of 0.5 because coin-img is bigger than actual coin
-                this.collectedCoins+=10; // 10 only for testing purposes
+        this.collectibleObjects.forEach((collectible, index) => {
+            if ( collectible instanceof Coin && this.character.isColliding(collectible, 0.7)) { // correction-value of 0.5 because coinllectible is bigger than actual coin
+                this.collectedCoins+=10; // 10 only for testing purposes // DRY
                 this.statusbars[1].setPercentage(this.collectedCoins);
-                coin.markedForDeletion = true;
+                collectible.markedForDeletion = true;
                 console.log('coins: ', this.collectedCoins);
+            }
+            else if ( collectible instanceof ThrowableObject && this.character.isColliding(collectible, 0.5)){
+                //let bottle = collectible;
+                //this.throwableObjects.push( new ThrowableObject() );// else markedForDeletion = true and gets removed AS WELL
+                collectible.markedForDeletion = true;
+                this.collectedBottles++; // check later if this variable is still necessary
+                this.statusbars[2].setPercentage(this.collectedBottles * 10); // * 10 for TESTING pps??
+                console.log('bottles: ', this.collectedBottles);
             }
         });
         // check character collisions with collectible objects (bottles)
-        // delete objects (TODO: maybe DRY it --> in extra function etc)
-        this.collectibleObjects = this.collectibleObjects.filter( coin => !coin.markedForDeletion);
-        this.throwableObjects = this.throwableObjects.filter(coin => !coin.markedForDeletion);
-        this.level.enemies = this.level.enemies.filter( enemy => !enemy.markedForDeletion);
-        });
+        // delete objects (TODO: maybe 'DRY' it --> in extra function etc)
+        this.collectibleObjects = this.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
+        this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
+        this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
+
     }
 
         checkThrowObjects() {
-            if(this.character.keyboard.ENTER && !this.character.isHurt()) { //
-                let bottleX;
-                if (this.character.isReversed_x) bottleX = this.character.x ;
-                else bottleX = this.character.x + this.character.width * 0.5;
-                let bottle = new ThrowableObject(bottleX, this.character.y + 115);
-                this.throwableObjects.push(bottle);
+
+            let isThrowing = false;
+
+            if(this.character.keyboard.ENTER && !this.character.isHurt() && this.collectedBottles > 0 && !isThrowing) {
+                
+                    isThrowing = true;
+                    let bottleX;
+                    if (this.character.isReversed_x) bottleX = this.character.x ;
+                    else bottleX = this.character.x + this.character.width * 0.5;
+                    // test
+                    // let index = this.throwableObjects.length - 1;
+                    // let bottle = this.throwableObjects[index];
+                    let bottle = new ThrowableObject();
+                    this.throwableObjects.push(bottle);
+                    bottle.throw(bottleX, this.character.y + 115);
+                    // remove thrown object from throwableObjects: throw() function
+                    // this.throwableObjects[index].markedForDeletion = true;
+                    this.collectedBottles--;
+                    this.character.keyboard.ENTER = false;
+                    // console.log('bottles left: ', this.collectedBottles);
+                    this.statusbars[2].setPercentage(this.collectedBottles * 10);
+
             }
+
         }
 
         run(){

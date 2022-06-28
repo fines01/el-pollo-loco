@@ -7,11 +7,8 @@ class Coin extends CollectibleObject {
 
     constructor(){
         super();
-        this.i = Math.floor(Math.random() * 2); // rand Integer between [0,1]
+        //this.i = Math.floor(Math.random() * 2); // rand Integer between [0,] // i?
         this.loadImage(this.IMAGE_COIN);
-        //place randomly between y [50, 325] & x [0, levelEnd_x -200]
-        this.x = Math.random() * (2*canvasWidth-500);
-        this.y = 50 + Math.random() * 275;
     }
 
     

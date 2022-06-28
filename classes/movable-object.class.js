@@ -106,7 +106,7 @@ class MovableObject extends DrawableObject {
     isCollidingMultiple(correction = 0, ...objects){
         for (let i = 0; i < objects.length; i++){
             this.isColliding(objects[i], correction);
-            //console.log(this,' HIT BY ', objects[i]);
+            // console.log(this,' HIT BY ', objects[i]);
             this.receiveHit();
         }
     }
