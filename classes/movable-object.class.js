@@ -14,13 +14,21 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
 
+    // as sometimes the actual image is much smaller than the size of the png file:
+    checkHitarea() { // mb not
+        this.imgY = this.y;
+        this.imgX = this.x;
+        this.imgWidth = this.width;
+        this.imgHeight = this.height;
+    }
+        
     playAnimation(images){
         //setInterval(() => { // 
-            let i = this.currentImage % images.length;
-            let imgPath = images[i];
-            this.img = this.imgCache[imgPath];
-            //console.log(this.imgCache);
-            this.currentImage++;
+        let i = this.currentImage % images.length;
+        let imgPath = images[i];
+        this.img = this.imgCache[imgPath];
+        //console.log(this.imgCache);
+        this.currentImage++;
         //}, 90 / this.speedX); // 
     }
 
@@ -66,7 +74,7 @@ class MovableObject extends DrawableObject {
     }
 
     isWalkingRight() {
-        return (this.keyboard.RIGHT && this.x < this.world.level.levelEnd_x);
+        return (this.keyboard.RIGHT && this.x < this.world.level.levelEndX);
     }
 
     isWalkingLeft() {
@@ -85,24 +93,34 @@ class MovableObject extends DrawableObject {
         return this.y < this.groundLevelY;
     }
 
-    // TODO (maybe) correctionX AND correctionY ?
-    isColliding(object, correction = 0) { // second parameter: optional (estimated) correction factor, as some img files are bigger than actual image
-        let objectX = object.x + object.width * correction;
-        let objectY = object.y + object.height * correction;
-        let objectWidth = object.width - object.width * correction;
-        let objectHeight = object.height - object.height * correction;
-        // reminder: pepe bild ist auch zu hoch (aber Überschuss nur nach oben)       
+    // isColliding(object, correction = 0) { // second parameter: optional (estimated) correction factor, as some img files are bigger than actual image
+    //     let objectX = object.x + object.width * correction;
+    //     let objectY = object.y + object.height * correction;
+    //     let objectWidth = object.width - object.width * correction;
+    //     let objectHeight = object.height - object.height * correction;
+    //     // reminder: pepe bild ist auch zu hoch (aber Überschuss nur nach oben)       
+    //     return (
+    //     //horizontal collision
+    //     objectX  < this.x + this.width &&
+    //     objectX  + objectWidth  > this.x &&
+    //     //vertical collision
+    //     objectY  < this.y + this.height &&
+    //     objectY  + objectHeight  > this.y
+    //     )
+    // }
+
+    isColliding(object) {
         return (
-        //horizontal collision
-        objectX  < this.x + this.width &&
-        objectX  + objectWidth  > this.x &&
-        //vertical collision
-        objectY  < this.y + this.height &&
-        objectY  + objectHeight  > this.y
+            //horizontal collision
+            object.imgX < this.imgX + this.imgWidth && 
+            object.imgX + object.imgWidth > this.imgX && 
+            //vertical collision
+            object.imgY < this.imgY + this.imgHeight &&
+            object.imgY + object.imgHeight > this.imgY
         )
     }
 
-    // mb better function name??
+    // mb better function name?? remove?
     isCollidingMultiple(correction = 0, ...objects){
         for (let i = 0; i < objects.length; i++){
             this.isColliding(objects[i], correction);
@@ -113,10 +131,10 @@ class MovableObject extends DrawableObject {
 
     isJumpingOn(object) {
         return ( 
-            this.isColliding(object, 0.7) &&
+            this.isColliding(object) &&
             this.isFalling() &&
-            //this.y + this.height == object.y
-            this.y + this.height >= object.y + object.height * 0.25
+            this.imgY + this.imgHeight >= object.imgY && //+ object.imgHeight * 0.9
+            this.imgY + this.imgHeight < object.imgY + 15
         );
     }
     
@@ -124,7 +142,6 @@ class MovableObject extends DrawableObject {
         this.energy -= 2;
         (this.energy < 0) && (this.energy = 0);
         (this.energy > 0) && (this.lastHit = new Date().getTime() ); // Timestamp: ms since 1.1.1970
-        // if (this instanceof Gallina) console.log('OUCH', this.energy);
     }
 
     receiveEnergy(){
@@ -132,9 +149,9 @@ class MovableObject extends DrawableObject {
         if (this.energy > 100) this.energy = 100;
     }
     
-    isHurt(){
+    isHurt( ms = 500 ){
         let dt = new Date().getTime() - this.lastHit; // ms since lastHit
-        return dt < 500;
+        return dt < ms;
     }
     
     isDead(){

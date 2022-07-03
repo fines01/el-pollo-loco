@@ -9,6 +9,12 @@ class DrawableObject {
     markedForDeletion = false;
     showHitboxes = true;
 
+    // as sometimes  the actual image is much smaller than the size of the png file:
+    imgY = this.y;
+    imgX = this.x;
+    imgWidth = this.width;
+    imgHeight = this.height;
+
     loadImage(imgPath){
         this.img = new Image(); // creates new <img id="image">
         this.img.src = imgPath;
@@ -42,7 +48,8 @@ class DrawableObject {
             ctx.beginPath();
             ctx.lineswidth = '3.5';
             ctx.strokeStyle = 'yellow';
-            ctx.rect(this.x, this.y, this.width, this.height);
+            if (this.isReversed_x) ctx.rect(-this.imgX + this.imgWidth*0.5, this.imgY, this.imgWidth, this.imgHeight); // td.: fix later
+            else ctx.rect(this.imgX, this.imgY, this.imgWidth, this.imgHeight);
             ctx.stroke();
         }
     }

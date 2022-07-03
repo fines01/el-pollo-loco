@@ -2,9 +2,17 @@ class Pepe extends MovableObject {
 
     x = 100;
     y = 135;
-    groundLevelY = 135; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
     height = 300;
     width = 150;
+
+    // as iactual image smaller than png:
+    imgY = this.y + 120;
+    imgX = this.x + 25;
+    imgWidth = this.width*0.7;
+    imgHeight = this.height*0.55;
+    
+    
+    groundLevelY = 135; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
     sound_walking = new Audio('audio/step1.mp3');
     //speedY = 0;
     speedX = 6;//1.5;
@@ -52,23 +60,32 @@ class Pepe extends MovableObject {
         //'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-57.png',
     ];
 
-    constructor() {
+    constructor(world) {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
+        this.world = world;
         //this.checkKeypress(); // TEST
         this.applyGravity(); //
         this.animate();
         this.move();
+        // as iactual image smaller than png:
+        this.checkHitarea();
+    }
+    
+    checkHitarea() {
+        // as sometimes  the actual image is much smaller than the size of the png file:
+        this.imgY = this.y + 120;
+        this.imgX = this.x + 25;
+        this.imgWidth = this.width * 0.6;
+        this.imgHeight = this.height * 0.55;
     }
 
     animate(){
 
         setInterval(() => {
-
-            //this.checkMode();
 
             if(this.isDead()){
                 this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
@@ -91,35 +108,29 @@ class Pepe extends MovableObject {
                 this.playAnimation(this.IMAGES_WALKING);
             }
 
-        }, 1000/25 );
+        }, 1000/20 );
         
     }
 
     move(){
 
+        this.checkHitarea();
+
         if(this.isJumping()){
             this.jump();
         }
 
-        if(this.keyboard.RIGHT){
+        if(this.isWalkingRight()){
             this.moveRight();
             this.isReversed_x = false;
-            (this.x + this.width > this.world.level.levelEnd_x) && (this.x = 100); // TEMPORARY(?) for testing: move back into frame
-            // (this.x + this.width > this.world.level.levelEnd_x) && (this.x = world.level.levelEnd_x); // don't move out of range
         }
 
-        if(this.keyboard.LEFT) {
+        if(this.isWalkingLeft()) {
             this.moveLeft();
             this.isReversed_x = true;
-            (this.x - this.width < 0 - this.width) && (this.x = this.world.level.levelEnd_x - this.width - 100); // TEMPORARY(?): move back into frame
-            // (this.x - this.width < 0 - this.width) && (this.x = 0); 
         }
 
-        let self = this;
-        requestAnimationFrame( ()=>{
-            self.world.camera_x = -this.x + 100;
-            self.move();
-        });
+        this.world.camera_x = -this.x + 100;
 
     }
 }

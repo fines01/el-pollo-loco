@@ -1,4 +1,0 @@
-class Bottle extends ThrowableObject {
-
-    
-}

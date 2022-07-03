@@ -13,10 +13,10 @@ class Chick extends Enemy {
         'img/3.Secuencias_Enemy_b sico/Versi¢n_pollito/4.Muerte.png'
     ];
 
-    constructor(){
+    constructor(levelEndX){
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
-        this.x = 300 + Math.random() * 1040;
+        this.x = 300 + Math.random() * (levelEndX-300);
         this.y = this.groundLevelY;
         this.speedX = 0.75 + Math.random() * 0.45;
         this.jumpHeight = Math.random() * 22;

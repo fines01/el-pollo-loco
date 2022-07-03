@@ -1,38 +1,39 @@
 class BackgroundObject extends MovableObject {
     
-    width = canvasWidth;
-    height = canvasHeight;
-    //x = 0;
-    // img; // in DrawableObject
+    width = canvasWidth*2; // world.canvas.width
+    height = canvasHeight; // world.canvas.height
 
-    constructor(imgPath, x, speedX){
+    // IMAGES_LAYERS = [
+    //     'img/5.Fondo/Capas/3.Fondo3/Completo.png',
+    //     'img/5.Fondo/Capas/2.Fondo2/completo.png',
+    //     'img/5.Fondo/Capas/1.suelo-fondo1/completo.png'
+    // ];
+
+    constructor(imgPath, x, speedX, levelEndX){
         super().loadImage(imgPath);
         this.x = x;
-        this.y = 480 - this.height;
+        this.y = 0;
         this.speedX = speedX;
-        this.move();
+        this.move(levelEndX);
+
     }
-
+    
     // move: add parallax effects when walking TODO. fix (parallax) backgrounds
-    move() {
-
+    move(levelEndX) {
+        
         if (!(this instanceof Cloud)){
-            if(this.keyboard.RIGHT){
+            if(this.keyboard.RIGHT && world.character.isWalkingRight()){ // if character.isWalkingRight()
+                //if (this.x < -this.width) this.x = 0;
                 this.moveLeft();
                 this.isReversed_x = false;
-                // (this.x + this.width < 0) && (this.x = world.level.levelEnd_x);
             }
-            if(this.keyboard.LEFT) {
+            if(this.keyboard.LEFT && world.character.isWalkingLeft()) {
+                //if (this.x > this.width ) this.x = -this.width;
                 this.moveRight();
                 this.isReversed_x = false;
-                // (this.x + this.width > world.level.levelEnd_x ) && (this.x = 0 - this.width);
             }
         }
 
-        let self = this;
-        requestAnimationFrame( ()=>{
-            self.move();
-        });
     }
     
 }

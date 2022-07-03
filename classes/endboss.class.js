@@ -4,10 +4,10 @@ class Endboss extends Enemy { // or Gallina
     height = 400;
     width = 300;
     //speed;
-    x = 1000; // levelEnd_x - this.width - ??50?maybe
+    //x = 1000;
     y = 50;
 
-    energy = 6; // needs 3 hits
+    energy = 6; // = needs 3 hits
 
     IMAGES_ALERT = [
         'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/2.Ateci¢n-ataque/1.Alerta/G5.png',
@@ -47,7 +47,7 @@ class Endboss extends Enemy { // or Gallina
         'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/4.Muerte/G26.png',
     ];
 
-    constructor() {
+    constructor(levelEndX) {
         super().loadImage(this.IMAGES_ALERT[0]);
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_ATTACKING);
@@ -55,11 +55,22 @@ class Endboss extends Enemy { // or Gallina
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
         //this.speed = 0.15 + Math.random() * 0.45; // maybe pass & increase with Level?
-        this.animate();
+        this.x = levelEndX - this.width;
+        this.animateEndboss();
     }
 
-    animate() {
+    checkHitarea() {    
+        this.imgY = this.y + 70;
+        this.imgX = this.x + 13;
+        this.imgWidth = this.width * 0.9;
+        this.imgHeight = this.height * 0.79;
+    }
+
+
+    animateEndboss() {
         setInterval( ()=>{
+
+            this.checkHitarea();
 
             if (this.keyboard.RIGHT || this.keyboard.LEFT){
                 this.playAnimation(this.IMAGES_WALKING);
@@ -73,6 +84,7 @@ class Endboss extends Enemy { // or Gallina
                 this.y+=20;
                  setTimeout(() => {
                      this.markedForDeletion = true;
+                     // this.receivedHit = false;
                  }, 1000);
             }
         }, 200)

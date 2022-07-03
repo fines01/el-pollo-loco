@@ -15,9 +15,9 @@ class Chicken extends Enemy {
 
     // speedX = 0.3;
 
-    constructor() {
+    constructor(levelEndX) {
         super().loadImage(this.IMAGES_WALKING[0]);
-        this.x = 200 + Math.random() * 1040; // * levelEnd_x  - 200
+        this.x = 200 + Math.random() * (levelEndX-200);
         this.y = 340 - Math.random() * 9; 
         this.groundLevelY = this.y;
         this.speedX = 1 + Math.random() * 0.5;
