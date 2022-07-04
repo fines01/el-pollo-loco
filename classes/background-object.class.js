@@ -13,7 +13,7 @@ class BackgroundObject extends MovableObject {
         super().loadImage(imgPath);
         this.x = x;
         this.y = 0;
-        this.speedX = speedX;
+        this.speedX = speedX; //ev in Verhältnis zum momentanen speedX vom Character: speedXModifier * world.character.speedX
         this.move(levelEndX);
 
     }
@@ -22,7 +22,7 @@ class BackgroundObject extends MovableObject {
     move(levelEndX) {
         
         if (!(this instanceof Cloud)){
-            if(this.keyboard.RIGHT && world.character.isWalkingRight()){ // if character.isWalkingRight()
+            if(this.keyboard.RIGHT && world.character.isWalkingRight()){
                 //if (this.x < -this.width) this.x = 0;
                 this.moveLeft();
                 this.isReversed_x = false;

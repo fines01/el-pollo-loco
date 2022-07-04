@@ -1,4 +1,4 @@
-class Pepe extends MovableObject {
+class Character extends MovableObject {
 
     x = 100;
     y = 135;
@@ -17,6 +17,11 @@ class Pepe extends MovableObject {
     //speedY = 0;
     speedX = 6;//1.5;
     jumpHeight = 28;
+
+    // for controlling animation-fps with requestAnimationFrame()
+    animationFPS = 35; //25;
+    animationFrameInterval = 1000/this.animationFPS;
+    animationFrameTimer = 0; //cycles between 0 and ...frameInterval
 
     IMAGES_IDLE = [];
     IMAGES_SLEEPING = [];
@@ -42,7 +47,7 @@ class Pepe extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-37.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-38.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-39.png', // TODO: nach Sprung-Ende/Landung IMMER dieses Bild anzeigen
-        //'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-40.png', // wenn als letzteb bild angezeigt: ev. ein anderes nehmen (sonst verschwindet Pepe manchmal)
+        //'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-40.png',
     ];
     IMAGES_HURT = [
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/4.Herido/H-41.png',
@@ -83,33 +88,38 @@ class Pepe extends MovableObject {
         this.imgHeight = this.height * 0.55;
     }
 
-    animate(){
+    checkAnimationFrameTime(deltaTime) {
+        if (this.animationFrameTimer > this.animationFrameInterval) {
+            this.animate();
+            this.animationFrameTimer = 0;
+        } else {
+            this.animationFrameTimer += deltaTime;
+        }
+    }
 
-        setInterval(() => {
+    animate(){
 
             if(this.isDead()){
                 this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
                 // gameOver();
             }
-
+    
             else if(this.isHurt()){
                 this.playAnimation(this.IMAGES_HURT);
             }
-
+    
             // pepe jumping animation
             else if(this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
                 //this.jump();
             }
-
+    
             //pepe walking animation
             else if(this.isWalkingRight() || this.isWalkingLeft()){
                 this.sound_walking.play();
                 this.playAnimation(this.IMAGES_WALKING);
             }
 
-        }, 1000/20 );
-        
     }
 
     move(){

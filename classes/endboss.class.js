@@ -3,11 +3,11 @@ class Endboss extends Enemy { // or Gallina
 
     height = 400;
     width = 300;
-    //speed;
     //x = 1000;
     y = 50;
-
     energy = 6; // = needs 3 hits
+    animationFPS = 10; //25;
+    animationFrameInterval = 1000 / this.animationFPS;
 
     IMAGES_ALERT = [
         'img/4.Secuencias_Enemy_gigant¢n-Do¤a_Gallinota-/2.Ateci¢n-ataque/1.Alerta/G5.png',
@@ -68,7 +68,6 @@ class Endboss extends Enemy { // or Gallina
 
 
     animateEndboss() {
-        setInterval( ()=>{
 
             this.checkHitarea();
 
@@ -87,7 +86,6 @@ class Endboss extends Enemy { // or Gallina
                      // this.receivedHit = false;
                  }, 1000);
             }
-        }, 200)
     }
 
 }

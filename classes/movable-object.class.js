@@ -9,8 +9,6 @@ class MovableObject extends DrawableObject {
     groundLevelY;// = canvasHeight - this.height - 45; //TEST 45px ca. // GN
     energy = 100;
     keyboard = new Keyboard();
-    //animationPlaying = false;
-    world; // connect to class World
     energy = 100;
     lastHit = 0;
 
@@ -27,7 +25,6 @@ class MovableObject extends DrawableObject {
         let i = this.currentImage % images.length;
         let imgPath = images[i];
         this.img = this.imgCache[imgPath];
-        //console.log(this.imgCache);
         this.currentImage++;
         //}, 90 / this.speedX); // 
     }
@@ -93,22 +90,6 @@ class MovableObject extends DrawableObject {
         return this.y < this.groundLevelY;
     }
 
-    // isColliding(object, correction = 0) { // second parameter: optional (estimated) correction factor, as some img files are bigger than actual image
-    //     let objectX = object.x + object.width * correction;
-    //     let objectY = object.y + object.height * correction;
-    //     let objectWidth = object.width - object.width * correction;
-    //     let objectHeight = object.height - object.height * correction;
-    //     // reminder: pepe bild ist auch zu hoch (aber Überschuss nur nach oben)       
-    //     return (
-    //     //horizontal collision
-    //     objectX  < this.x + this.width &&
-    //     objectX  + objectWidth  > this.x &&
-    //     //vertical collision
-    //     objectY  < this.y + this.height &&
-    //     objectY  + objectHeight  > this.y
-    //     )
-    // }
-
     isColliding(object) {
         return (
             //horizontal collision
@@ -134,14 +115,14 @@ class MovableObject extends DrawableObject {
             this.isColliding(object) &&
             this.isFalling() &&
             this.imgY + this.imgHeight >= object.imgY && //+ object.imgHeight * 0.9
-            this.imgY + this.imgHeight < object.imgY + 15
+            this.imgY + this.imgHeight < object.imgY + 25
         );
     }
     
     receiveHit(){
         this.energy -= 2;
-        (this.energy < 0) && (this.energy = 0);
-        (this.energy > 0) && (this.lastHit = new Date().getTime() ); // Timestamp: ms since 1.1.1970
+        if (this.energy < 0) this.energy = 0;
+        if (this.energy > 0) this.lastHit = new Date().getTime(); // Timestamp: ms since 1.1.1970
     }
 
     receiveEnergy(){
@@ -151,7 +132,7 @@ class MovableObject extends DrawableObject {
     
     isHurt( ms = 500 ){
         let dt = new Date().getTime() - this.lastHit; // ms since lastHit
-        return dt < ms;
+        return (dt < ms);
     }
     
     isDead(){

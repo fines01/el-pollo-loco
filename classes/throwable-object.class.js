@@ -32,6 +32,7 @@ class ThrowableObject extends CollectibleObject {
         this.y = y;
         this.speedY = 20;
         this.applyGravity();
+        
         setInterval( () => {
 
             this.checkHitarea();

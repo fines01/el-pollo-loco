@@ -8,7 +8,7 @@ class Level {
     world;
 
     constructor(amountHens, amountChicks, amountCoins, amountBottles, bgLengts) { // (enemies, bgo, smth)
-        this.levelEndX = (bgLengts-1) * canvasWidth * 2; // bgLengts * world.canvas.width; // starts one bgLength behind beginning
+        this.levelEndX = (bgLengts-1) * canvasWidth * 2;  
         this.addBackgroundObjects(bgLengts);
         this.addEnemies(amountHens, amountChicks);
         this.addCollectibles(amountCoins, amountBottles);
@@ -16,14 +16,13 @@ class Level {
     
     addBackgroundObjects(bgLengts){
         
-        for (let i = -1; i < bgLengts; i++){
-            let x = i * canvasWidth*2; // canvasWidth * 2;
+        for (let i = -1; i <= bgLengts; i++){ // bg-lengths plus 2 extra (before and after actual level-area)
+            let x = i * canvasWidth*2;
             let bgLayerObjects = [ 
                 new Cloud('img/5.Fondo/Capas/4.nubes/1.png', x, this.levelEndX),
-                //new BackgroundObject('img/5.Fondo/Capas/5.cielo_1920-1080px.png', 0),
-                new BackgroundObject('img/5.Fondo/Capas/3.Fondo3/Completo.png', x, 0.5, this.levelEndX),
-                new BackgroundObject('img/5.Fondo/Capas/2.Fondo2/completo.png', x, 1, this.levelEndX),
-                new BackgroundObject('img/5.Fondo/Capas/1.suelo-fondo1/completo.png', x, 1.5, this.levelEndX),
+                new BackgroundObject('img/5.Fondo/Capas/3.Fondo3/Completo.png', x+25, 0, this.levelEndX),
+                new BackgroundObject('img/5.Fondo/Capas/2.Fondo2/completo.png', x+15, 0.5, this.levelEndX),
+                new BackgroundObject('img/5.Fondo/Capas/1.suelo-fondo1/completo.png', x, 1, this.levelEndX),
             ];
             this.backgroundObjects.push(...bgLayerObjects);
         }
