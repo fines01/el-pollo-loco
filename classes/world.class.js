@@ -3,16 +3,16 @@ class World {
     canvas;
     ctx;
     camera_x = 0;
-    statusbars = [new StatusBar(0, 'energy', 100), new StatusBar(35, 'coins', 0), new StatusBar(70, 'bottles', 0)];
     collectedCoins = 0;
     collectedBottles = 0;
+    statusbars = [new StatusBar(0, 'energy', 100), new StatusBar(35, 'coins', 0, 10), new StatusBar(70, 'bottles', 0, 10)];
     throwableObjects = [];
     score = 0;
     // animationFps = 20; // 25 or 20
     // for controlling animation fps with requestAnimationTime()
     lastAnimationFrame = 0;
     gameOver = false;
-
+    
     constructor() {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -22,11 +22,6 @@ class World {
         this.draw();
         this.run();
     }
-
-    // setWorld(){
-    //     //this.character.world = this; // or via passing this as above
-    //     this.level.world = this;
-    // }
 
     draw() {
         // clear canvas/ delete old images
@@ -46,14 +41,6 @@ class World {
         //'Kameraauschnitt' zurückverschieben
         this.ctx.translate(-this.camera_x, 0);
 
-        // 'Kamera-Ausschnitt' zurückverschieben
-        //this.ctx.translate(-this.camera_x, 0);
-
-        let self = this;
-        // fkt wird asynchron ausgeführt: sobald drawImage fertig ausgeführt wurde
-        requestAnimationFrame(() => {
-            self.draw();
-        });
     }
 
     addToMap(...objects) {
@@ -63,6 +50,7 @@ class World {
             }
             objects[i].drawObject(this.ctx);
             objects[i].drawFrame(this.ctx);
+            if (objects[i] instanceof StatusBar) objects[i].drawUI(this.ctx);
             // if isReversed: wieder resetten, dh Spiegelung wieder rückgängig machen nach draw()
             if (objects[i].isReversed_x) {
                 this.flipImageBack(objects[i]);
@@ -97,12 +85,12 @@ class World {
             // check character collisions with collectible objects (bottles)
             this.throwableObjects.forEach(throwableObj => {
                 if (enemy.isColliding(throwableObj)) {
-                    enemy.scoreAgainstEnemy(); // while isColliding() --> execute only once ! (maybe another idea)
+                    enemy.scoreAgainstEnemy();
                 }
             });
             if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOn(enemy)) {
                 this.character.receiveHit();
-                this.statusbars[0].setPercentage(this.character.energy);
+                this.statusbars[0].setStatusbar(this.character.energy);
             } else if (this.character.isJumpingOn(enemy)) { //
                 enemy.scoreAgainstEnemy();
             }
@@ -110,16 +98,14 @@ class World {
         });
         // check coin collisions
         this.level.collectibleObjects.forEach((collectible, index) => {
-            if (collectible instanceof Coin && this.character.isColliding(collectible)) { // correction-value of 0.5 because coinllectible png is bigger than actual coin
-                this.collectedCoins += 10; // 10 only for testing purposes // DRY
-                this.statusbars[1].setPercentage(this.collectedCoins);
+            if (collectible instanceof Coin && this.character.isColliding(collectible)) {
+                this.collectedCoins++; 
+                this.statusbars[1].setStatusbar(this.collectedCoins);
                 collectible.markedForDeletion = true;
-                // console.log('coins: ', this.collectedCoins);
             } else if (collectible instanceof ThrowableObject && this.character.isColliding(collectible)) {
                 collectible.markedForDeletion = true;
-                this.collectedBottles++; // check later if this variable is still necessary
-                this.statusbars[2].setPercentage(this.collectedBottles * 10); // * 10 for TESTING pps??
-                //console.log('bottles: ', this.collectedBottles);
+                this.collectedBottles++; 
+                this.statusbars[2].setStatusbar(this.collectedBottles);
             }
         });
         // delete objects (TODO: 'DRY' )
@@ -140,17 +126,18 @@ class World {
             bottle.throw(bottleX, this.character.y + 115);
             this.collectedBottles--;
             this.character.keyboard.ENTER = false;
-            this.statusbars[2].setPercentage(this.collectedBottles * 10);
+            this.statusbars[2].setStatusbar(this.collectedBottles);
         }
     }
 
     updateGame(timeStamp) {
 
+        this.draw();
         // check conditions
         this.checkCollisions();
         this.checkThrowObjects();
 
-        // // ANIMATIONS (need lower fps: 20 - 25)
+        // // ANIMATIONS
         // // for controlling animation-fps (needs lower fps ob about 20-25) withhin requestAnimationFrame()
         let deltaTime = timeStamp - this.lastAnimationFrame; //ms
         this.lastAnimationFrame = timeStamp;
@@ -184,8 +171,8 @@ class World {
     run() {
         //if !gameOver
         let self = this; // now access to self in updateGame() callback-function (wo extra passing it?)
-        //requestAnimationFrame(this.updateGame); // requestAnimationFrame() function: 1.determines/sets possible fps & 2. auto-generates a timestamp and automatically passes it to the callback! ('this' is not accessible in callback?!)
-        requestAnimationFrame( ()=> { // need to do it like so, so that 'this' is accessible in function updateGame()
+        //requestAnimationFrame(this.updateGame); // requestAnimationFrame() function: async, 1.determines/sets possible fps & 2. auto-generates a timestamp and automatically passes it to the callback! ('this' is not accessible in callback?!)
+        requestAnimationFrame( ()=> { // need to do it like that, so that 'this' is accessible in function updateGame()
             let timeStamp = Date.now();
             self.updateGame(timeStamp);
         });

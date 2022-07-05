@@ -1,6 +1,6 @@
 class Coin extends CollectibleObject {
 
-    width = 150;
+    width = 120;
     height = this.width;
 
     IMAGE_COIN = 'img/8.Coin/Moneda2.png' ;
@@ -16,8 +16,8 @@ class Coin extends CollectibleObject {
     }
 
     checkHitareaDimensions() {
-        this.imgY = this.y + 52;
-        this.imgX = this.x + 53;
+        this.imgY = this.y + 42;//52;
+        this.imgX = this.x + 42;//53;
         this.imgWidth = this.width * 0.3;
         this.imgHeight = this.height * 0.3;
     }

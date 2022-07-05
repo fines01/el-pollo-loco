@@ -1,7 +1,7 @@
 class ThrowableObject extends CollectibleObject {
     
-    width = 100; //60
-    height = 100; // 50
+    width = 90; //60
+    height = 90; // 50
     groundLevelY = canvasHeight - this.height;
     initialY = 370;
     //acceleration;
@@ -20,8 +20,8 @@ class ThrowableObject extends CollectibleObject {
     }
 
     checkHitarea() {
-        this.imgY = this.y + 10;
-        this.imgX = this.x + 40;
+        this.imgY = this.y + 8;
+        this.imgX = this.x + 35;
         this.imgWidth = this.width * 0.22;
         this.imgHeight = this.height * 0.78;
     }

@@ -28,18 +28,27 @@ class StatusBar extends DrawableObject {
     ]
 
     // life/energy - statusbar:
+    world;
     percentage;
     x = 10;
-    //y = 0;
     height = 40;
     width = 180;
+    textX = this.x + this.width + 18;
+    fontSize = 18;
+    fontColor = 'white';
+    fontFamily = 'Helvetica, sans-serif';
+    amountBottles = 0;
+    amountCoins = 0;
 
-    constructor(y, images, initialValue) {
+
+    constructor(y, images, initialValue, ratio = 1) {
         super();
         this.y = y;
+        this.percentage = initialValue;
+        this.ratio = ratio
         this.images = this.resolveImages(images);
         this.loadImages(this.images);
-        this.setPercentage(initialValue); // only for energy? 0 coins at start, or start with a certain amount of bottles?
+        this.setStatusbar(this.percentage);
     }
 
     resolveImages(images) {
@@ -53,14 +62,24 @@ class StatusBar extends DrawableObject {
         }
     }
 
-    setPercentage(percentage) {
-        this.percentage = percentage;
+    setStatusbar(percentage) {
+        this.percentage = percentage * this.ratio;
         let imgPath = this.images[this.resolveImageIndex()];
         this.img = this.imgCache[imgPath];
+        //if (ctx) this.drawUI( ctx );
     }
 
     resolveImageIndex() {
         return Math.floor(this.percentage / 20); 
+    }
+
+    drawUI(ctx) {
+        let amountTxt = (this.percentage / this.ratio).toString();
+        ctx.font = this.fontSize + 'px ' + this.fontFamily;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = this.fontColor;
+        ctx.fillText(amountTxt, this.textX, this.y + this.height -8);
+        // if (gameOver) text: x coins missed etc.?
     }
 
 }

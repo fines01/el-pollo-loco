@@ -2,7 +2,7 @@ class Character extends MovableObject {
 
     x = 100;
     y = 135;
-    height = 300;
+    height = 280;
     width = 150;
 
     // as iactual image smaller than png:
@@ -11,11 +11,10 @@ class Character extends MovableObject {
     imgWidth = this.width*0.7;
     imgHeight = this.height*0.55;
     
-    
-    groundLevelY = 135; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
+    groundLevelY = 155; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
     sound_walking = new Audio('audio/step1.mp3');
     //speedY = 0;
-    speedX = 6;//1.5;
+    speedX = 8;//1.5;
     jumpHeight = 28;
 
     // for controlling animation-fps with requestAnimationFrame()
@@ -76,7 +75,6 @@ class Character extends MovableObject {
         this.applyGravity(); //
         this.animate();
         this.move();
-        // as iactual image smaller than png:
         this.checkHitarea();
     }
     
