@@ -17,12 +17,12 @@ class Chicken extends Enemy {
 
     constructor(levelEndX) {
         super().loadImage(this.IMAGES_WALKING[0]);
-        this.x = 200 + Math.random() * (levelEndX-200);
+        this.x = 400 + Math.random() * (levelEndX-400);
         this.y = 340 - Math.random() * 9; 
         this.groundLevelY = this.y;
-        this.speedX = 1 + Math.random() * 0.5;
+        this.speedX = 1 + Math.random() * 1.8;
         this.loadImages(this.IMAGES_WALKING);
-        this.jumpHeight = Math.random() * 5;
+        this.jumpHeight = Math.random() * 7;
         this.applyGravity();
         this.animateEnemies();
     }

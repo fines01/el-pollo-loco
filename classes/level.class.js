@@ -1,14 +1,18 @@
 class Level {
     
     //character;
-    enemies = [];
     backgroundObjects = [];
+    enemies = [];
     collectibleObjects = [];
     collectibles;
     world;
 
     constructor(amountHens, amountChicks, amountCoins, amountBottles, bgLengts) { // (enemies, bgo, smth)
-        this.levelEndX = (bgLengts-1) * canvasWidth * 2;  
+        this.levelEndX = (bgLengts-1) * canvasWidth * 2;
+        this.amountHens = amountHens;
+        this.amountChicks = amountChicks;
+        this.amountCoins = amountCoins;
+        this.amountBottles = amountBottles;
         this.addBackgroundObjects(bgLengts);
         this.addEnemies(amountHens, amountChicks);
         this.addCollectibles(amountCoins, amountBottles);
@@ -46,6 +50,21 @@ class Level {
         }
         for (let i = 0; i < amountBottles; i++) {
             this.collectibleObjects.push(new ThrowableObject(this.levelEndX));
+        }
+    }
+
+    addNewEnemy(enemyType){
+        if (this.enemies.length < this.amountChicks + this.amountHens){
+            if (enemyType === 'Hen'){
+                let chicken = new Chicken(this.levelEndX);
+                //chicken.x = this.levelEndX+250;
+                this.enemies.push(chicken);
+            }
+            if (enemyType === 'Chick') {
+                let chick = new Chick(this.levelEndX);
+                //chick.x = this.levelEndX+250;
+                this.enemies.push(chick);
+            }
         }
     }
 

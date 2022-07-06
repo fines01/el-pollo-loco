@@ -1,7 +1,7 @@
 class ThrowableObject extends CollectibleObject {
     
-    width = 90; //60
-    height = 90; // 50
+    width = 80; //60
+    height = 80; // 50
     groundLevelY = canvasHeight - this.height;
     initialY = 370;
     //acceleration;
@@ -10,7 +10,7 @@ class ThrowableObject extends CollectibleObject {
     constructor(levelEndX) {
         super();
         //if (levelEndX) {
-            this.x = 100 + Math.random() * (levelEndX - 100);
+            this.x = 100 + Math.random() * (levelEndX - 150);
             this.y = 50 + Math.random() * 275;
         //}
         this.loadImage('img/7.Marcadores/Icono/Botella.png');
@@ -21,7 +21,7 @@ class ThrowableObject extends CollectibleObject {
 
     checkHitarea() {
         this.imgY = this.y + 8;
-        this.imgX = this.x + 35;
+        this.imgX = this.x + 31;
         this.imgWidth = this.width * 0.22;
         this.imgHeight = this.height * 0.78;
     }

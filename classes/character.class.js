@@ -1,9 +1,9 @@
 class Character extends MovableObject {
 
-    x = 100;
+    x = 150;
     y = 135;
-    height = 280;
-    width = 150;
+    height = 210;
+    width = 140;
 
     // as iactual image smaller than png:
     imgY = this.y + 120;
@@ -11,7 +11,7 @@ class Character extends MovableObject {
     imgWidth = this.width*0.7;
     imgHeight = this.height*0.55;
     
-    groundLevelY = 155; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
+    groundLevelY = 220; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
     sound_walking = new Audio('audio/step1.mp3');
     //speedY = 0;
     speedX = 8;//1.5;
@@ -80,9 +80,9 @@ class Character extends MovableObject {
     
     checkHitarea() {
         // as sometimes  the actual image is much smaller than the size of the png file:
-        this.imgY = this.y + 120;
+        this.imgY = this.y + 90;
         this.imgX = this.x + 25;
-        this.imgWidth = this.width * 0.6;
+        this.imgWidth = this.width * 0.55;
         this.imgHeight = this.height * 0.55;
     }
 
@@ -97,21 +97,23 @@ class Character extends MovableObject {
 
     animate(){
 
-            if(this.isDead()){
-                this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
-                // gameOver();
+        if(this.isDead()){
+            this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
+            this.y += 2; // makes character 'bounce' because somewhere? i check if is beyond groundLevelY and reset to groundLevelY???
+            // gameOver();
+            this.world.gameOver = true;
             }
-    
+        
             else if(this.isHurt()){
                 this.playAnimation(this.IMAGES_HURT);
             }
-    
+        
             // pepe jumping animation
             else if(this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
                 //this.jump();
             }
-    
+        
             //pepe walking animation
             else if(this.isWalkingRight() || this.isWalkingLeft()){
                 this.sound_walking.play();

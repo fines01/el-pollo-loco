@@ -48,7 +48,7 @@ class DrawableObject {
             ctx.beginPath();
             ctx.lineswidth = '3.5';
             ctx.strokeStyle = 'yellow';
-            if (this.isReversed_x) ctx.rect(-this.imgX + this.imgWidth*0.5, this.imgY, this.imgWidth, this.imgHeight); // td.: fix later
+            if (this.isReversed_x) ctx.rect(-this.imgX + this.imgWidth*0.55, this.imgY, this.imgWidth, this.imgHeight); // td.: fix later
             else ctx.rect(this.imgX, this.imgY, this.imgWidth, this.imgHeight);
             ctx.stroke();
         }

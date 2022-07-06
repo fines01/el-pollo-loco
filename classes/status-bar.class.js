@@ -30,9 +30,9 @@ class StatusBar extends DrawableObject {
     // life/energy - statusbar:
     world;
     percentage;
-    x = 10;
-    height = 40;
-    width = 180;
+    height = 35;
+    width = 150;
+    x = 5;
     textX = this.x + this.width + 18;
     fontSize = 18;
     fontColor = 'white';
@@ -63,10 +63,9 @@ class StatusBar extends DrawableObject {
     }
 
     setStatusbar(percentage) {
-        this.percentage = percentage * this.ratio;
+        this.percentage = Math.round(percentage * this.ratio);
         let imgPath = this.images[this.resolveImageIndex()];
         this.img = this.imgCache[imgPath];
-        //if (ctx) this.drawUI( ctx );
     }
 
     resolveImageIndex() {
@@ -74,7 +73,7 @@ class StatusBar extends DrawableObject {
     }
 
     drawUI(ctx) {
-        let amountTxt = (this.percentage / this.ratio).toString();
+        let amountTxt = Math.round((this.percentage / this.ratio)).toString();
         ctx.font = this.fontSize + 'px ' + this.fontFamily;
         ctx.textAlign = 'center';
         ctx.fillStyle = this.fontColor;

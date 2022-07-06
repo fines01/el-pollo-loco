@@ -126,11 +126,11 @@ class MovableObject extends DrawableObject {
     }
 
     receiveEnergy(){
-        this.energy += 2;
+        this.energy += 0.5;
         if (this.energy > 100) this.energy = 100;
     }
     
-    isHurt( ms = 500 ){
+    isHurt( ms = 250 ){
         let dt = new Date().getTime() - this.lastHit; // ms since lastHit
         return (dt < ms);
     }

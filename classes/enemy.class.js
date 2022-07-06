@@ -7,17 +7,6 @@ class Enemy extends MovableObject {
     animationFrameInterval = 1000 / this.animationFPS;
     animationFrameTimer = 0; //cycles between 0 and Animation-FrameInterval
 
-    scoreAgainstEnemy() {
-
-        if( !this.isHurt(1000)){ // has not been hit in the last 1000ms ( !isHurt(1000) ) OR !receivedHit (wann wieder true setzen)
-            this.receivedHit = true;
-            this.score++;
-            world.character.receiveEnergy();
-            this.receiveHit();
-            // console.log(this, this.energy);
-        }
-    }
-
     checkAnimationFrameTime(deltaTime){
         if (this.animationFrameTimer > this.animationFrameInterval) {
             if (this instanceof Endboss) this.animateEndboss();
@@ -26,6 +15,13 @@ class Enemy extends MovableObject {
         } else {
             this.animationFrameTimer += deltaTime;
         }
+    }
+
+    checkHitarea() {
+        this.imgY = this.y + 7;
+        this.imgX = this.x + 5;
+        this.imgWidth = this.width * 0.85;
+        this.imgHeight = this.height * 0.79;
     }
 
     animateEnemies() {
@@ -45,8 +41,19 @@ class Enemy extends MovableObject {
             this.moveLeft();
             this.randomBounce();
         }
-        if (this.x < 0 - this.width) this.x = world.level.levelEndX; //move back into frame 
+        if (this.x < 0 - 2*this.width) this.x = world.level.levelEndX + 250; //move back into frame 
 
+    }
+
+    scoreAgainstEnemy() {
+
+        if( !this.isHurt(1000)){ // has not been hit in the last 1000ms ( !isHurt(1000) ) OR !receivedHit (wann wieder true setzen)
+            this.receivedHit = true;
+            this.score++;
+            world.character.receiveEnergy();
+            this.receiveHit();
+            // console.log(this, this.energy);
+        }
     }
 
 }

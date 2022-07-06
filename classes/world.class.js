@@ -5,7 +5,6 @@ class World {
     camera_x = 0;
     collectedCoins = 0;
     collectedBottles = 0;
-    statusbars = [new StatusBar(0, 'energy', 100), new StatusBar(35, 'coins', 0, 10), new StatusBar(70, 'bottles', 0, 10)];
     throwableObjects = [];
     score = 0;
     // animationFps = 20; // 25 or 20
@@ -15,10 +14,14 @@ class World {
     
     constructor() {
         this.canvas = document.getElementById('canvas');
+         // get an instance of the CanvasRenderingContext2D interface (provides 2d rendering context for the canvas element)
         this.ctx = this.canvas.getContext('2d');
         this.character = new Character(this);
         this.level = level1;
         this.level.world = this;
+        // this.coinsRatio = (100 / this.level.amountCoins);
+        // this.bottlesRatio = (100 / this.level.amountBottles);
+        this.statusbars = [new StatusBar(-5, 'energy', 100), new StatusBar(20, 'coins', 0, 100 / this.level.amountCoins), new StatusBar(45, 'bottles', 0, 100 / this.level.amountBottles)];
         this.draw();
         this.run();
     }
@@ -86,6 +89,8 @@ class World {
             this.throwableObjects.forEach(throwableObj => {
                 if (enemy.isColliding(throwableObj)) {
                     enemy.scoreAgainstEnemy();
+                    if (enemy instanceof Chicken) this.level.addNewEnemy('Hen')
+                    else this.level.addNewEnemy('Chick');
                 }
             });
             if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOn(enemy)) {
@@ -93,6 +98,8 @@ class World {
                 this.statusbars[0].setStatusbar(this.character.energy);
             } else if (this.character.isJumpingOn(enemy)) { //
                 enemy.scoreAgainstEnemy();
+                if (enemy instanceof Chicken) this.level.addNewEnemy('Hen')
+                else this.level.addNewEnemy('Chick');
             }
             enemy.receivedHit = false;
         });
@@ -123,11 +130,26 @@ class World {
             else bottleX = this.character.x + this.character.width * 0.5;
             let bottle = new ThrowableObject();
             this.throwableObjects.push(bottle);
-            bottle.throw(bottleX, this.character.y + 115);
+            bottle.throw(bottleX, this.character.y + 80);
             this.collectedBottles--;
             this.character.keyboard.ENTER = false;
             this.statusbars[2].setStatusbar(this.collectedBottles);
         }
+    }
+
+    checkGameStatus(){
+        if (this.gameOver){
+            // stop game, show game-over screen, show scores?
+        }
+    }
+
+    checkDevMode() {
+        let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
+        movableObjects.forEach( mo => {
+            if (this.character.keyboard.F){
+                mo.showHitboxes = !mo.showHitboxes;
+            }
+        });
     }
 
     updateGame(timeStamp) {
@@ -136,6 +158,8 @@ class World {
         // check conditions
         this.checkCollisions();
         this.checkThrowObjects();
+        this.checkDevMode();
+        this.checkGameStatus();
 
         // // ANIMATIONS
         // // for controlling animation-fps (needs lower fps ob about 20-25) withhin requestAnimationFrame()

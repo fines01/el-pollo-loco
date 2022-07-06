@@ -20,18 +20,60 @@ body {
     max-height: 100%;
 }
 
-h1 {
+h1, p {
     color: sandybrown;
+    position: absolute;
+    top: 2rem;
+}
+
+h2 {
+    color: brown;
+    font-size: 2rem;
+    position: absolute;
+    top: 23%;
+    z-index: 1;
+    translate: all 235ms linear;
 }
 
 canvas {
-    width: var(--canvasWidth);
+    /* width: var(--canvasWidth);
     height:var(--canvasHeight);
+    margin: 1rem 0;
+    border-top: 4px solid white;
+    border-bottom: 4px solid white;
+    border-radius: 4px; */
     /* background-size: cover; */
     background-image: linear-gradient(to bottom, rgba(2, 0, 128, 0.9), rgba(105, 215, 252, 0.45) 30%, rgba(255, 140, 0) 70%);
     z-index: 1;
+}
+
+.screen{
+    width: var(--canvasWidth);
+    height:var(--canvasHeight);
     margin: 1rem 0;
     border-top: 4px solid white;
     border-bottom: 4px solid white;
     border-radius: 4px;
+    /* center in middle of page */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* auto scale down  when width/height of page is less than canvas element*/
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.d.none {
+    display: none;
+}
+
+.text-dive-animation {
+    animation: text-dive 500ms linear 1;
+}
+
+@keyframes text-dive {
+    0% {top: 20%;}
+    50% {top: 55%; }
+    100% { top: 95%;}
 }

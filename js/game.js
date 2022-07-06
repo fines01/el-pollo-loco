@@ -1,7 +1,6 @@
 // get css variables
 // remove string 'px' and keep only the numeric values
 // Actually not necessary
-
 const root = document.documentElement;
 const canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '');
 const canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '');
@@ -9,15 +8,56 @@ const canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').r
 let world;
 
 function init() {
-    // get an instance of the CanvasRenderingContext2D interface (provides 2d rendering context for the canvas element)
-    //canvas = document.getElementById('canvas');
-    // const ctx = canvas.getContext('2d'); // into class World
-    world = new World();
+
+    console.log('Hi! Press Enter to start the game!');
+
+   // world = new World();
 }
 
-// handle keypresses (class Keyboard?)
-// window.addEventListener('keydown', (event) => {
-//     console.log(event.key, event.code);
-//     let keys = [];
-// })
+let handleKeypresses = window.addEventListener('keydown', (e) => {
+    if (e.code == 'Enter' && !world) {
+        getId('start-text').classList.add('text-dive-animation');
+        window.setTimeout( ()=>{
+        startGame();
+    }, 400);
+    }
+});
 
+function startGame() {
+        hide('start-screen', 'game-over-screen', 'loser-screen', 'start-text');
+        show('canvas');
+        world = new World();
+}
+
+
+// function pauseGame() {}
+
+
+// HELPER FUNCTIONS 
+
+function getId(...idNames){
+    let htmlElements = [];
+    for(let i = 0; i < idNames.length; i++){
+        htmlElements.push(document.getElementById(idNames[i]));
+    }
+    if (htmlElements.length == 1)  return htmlElements[0];
+    else return htmlElements;
+}
+
+function hide(...elements){
+    for (let i = 0; i < elements.length; i++){
+        let el = getId(elements[i]);
+        if (!el.classList.contains('d-none')){
+            el.classList.add('d-none');
+        }
+    }
+}
+
+function show(...elements) {
+     for (let i = 0; i < elements.length; i++) {
+        let el = getId(elements[i]);
+        if (el.classList.contains('d-none')) {
+            el.classList.remove('d-none');
+         }
+     }
+}
