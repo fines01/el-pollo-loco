@@ -100,8 +100,10 @@ class Character extends MovableObject {
         if(this.isDead()){
             this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
             this.y += 2; // makes character 'bounce' because somewhere? i check if is beyond groundLevelY and reset to groundLevelY???
-            // gameOver();
-            this.world.gameOver = true;
+            //this.setGameOver();
+            // setTimeout( ()=>{
+            //     this.world.gameOver = true;
+            // }, 400);
             }
         
             else if(this.isHurt()){

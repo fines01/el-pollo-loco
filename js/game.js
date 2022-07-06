@@ -7,12 +7,10 @@ const canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').r
 
 let world;
 
-function init() {
-
-    console.log('Hi! Press Enter to start the game!');
-
-   // world = new World();
-}
+// function init() {
+//     console.log('Hi! Press Enter to start the game!');
+//    // world = new World();
+// }
 
 let handleKeypresses = window.addEventListener('keydown', (e) => {
     if (e.code == 'Enter' && !world) {
@@ -21,6 +19,9 @@ let handleKeypresses = window.addEventListener('keydown', (e) => {
         startGame();
     }, 400);
     }
+    if (e.code == 'KeyP' && world){
+        togglePause();
+    }
 });
 
 function startGame() {
@@ -28,6 +29,16 @@ function startGame() {
         show('canvas');
         world = new World();
 }
+
+function togglePause() {
+    world.gamePaused = !world.gamePaused;
+    if (!world.gamePaused) world.run();
+}
+
+// OK LOL
+// function showGameOverScreen(){
+//     show('game-over-screen');
+// }
 
 
 // function pauseGame() {}

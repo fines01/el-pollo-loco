@@ -10,7 +10,7 @@ class ThrowableObject extends CollectibleObject {
     constructor(levelEndX) {
         super();
         //if (levelEndX) {
-            this.x = 100 + Math.random() * (levelEndX - 150);
+            this.x = 200 + Math.random() * (levelEndX - 250);
             this.y = 50 + Math.random() * 275;
         //}
         this.loadImage('img/7.Marcadores/Icono/Botella.png');

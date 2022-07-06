@@ -7,7 +7,7 @@ class DrawableObject {
     height;
     imgCache = [];
     markedForDeletion = false;
-    showHitboxes = true;
+    showHitboxes = false;
 
     // as sometimes  the actual image is much smaller than the size of the png file:
     imgY = this.y;

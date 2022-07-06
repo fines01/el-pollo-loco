@@ -64,6 +64,10 @@ canvas {
     max-height: 100%;
 }
 
+#game-over-screen, #loser-screen{
+    z-index: 1;
+}
+
 .d.none {
     display: none;
 }

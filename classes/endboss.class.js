@@ -3,7 +3,6 @@ class Endboss extends Enemy { // or Gallina
 
     height = 400;
     width = 300;
-    //x = 1000;
     y = 50;
     energy = 6; // = needs 3 hits
     animationFPS = 10; //25;
@@ -66,7 +65,6 @@ class Endboss extends Enemy { // or Gallina
         this.imgHeight = this.height * 0.79;
     }
 
-
     animateEndboss() {
 
             this.checkHitarea();
@@ -80,11 +78,11 @@ class Endboss extends Enemy { // or Gallina
             if (this.isHurt()) this.playAnimation(this.IMAGES_HURT);
             else if (this.isDead()) {
                 this.playAnimationOnce(this.IMAGES_DYING);
-                this.y+=20;
-                setTimeout(() => {
-                    this.markedForDeletion = true;
-                    // this.receivedHit = false;
-                }, 1000);
+                this.y+=80;
+                // setTimeout(() => {
+                //     this.markedForDeletion = true;
+                //     // this.receivedHit = false;
+                // }, 1000);
             }
     }
 

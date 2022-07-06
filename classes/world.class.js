@@ -10,6 +10,7 @@ class World {
     // animationFps = 20; // 25 or 20
     // for controlling animation fps with requestAnimationTime()
     lastAnimationFrame = 0;
+    gamePaused = false;
     gameOver = false;
     
     constructor() {
@@ -85,7 +86,12 @@ class World {
     checkCollisions() {
         // check enemy collisions
         this.level.enemies.forEach(enemy => {
-            // check character collisions with collectible objects (bottles)
+            // check endboss - game-over condition
+            if (enemy instanceof Endboss && enemy.isDead()) {
+                this.endboss = enemy;
+                this.setGameOver();
+            };
+            // check enemy collisions with collectible objects (bottles)
             this.throwableObjects.forEach(throwableObj => {
                 if (enemy.isColliding(throwableObj)) {
                     enemy.scoreAgainstEnemy();
@@ -93,6 +99,7 @@ class World {
                     else this.level.addNewEnemy('Chick');
                 }
             });
+            // check enemy collisions with character
             if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOn(enemy)) {
                 this.character.receiveHit();
                 this.statusbars[0].setStatusbar(this.character.energy);
@@ -103,7 +110,8 @@ class World {
             }
             enemy.receivedHit = false;
         });
-        // check coin collisions
+
+        // check collectibles collisions: coins and bottles
         this.level.collectibleObjects.forEach((collectible, index) => {
             if (collectible instanceof Coin && this.character.isColliding(collectible)) {
                 this.collectedCoins++; 
@@ -115,10 +123,25 @@ class World {
                 this.statusbars[2].setStatusbar(this.collectedBottles);
             }
         });
-        // delete objects (TODO: 'DRY' )
+        // remove objects (TODO: 'DRY' )
+        this.removeMarkedObjects();
+        // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies); // doesn't work WHY ???
+
+        // check character game-over condition
+        if (this.character.isDead()) this.setGameOver();
+    }
+    
+    removeMarkedObjects(){
+        //objArr = objArr.filter(obj => !obj.markedForDeletion); // gn 
         this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
         this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
         this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
+    }
+
+    removeMarkedObjects2(...objArrs){
+        for( let i = 0; i < objArrs.length; i++ ) {
+            objArrs[i] = objArrs[i].filter(obj => !obj.markedForDeletion);
+        }
     }
 
     checkThrowObjects() {
@@ -136,11 +159,19 @@ class World {
             this.statusbars[2].setStatusbar(this.collectedBottles);
         }
     }
+    
+    setGameOver() {
+        setTimeout( ()=>{
+            this.gameOver = true;
+        },500);
+        this.setGameOverScreen();
+    }
 
-    checkGameStatus(){
-        if (this.gameOver){
-            // stop game, show game-over screen, show scores?
-        }
+    setGameOverScreen() {
+        // do game-over stuff (set game over screens)
+            if (this.character.isDead()) show('loser-screen')
+            else if(this.endboss.isDead() && this.level.amountCoins === this.collectedCoins) show('game-over-screen');
+            else show('loser-screen');
     }
 
     checkDevMode() {
@@ -159,7 +190,7 @@ class World {
         this.checkCollisions();
         this.checkThrowObjects();
         this.checkDevMode();
-        this.checkGameStatus();
+        //this.setGameOverScreen();
 
         // // ANIMATIONS
         // // for controlling animation-fps (needs lower fps ob about 20-25) withhin requestAnimationFrame()
@@ -186,17 +217,14 @@ class World {
         // // movable-objects: applyGravity()
         // // throwable-objects: throw() 
 
-        // //if !gameOver
-        //requestAnimationFrame(this.updateGame);
         this.run();
 
     }
 
     run() {
-        //if !gameOver
         let self = this; // now access to self in updateGame() callback-function (wo extra passing it?)
         //requestAnimationFrame(this.updateGame); // requestAnimationFrame() function: async, 1.determines/sets possible fps & 2. auto-generates a timestamp and automatically passes it to the callback! ('this' is not accessible in callback?!)
-        requestAnimationFrame( ()=> { // need to do it like that, so that 'this' is accessible in function updateGame()
+        if(!this.gameOver && !this.gamePaused) requestAnimationFrame( ()=> { // need to do it like that, so that 'this' is accessible in function updateGame()
             let timeStamp = Date.now();
             self.updateGame(timeStamp);
         });
