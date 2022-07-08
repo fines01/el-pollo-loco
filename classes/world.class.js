@@ -12,19 +12,19 @@ class World {
     // for controlling animation fps with requestAnimationTime()
     // animationFps = 20; // 25 or 20
     gamePaused = false;
-    gameOver = false;
+    gameOver = true;
     
     constructor(levelNo = 1) {
         this.canvas = document.getElementById('canvas');
         // get an instance of the CanvasRenderingContext2D interface (provides 2d rendering context for the canvas element)
         this.ctx = this.canvas.getContext('2d');
         this.character = new Character(this);
-        this.level = setLevel(levelNo);
+        this.level = level; //setLevel(levelNo);
         this.endboss = this.level.enemies[this.level.enemies.length-1];
         this.statusbars = [new StatusBar(-5, 'energy', 100), new StatusBar(20, 'coins', 0, 100 / this.level.amountCoins), new StatusBar(45, 'bottles', 0, 100 / this.level.amountBottles)];
         this.lastAnimationFrame = Date.now();
         this.draw();
-        this.run();
+        //this.run();
     }
 
     draw() {
@@ -81,9 +81,9 @@ class World {
         this.ctx.restore();
     }
 
-    checkCollisions() { // TODO rename in maybe checkGameStatus() and refactor
+    checkCollisions() {
         // check enemy collisions
-        this.level.enemies.forEach(enemy => {
+        this.level.enemies.forEach((enemy,index) => {
             // check enemy collisions with collectible objects (bottles)
             this.throwableObjects.forEach(throwableObj => {
                 if (enemy.isColliding(throwableObj)) {
@@ -116,23 +116,24 @@ class World {
                 this.statusbars[2].setStatusbar(this.collectedBottles);
             }
         });
-        // remove objects (TODO: 'DRY' )
+        // remove objects
+        // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies); // doesn't work, why ???
         this.removeMarkedObjects();
-        // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies); // doesn't work WHY ???
     }
     
-    removeMarkedObjects(){
-        //objArr = objArr.filter(obj => !obj.markedForDeletion); // gn 
-        this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
-        this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
-        this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
-    }
-
     removeMarkedObjects2(...objArrs){
         for( let i = 0; i < objArrs.length; i++ ) {
             objArrs[i] = objArrs[i].filter( (obj) => !obj.markedForDeletion );
         }
     }
+
+    removeMarkedObjects(){
+        //objArr = objArr.filter(obj => !obj.markedForDeletion); // gn - check 
+        this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
+        this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
+        this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
+    }
+
 
     checkThrowObjects() {
         let isThrowing = false;
@@ -176,16 +177,15 @@ class World {
     updateGame(timeStamp) {
 
         this.draw();
-        // check conditions
         this.checkCollisions();
         this.checkThrowObjects();
         this.checkDevMode();
 
         // // ANIMATIONS
         // // for controlling animation-fps (needs lower fps ob about 20-25) withhin requestAnimationFrame()
-        let deltaTime = timeStamp - this.lastAnimationFrame; //ms
+        let deltaTime = timeStamp - this.lastAnimationFrame; //ms // reset lastAnimationFrame to NOW after pause (else time passed in pause is subtracted as well)
         this.lastAnimationFrame = timeStamp;
-        // update game time
+         // update game time
         this.gameTime += deltaTime;
         // check time game over condition
         if (this.gameTime > this.maxGameTime) this.setGameOver();
@@ -193,7 +193,7 @@ class World {
         // update bg objects & clouds: move
         this.level.backgroundObjects.forEach(bgo => {
             bgo.move();
-        })
+        });
         // update enemies
         this.level.enemies.forEach(enemy => {
             // animate enemies
@@ -213,6 +213,7 @@ class World {
         // check character game-over condition
         if (this.character.isDead()) this.setGameOver();
         // // Todo: movable-objects: applyGravity()
+        
         this.run();
     }
 

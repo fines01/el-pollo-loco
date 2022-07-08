@@ -29,9 +29,7 @@ class Enemy extends MovableObject {
     }
 
     move() {
-
         this.checkHitarea();
-        
         if (this.isDead()) {
             setTimeout(() => {
                 this.markedForDeletion = true;
@@ -41,14 +39,12 @@ class Enemy extends MovableObject {
             this.randomBounce();
         }
         if (this.x < 0 - 2*this.width) this.x = world.level.levelEndX + 250; //move back into frame 
-
     }
 
     scoreAgainstEnemy() {
-
         if( !this.isHurt(800)){ // has not been hit in the last 1000ms ( !isHurt(1000) ) OR !receivedHit (wann wieder true setzen)
             this.receivedHit = true;
-            this.score++;
+            //world.character.score++;
             world.character.receiveEnergy();
             this.receiveHit();
         }
