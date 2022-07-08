@@ -6,7 +6,7 @@ class Keyboard {
     DOWN = false;
     SPACE = false;
     F = false;
-    ENTER = false; //start game and throw instead of D
+    ENTER = false;
 
     constructor(){
         this.handleKeypress();

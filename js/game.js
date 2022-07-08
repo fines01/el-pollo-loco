@@ -7,27 +7,26 @@ const canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').r
 
 let world;
 
-// function init() {
-//     console.log('Hi! Press Enter to start the game!');
-//    // world = new World();
-// }
-
 let handleKeypresses = window.addEventListener('keydown', (e) => {
     if (e.code == 'Enter' && !world) {
-        getId('start-text').classList.add('text-dive-animation');
+        getId('screen-text-big').classList.add('text-dive-animation');
         window.setTimeout( ()=>{
         startGame();
     }, 400);
     }
+    if (e.code == 'Enter' && world && world.gameOver) {
+        startGame();
+    }
     if (e.code == 'KeyP' && world){
         togglePause();
+        console.log(world.gameOver);
     }
 });
 
 function startGame() {
-        hide('start-screen', 'game-over-screen', 'loser-screen', 'start-text');
-        show('canvas');
-        world = new World();
+    hide('start-screen', 'game-over-screen', 'loser-screen', 'screen-text-big', 'screen-text-small');
+    show('canvas');
+    world = new World();
 }
 
 function togglePause() {
@@ -35,13 +34,18 @@ function togglePause() {
     if (!world.gamePaused) world.run();
 }
 
-// OK LOL
-// function showGameOverScreen(){
-//     show('game-over-screen');
-// }
+function setWinScreen(){
+    let text = getId('screen-text-big');
+    show('game-over-screen', 'screen-text-big', 'screen-text-small');
+    text.innerHTML = "YOU WON!";
+    text.classList.add('endscreen-text');
+}
 
+function setLoserScreen(){
+    show('loser-screen', 'screen-text-small');
+}
 
-// function pauseGame() {}
+function setHelpScreen(){}
 
 
 // HELPER FUNCTIONS 

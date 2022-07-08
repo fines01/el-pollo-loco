@@ -8,13 +8,11 @@ class Coin extends CollectibleObject {
         super();
         this.x = 200 + Math.random() * (levelEndX - 300);
         this.y = 50 + Math.random() * 275;
-        //this.i = Math.floor(Math.random() * 2); // rand Integer between [0,] // i?
         this.loadImage(this.IMAGE_COIN);
-        // as sometimes  the actual image is much smaller than the size of the png file:
-        this.checkHitareaDimensions();
+        this.checkHitarea();
     }
 
-    checkHitareaDimensions() {
+    checkHitarea() {
         this.imgY = this.y + 42;//52;
         this.imgX = this.x + 42;//53;
         this.imgWidth = this.width * 0.3;

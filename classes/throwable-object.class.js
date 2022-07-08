@@ -1,22 +1,17 @@
 class ThrowableObject extends CollectibleObject {
     
-    width = 80; //60
-    height = 80; // 50
+    width = 80;
+    height = 80;
     groundLevelY = canvasHeight - this.height;
     initialY = 370;
     //acceleration;
 
-    //constructor(x, y) {
     constructor(levelEndX) {
         super();
-        //if (levelEndX) {
-            this.x = 200 + Math.random() * (levelEndX - 250);
-            this.y = 50 + Math.random() * 275;
-        //}
+        this.x = 200 + Math.random() * (levelEndX - 250);
+        this.y = 50 + Math.random() * 275;
         this.loadImage('img/7.Marcadores/Icono/Botella.png');
         this.checkHitarea();
-        // if (x) this.x = x;
-        // if (y) this.y = y;
     }
 
     checkHitarea() {
@@ -31,15 +26,13 @@ class ThrowableObject extends CollectibleObject {
         this.x = x;
         this.y = y;
         this.speedY = 20;
-        this.applyGravity();
-        
+        // TODO: remove interval function
         setInterval( () => {
-
             this.checkHitarea();
-
+            this.applyGravity();
             if (this.y < this.groundLevelY) {
-                if (!world.character.isReversed_x) this.x += 8;
-                if (world.character.isReversed_x) this.x -=8;
+                if (!world.character.isReversed_x) this.x += 16;
+                if (world.character.isReversed_x) this.x -= 16;
             } else {
                 this.markedForDeletion = true;
             }

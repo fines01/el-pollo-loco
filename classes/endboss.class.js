@@ -53,7 +53,7 @@ class Endboss extends Enemy { // or Gallina
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
-        //this.speed = 0.15 + Math.random() * 0.45; // maybe pass & increase with Level?
+        //this.speed = 0.15 + Math.random() * 0.45;
         this.x = levelEndX;// - this.width;
         this.animateEndboss();
     }
@@ -79,10 +79,6 @@ class Endboss extends Enemy { // or Gallina
             else if (this.isDead()) {
                 this.playAnimationOnce(this.IMAGES_DYING);
                 this.y+=80;
-                // setTimeout(() => {
-                //     this.markedForDeletion = true;
-                //     // this.receivedHit = false;
-                // }, 1000);
             }
     }
 

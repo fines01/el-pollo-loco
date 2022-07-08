@@ -27,7 +27,6 @@ class StatusBar extends DrawableObject {
         'img/7.Marcadores/Barra/Marcador_botella/Verde/100_.png',
     ]
 
-    // life/energy - statusbar:
     world;
     percentage;
     height = 35;
@@ -72,13 +71,21 @@ class StatusBar extends DrawableObject {
         return Math.floor(this.percentage / 20); 
     }
 
-    drawUI(ctx) {
+    drawAmount(ctx) {
         let amountTxt = Math.round((this.percentage / this.ratio)).toString();
         ctx.font = this.fontSize + 'px ' + this.fontFamily;
         ctx.textAlign = 'center';
         ctx.fillStyle = this.fontColor;
         ctx.fillText(amountTxt, this.textX, this.y + this.height -8);
         // if (gameOver) text: x coins missed etc.?
+    }
+    
+    drawGameTime(ctx, gameTime, maxGameTime) {
+        ctx.font = 'bold ' + this.fontSize * 1.1 + 'px ' + this.fontFamily;
+        let remainingTime = ( (maxGameTime - gameTime) * 0.001).toFixed(1);
+        if (remainingTime < 10 ) ctx.fillStyle = 'red';
+        if (remainingTime < 0.0 ) remainingTime = 0.0;
+        ctx.fillText('Time: ' + remainingTime, canvasWidth*0.9, this.y + this.height -4 );
     }
 
 }

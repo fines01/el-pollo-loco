@@ -1,9 +1,7 @@
 class Enemy extends MovableObject {
     
     energy = 2;
-   
-    // for controlling animation-fps with requestAnimationFrame()
-    animationFPS = 20; //25;
+    animationFPS = 25; //25;
     animationFrameInterval = 1000 / this.animationFPS;
     animationFrameTimer = 0; //cycles between 0 and Animation-FrameInterval
 
@@ -25,6 +23,7 @@ class Enemy extends MovableObject {
     }
 
     animateEnemies() {
+        this.applyGravity();
         if (this.isDead()) this.loadImage(this.IMAGE_DEAD);
         else this.playAnimation(this.IMAGES_WALKING);
     }
@@ -47,12 +46,11 @@ class Enemy extends MovableObject {
 
     scoreAgainstEnemy() {
 
-        if( !this.isHurt(1000)){ // has not been hit in the last 1000ms ( !isHurt(1000) ) OR !receivedHit (wann wieder true setzen)
+        if( !this.isHurt(800)){ // has not been hit in the last 1000ms ( !isHurt(1000) ) OR !receivedHit (wann wieder true setzen)
             this.receivedHit = true;
             this.score++;
             world.character.receiveEnergy();
             this.receiveHit();
-            // console.log(this, this.energy);
         }
     }
 

@@ -3,12 +3,6 @@ class BackgroundObject extends MovableObject {
     width = canvasWidth*2; // world.canvas.width
     height = canvasHeight; // world.canvas.height
 
-    // IMAGES_LAYERS = [
-    //     'img/5.Fondo/Capas/3.Fondo3/Completo.png',
-    //     'img/5.Fondo/Capas/2.Fondo2/completo.png',
-    //     'img/5.Fondo/Capas/1.suelo-fondo1/completo.png'
-    // ];
-
     constructor(imgPath, x, speedX, levelEndX){
         super().loadImage(imgPath);
         this.x = x;
@@ -18,9 +12,8 @@ class BackgroundObject extends MovableObject {
 
     }
     
-    // move: add parallax effects when walking TODO. fix (parallax) backgrounds
+    // move: add parallax effects when walking
     move(levelEndX) {
-        
         if (!(this instanceof Cloud)){
             if(this.keyboard.RIGHT && world.character.isWalkingRight()){
                 //if (this.x < -this.width) this.x = 0;
@@ -33,7 +26,6 @@ class BackgroundObject extends MovableObject {
                 this.isReversed_x = false;
             }
         }
-
     }
     
 }

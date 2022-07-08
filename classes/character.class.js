@@ -5,19 +5,18 @@ class Character extends MovableObject {
     height = 210;
     width = 140;
 
-    // as iactual image smaller than png:
+    // as iactual image is smaller than png:
     imgY = this.y + 120;
     imgX = this.x + 25;
     imgWidth = this.width*0.7;
     imgHeight = this.height*0.55;
     
-    groundLevelY = 220; // Ground-Level. TEST, vorübergehend (bessere Lsg f ?)
+    groundLevelY = 220;
     sound_walking = new Audio('audio/step1.mp3');
-    //speedY = 0;
     speedX = 8;//1.5;
     jumpHeight = 28;
 
-    // for controlling animation-fps with requestAnimationFrame()
+    // for controlling animation-fps withhin requestAnimationFrame()
     animationFPS = 35; //25;
     animationFrameInterval = 1000/this.animationFPS;
     animationFrameTimer = 0; //cycles between 0 and ...frameInterval
@@ -45,8 +44,7 @@ class Character extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-36.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-37.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-38.png',
-        'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-39.png', // TODO: nach Sprung-Ende/Landung IMMER dieses Bild anzeigen
-        //'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-40.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-39.png', //
     ];
     IMAGES_HURT = [
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/4.Herido/H-41.png',
@@ -71,8 +69,6 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
         this.world = world;
-        //this.checkKeypress(); // TEST
-        this.applyGravity(); //
         this.animate();
         this.move();
         this.checkHitarea();
@@ -97,26 +93,21 @@ class Character extends MovableObject {
 
     animate(){
 
+        this.applyGravity();
+
         if(this.isDead()){
             this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
-            this.y += 2; // makes character 'bounce' because somewhere? i check if is beyond groundLevelY and reset to groundLevelY???
-            //this.setGameOver();
-            // setTimeout( ()=>{
-            //     this.world.gameOver = true;
-            // }, 400);
+            this.y += 2; // TODO fix 'bounce'
             }
         
             else if(this.isHurt()){
                 this.playAnimation(this.IMAGES_HURT);
             }
         
-            // pepe jumping animation
             else if(this.isAboveGround()) {
                 this.playAnimation(this.IMAGES_JUMPING);
-                //this.jump();
             }
         
-            //pepe walking animation
             else if(this.isWalkingRight() || this.isWalkingLeft()){
                 this.sound_walking.play();
                 this.playAnimation(this.IMAGES_WALKING);

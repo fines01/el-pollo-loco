@@ -35,6 +35,14 @@ h2 {
     translate: all 235ms linear;
 }
 
+h4{
+    color: rgb(251, 251, 0);
+    font-size: 1.5rem;
+    position: absolute;
+    top: 23%;
+    z-index: 2;
+}
+
 canvas {
     /* width: var(--canvasWidth);
     height:var(--canvasHeight);
@@ -68,16 +76,23 @@ canvas {
     z-index: 1;
 }
 
+.endscreen-text {
+    color: rgb(251, 251, 0);
+    font-size: 3rem;
+    top: 75%;
+    z-index: 2;
+}
+
 .d.none {
     display: none;
 }
 
 .text-dive-animation {
-    animation: text-dive 500ms linear 1;
+    animation: text-dive-out 500ms linear 1;
 }
 
-@keyframes text-dive {
+@keyframes text-dive-out {
     0% {top: 20%;}
     50% {top: 55%; }
-    100% { top: 95%;}
+    100% { top: 100%;}
 }

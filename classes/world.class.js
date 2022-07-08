@@ -7,22 +7,22 @@ class World {
     collectedBottles = 0;
     throwableObjects = [];
     score = 0;
-    // animationFps = 20; // 25 or 20
+    gameTime = 0;
+    maxGameTime = 30000; //in ms
     // for controlling animation fps with requestAnimationTime()
-    lastAnimationFrame = 0;
+    // animationFps = 20; // 25 or 20
     gamePaused = false;
     gameOver = false;
     
-    constructor() {
+    constructor(levelNo = 1) {
         this.canvas = document.getElementById('canvas');
-         // get an instance of the CanvasRenderingContext2D interface (provides 2d rendering context for the canvas element)
+        // get an instance of the CanvasRenderingContext2D interface (provides 2d rendering context for the canvas element)
         this.ctx = this.canvas.getContext('2d');
         this.character = new Character(this);
-        this.level = level1;
-        this.level.world = this;
-        // this.coinsRatio = (100 / this.level.amountCoins);
-        // this.bottlesRatio = (100 / this.level.amountBottles);
+        this.level = setLevel(levelNo);
+        this.endboss = this.level.enemies[this.level.enemies.length-1];
         this.statusbars = [new StatusBar(-5, 'energy', 100), new StatusBar(20, 'coins', 0, 100 / this.level.amountCoins), new StatusBar(45, 'bottles', 0, 100 / this.level.amountBottles)];
+        this.lastAnimationFrame = Date.now();
         this.draw();
         this.run();
     }
@@ -30,18 +30,14 @@ class World {
     draw() {
         // clear canvas/ delete old images
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         // 'Kamera-Ausschnitt' verschieben (Verschiebt Koordinatensystem/ Position an der 'gezeichnet' wird)
         this.ctx.translate(this.camera_x, 0); // translate(x,y) verändert Position des Canvas
-
         this.addToMap(...this.level.backgroundObjects, ...this.level.collectibleObjects, ...this.level.enemies, this.character, ...this.throwableObjects);
-
-        // Objects that should stay in place:
+        //// Objects that should stay in place:
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(...this.statusbars);
         this.ctx.translate(this.camera_x, 0);
-        // End Objects that should stay in place
-
+        //// End Objects that should stay in place
         //'Kameraauschnitt' zurückverschieben
         this.ctx.translate(-this.camera_x, 0);
 
@@ -54,13 +50,15 @@ class World {
             }
             objects[i].drawObject(this.ctx);
             objects[i].drawFrame(this.ctx);
-            if (objects[i] instanceof StatusBar) objects[i].drawUI(this.ctx);
+            if (objects[i] instanceof StatusBar) {objects[i].drawAmount(this.ctx)};
+            if (objects[i] instanceof StatusBar && i === 0) objects[i].drawGameTime(this.ctx, this.gameTime, this.maxGameTime);
             // if isReversed: wieder resetten, dh Spiegelung wieder rückgängig machen nach draw()
             if (objects[i].isReversed_x) {
                 this.flipImageBack(objects[i]);
             }
         }
     }
+
     // into one function via spread operator?
     addObjectsToMap(objects) {
         objects.forEach(o => {
@@ -83,14 +81,9 @@ class World {
         this.ctx.restore();
     }
 
-    checkCollisions() {
+    checkCollisions() { // TODO rename in maybe checkGameStatus() and refactor
         // check enemy collisions
         this.level.enemies.forEach(enemy => {
-            // check endboss - game-over condition
-            if (enemy instanceof Endboss && enemy.isDead()) {
-                this.endboss = enemy;
-                this.setGameOver();
-            };
             // check enemy collisions with collectible objects (bottles)
             this.throwableObjects.forEach(throwableObj => {
                 if (enemy.isColliding(throwableObj)) {
@@ -126,9 +119,6 @@ class World {
         // remove objects (TODO: 'DRY' )
         this.removeMarkedObjects();
         // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies); // doesn't work WHY ???
-
-        // check character game-over condition
-        if (this.character.isDead()) this.setGameOver();
     }
     
     removeMarkedObjects(){
@@ -140,7 +130,7 @@ class World {
 
     removeMarkedObjects2(...objArrs){
         for( let i = 0; i < objArrs.length; i++ ) {
-            objArrs[i] = objArrs[i].filter(obj => !obj.markedForDeletion);
+            objArrs[i] = objArrs[i].filter( (obj) => !obj.markedForDeletion );
         }
     }
 
@@ -169,9 +159,9 @@ class World {
 
     setGameOverScreen() {
         // do game-over stuff (set game over screens)
-            if (this.character.isDead()) show('loser-screen')
-            else if(this.endboss.isDead() && this.level.amountCoins === this.collectedCoins) show('game-over-screen');
-            else show('loser-screen');
+            if (this.character.isDead()) setLoserScreen(); // params: energy left, missed coins, time left?
+            else if(this.endboss.isDead() && this.level.amountCoins === this.collectedCoins)  setWinScreen();
+            else setLoserScreen(); // determine reason: "you missed x coins" or "you ran out of time"
     }
 
     checkDevMode() {
@@ -190,12 +180,15 @@ class World {
         this.checkCollisions();
         this.checkThrowObjects();
         this.checkDevMode();
-        //this.setGameOverScreen();
 
         // // ANIMATIONS
         // // for controlling animation-fps (needs lower fps ob about 20-25) withhin requestAnimationFrame()
         let deltaTime = timeStamp - this.lastAnimationFrame; //ms
         this.lastAnimationFrame = timeStamp;
+        // update game time
+        this.gameTime += deltaTime;
+        // check time game over condition
+        if (this.gameTime > this.maxGameTime) this.setGameOver();
        
         // update bg objects & clouds: move
         this.level.backgroundObjects.forEach(bgo => {
@@ -207,24 +200,25 @@ class World {
             enemy.checkAnimationFrameTime(deltaTime);
             // move enemies
             if (!(enemy instanceof Endboss)) enemy.move();
+            // check endboss - game over conditions
+            if (enemy instanceof Endboss && enemy.isDead()) { 
+                //this.endboss = enemy;
+                this.setGameOver();
+            };
         });
         // update character: move
         this.character.move();
         // update character: animate
         this.character.checkAnimationFrameTime(deltaTime);
-
-        // // Todo: also animations from:
-        // // movable-objects: applyGravity()
-        // // throwable-objects: throw() 
-
+        // check character game-over condition
+        if (this.character.isDead()) this.setGameOver();
+        // // Todo: movable-objects: applyGravity()
         this.run();
-
     }
 
     run() {
-        let self = this; // now access to self in updateGame() callback-function (wo extra passing it?)
-        //requestAnimationFrame(this.updateGame); // requestAnimationFrame() function: async, 1.determines/sets possible fps & 2. auto-generates a timestamp and automatically passes it to the callback! ('this' is not accessible in callback?!)
-        if(!this.gameOver && !this.gamePaused) requestAnimationFrame( ()=> { // need to do it like that, so that 'this' is accessible in function updateGame()
+        let self = this;
+        if(!this.gameOver && !this.gamePaused) requestAnimationFrame( ()=> { 
             let timeStamp = Date.now();
             self.updateGame(timeStamp);
         });

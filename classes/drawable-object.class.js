@@ -9,7 +9,6 @@ class DrawableObject {
     markedForDeletion = false;
     showHitboxes = false;
 
-    // as sometimes  the actual image is much smaller than the size of the png file:
     imgY = this.y;
     imgX = this.x;
     imgWidth = this.width;
@@ -42,8 +41,8 @@ class DrawableObject {
         }
     }
 
+    // draw hitboxes
     drawFrame(ctx){
-        // in case of character or enemy: draw a frame around images for illustration/testing purposes for collision-detection functionalities etc.
         if(this.showHitboxes && (this instanceof Character || this instanceof Chicken || this instanceof Chick || this instanceof Coin || this instanceof ThrowableObject || this instanceof Endboss) ){
             ctx.beginPath();
             ctx.lineswidth = '3.5';

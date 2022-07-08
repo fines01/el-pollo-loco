@@ -6,13 +6,12 @@ class MovableObject extends DrawableObject {
     acceleration = 2;
     currentImage = 0;
     isReversed_x = false;
-    groundLevelY;// = canvasHeight - this.height - 45; //TEST 45px ca. // GN
+    groundLevelY;// = canvasHeight - this.height - 45;
     energy = 100;
     keyboard = new Keyboard();
     energy = 100;
     lastHit = 0;
 
-    // as sometimes the actual image is much smaller than the size of the png file:
     checkHitarea() { // mb not
         this.imgY = this.y;
         this.imgX = this.x;
@@ -21,12 +20,10 @@ class MovableObject extends DrawableObject {
     }
         
     playAnimation(images){
-        //setInterval(() => { // 
         let i = this.currentImage % images.length;
         let imgPath = images[i];
         this.img = this.imgCache[imgPath];
         this.currentImage++;
-        //}, 90 / this.speedX); // 
     }
 
     playAnimationOnce(images){
@@ -36,10 +33,7 @@ class MovableObject extends DrawableObject {
         }
     }
 
-    applyGravity() {
-
-        setInterval( ()=>{
-            
+    applyGravity() {           
             if (this.isAboveGround() || this.speedY > 0) { 
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
@@ -48,9 +42,6 @@ class MovableObject extends DrawableObject {
                 this.y = this.groundLevelY;
                 this.speedY = 0;
             }
-
-        }, 1000/25);
-
     }
 
     moveLeft() {
@@ -66,8 +57,8 @@ class MovableObject extends DrawableObject {
     }
     
     randomBounce() { // bounce left
-        Math.random() < 0.3 && !this.isAboveGround() && this.jump();
-        Math.random() < 0.4 && this.moveLeft(); // makes it a bit more dynamic? maybe? (if moving left at all)
+        if (Math.random() < 0.3 && !this.isAboveGround()) this.jump();
+        if (Math.random() < 0.4) this.moveLeft(); // adds a bit moredynamic
     }
 
     isWalkingRight() {
@@ -101,14 +92,13 @@ class MovableObject extends DrawableObject {
         )
     }
 
-    // mb better function name?? remove?
-    isCollidingMultiple(correction = 0, ...objects){
-        for (let i = 0; i < objects.length; i++){
-            this.isColliding(objects[i], correction);
-            // console.log(this,' HIT BY ', objects[i]);
-            this.receiveHit();
-        }
-    }
+    // isCollidingMultiple(correction = 0, ...objects){
+    //     for (let i = 0; i < objects.length; i++){
+    //         this.isColliding(objects[i], correction);
+    //         // console.log(this,' HIT BY ', objects[i]);
+    //         this.receiveHit();
+    //     }
+    // }
 
     isJumpingOn(object) {
         return ( 
