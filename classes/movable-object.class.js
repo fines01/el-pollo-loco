@@ -108,6 +108,10 @@ class MovableObject extends DrawableObject {
             this.imgY + this.imgHeight < object.imgY + 25
         );
     }
+
+    isEnemy(obj) {
+        return (obj instanceof Chicken || obj instanceof Chick || obj instanceof Endboss);
+    }
     
     receiveHit(){
         this.energy -= 2;

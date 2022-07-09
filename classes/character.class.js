@@ -59,7 +59,6 @@ class Character extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-54.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-55.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-56.png',
-        //'img/2.Secuencias_Personaje-Pepe-correcci¢n/5.Muerte/D-57.png',
     ];
 
     constructor(world) {
@@ -69,9 +68,6 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
         this.world = world;
-        this.animate();
-        this.move();
-        this.checkHitarea();
     }
     
     checkHitarea() {

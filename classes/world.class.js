@@ -81,42 +81,54 @@ class World {
         this.ctx.restore();
     }
 
-    checkCollisions() {
-        // check enemy collisions
-        this.level.enemies.forEach((enemy,index) => {
-            // check enemy collisions with collectible objects (bottles)
-            this.throwableObjects.forEach(throwableObj => {
-                if (enemy.isColliding(throwableObj)) {
-                    enemy.scoreAgainstEnemy();
-                    if (enemy instanceof Chicken) this.level.addNewEnemy('Hen')
-                    else this.level.addNewEnemy('Chick');
-                }
-            });
-            // check enemy collisions with character
-            if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOn(enemy)) {
-                this.character.receiveHit();
-                this.statusbars[0].setStatusbar(this.character.energy);
-            } else if (this.character.isJumpingOn(enemy)) { //
-                enemy.scoreAgainstEnemy();
-                if (enemy instanceof Chicken) this.level.addNewEnemy('Hen')
-                else this.level.addNewEnemy('Chick');
-            }
-            enemy.receivedHit = false;
-        });
+    checkThrowableObjectsCollision(throwableObj, hitObj) {
+        if (hitObj.isColliding(throwableObj)) { // && isEnemy(hitObj)
+            hitObj.scoreAgainstEnemy();
+            if (hitObj instanceof Chicken) this.level.addNewEnemy('Hen')
+            else if (hitObj instanceof Chick) this.level.addNewEnemy('Chick');
+        }
+    }
 
-        // check collectibles collisions: coins and bottles
-        this.level.collectibleObjects.forEach((collectible, index) => {
-            if (collectible instanceof Coin && this.character.isColliding(collectible)) {
-                this.collectedCoins++; 
-                this.statusbars[1].setStatusbar(this.collectedCoins);
-                collectible.markedForDeletion = true;
-            } else if (collectible instanceof ThrowableObject && this.character.isColliding(collectible)) {
-                collectible.markedForDeletion = true;
-                this.collectedBottles++; 
-                this.statusbars[2].setStatusbar(this.collectedBottles);
-            }
+    checkCharacterCollision(enemy) {
+        if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOn(enemy)) {
+            this.character.receiveHit();
+            this.statusbars[0].setStatusbar(this.character.energy);
+        } else if (this.character.isJumpingOn(enemy)) { //
+            enemy.scoreAgainstEnemy();
+            if (enemy instanceof Chicken) this.level.addNewEnemy('Hen')
+            else this.level.addNewEnemy('Chick');
+        }
+    }
+
+    checkEnemyCollisions(enemy) {
+        // check enemy collisions with throwable objects
+        this.throwableObjects.forEach(throwableObj => {
+            this.checkThrowableObjectsCollision(throwableObj, enemy);
         });
-        // remove objects
+        // check enemy collisions with character
+        this.checkCharacterCollision(enemy);
+        enemy.receivedHit = false;
+    }
+
+    checkCollectibleCollisions(collectibleObject) {
+         if (collectibleObject instanceof Coin && this.character.isColliding(collectibleObject)) {
+             this.collectedCoins++;
+             this.statusbars[1].setStatusbar(this.collectedCoins);
+             collectibleObject.markedForDeletion = true;
+         } else if (collectibleObject instanceof ThrowableObject && this.character.isColliding(collectibleObject)) {
+             collectibleObject.markedForDeletion = true;
+             this.collectedBottles++;
+             this.statusbars[2].setStatusbar(this.collectedBottles);
+         }
+    }
+
+    checkCollisions() {
+        this.level.enemies.forEach((enemy,index) => {
+            this.checkEnemyCollisions(enemy);
+        });
+        this.level.collectibleObjects.forEach((collectible, index) => {
+            this.checkCollectibleCollisions(collectible);
+        });
         // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies); // doesn't work, why ???
         this.removeMarkedObjects();
     }
@@ -134,11 +146,10 @@ class World {
         this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
     }
 
-
     checkThrowObjects() {
-        let isThrowing = false;
-        if (this.character.keyboard.ENTER && !this.character.isHurt() && this.collectedBottles > 0 && !isThrowing) {
-            isThrowing = true;
+        //let isThrowing = false;
+        if (this.character.keyboard.ENTER && !this.character.isHurt() && this.collectedBottles > 0) {// && !isThrowing) {
+            //isThrowing = true; // Sinn wäre, dass nicht mehrere Flaschen glz geworfen werden können
             let bottleX;
             if (this.character.isReversed_x) bottleX = this.character.x;
             else bottleX = this.character.x + this.character.width * 0.5;
@@ -174,38 +185,34 @@ class World {
         });
     }
 
-    updateGame(timeStamp) {
-
-        this.draw();
+    checkGameStatus() {
         this.checkCollisions();
         this.checkThrowObjects();
         this.checkDevMode();
+    }
 
-        // // ANIMATIONS
-        // // for controlling animation-fps (needs lower fps ob about 20-25) withhin requestAnimationFrame()
+    // // for controlling animation-fps (needs lower fps ob about 20-25) withhin requestAnimationFrame() & updateGameTime
+    setDeltaTime(timeStamp) {
         let deltaTime = timeStamp - this.lastAnimationFrame; //ms // reset lastAnimationFrame to NOW after pause (else time passed in pause is subtracted as well)
         this.lastAnimationFrame = timeStamp;
-         // update game time
+        // update game time
         this.gameTime += deltaTime;
         // check time game over condition
         if (this.gameTime > this.maxGameTime) this.setGameOver();
-       
-        // update bg objects & clouds: move
-        this.level.backgroundObjects.forEach(bgo => {
-            bgo.move();
-        });
-        // update enemies
-        this.level.enemies.forEach(enemy => {
-            // animate enemies
-            enemy.checkAnimationFrameTime(deltaTime);
-            // move enemies
-            if (!(enemy instanceof Endboss)) enemy.move();
-            // check endboss - game over conditions
-            if (enemy instanceof Endboss && enemy.isDead()) { 
-                //this.endboss = enemy;
-                this.setGameOver();
-            };
-        });
+        return deltaTime;
+    }
+
+    updateEnemy(enemy, deltaTime) {
+        // animate enemies
+        enemy.checkAnimationFrameTime(deltaTime);
+        // move enemies
+        if (!(enemy instanceof Endboss)) enemy.move();
+        if (enemy instanceof Endboss && enemy.isDead()) {
+            this.setGameOver();
+        };
+    }
+
+    updateCharacter(deltaTime) {
         // update character: move
         this.character.move();
         // update character: animate
@@ -213,7 +220,19 @@ class World {
         // check character game-over condition
         if (this.character.isDead()) this.setGameOver();
         // // Todo: movable-objects: applyGravity()
-        
+    }
+
+    updateGame(timeStamp) {
+        this.draw();
+        this.checkGameStatus();
+        let deltaTime = this.setDeltaTime(timeStamp);  
+        this.level.backgroundObjects.forEach(bgo => {
+            bgo.move();
+        });
+        this.level.enemies.forEach(enemy => {
+            this.updateEnemy(enemy, deltaTime);
+        });
+        this.updateCharacter(deltaTime),
         this.run();
     }
 
