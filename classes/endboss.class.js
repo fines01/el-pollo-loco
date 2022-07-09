@@ -54,7 +54,7 @@ class Endboss extends Enemy { // or Gallina
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
         //this.speed = 0.15 + Math.random() * 0.45;
-        this.x = levelEndX;// - this.width;
+        this.x = levelEndX;
         this.animateEndboss();
     }
 
@@ -66,9 +66,7 @@ class Endboss extends Enemy { // or Gallina
     }
 
     animateEndboss() {
-
             this.checkHitarea();
-
             if (this.keyboard.RIGHT || this.keyboard.LEFT){
                 this.playAnimation(this.IMAGES_WALKING);
             }

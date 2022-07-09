@@ -12,7 +12,6 @@ class BackgroundObject extends MovableObject {
 
     }
     
-    // move: add parallax effects when walking
     move(levelEndX) {
         if (!(this instanceof Cloud)){
             if(this.keyboard.RIGHT && world.character.isWalkingRight()){

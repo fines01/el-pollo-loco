@@ -1,9 +1,9 @@
 class Enemy extends MovableObject {
     
     energy = 2;
-    animationFPS = 25; //25;
+    animationFPS = 25;
     animationFrameInterval = 1000 / this.animationFPS;
-    animationFrameTimer = 0; //cycles between 0 and Animation-FrameInterval
+    animationFrameTimer = 0; //cycles between 0 and Animation-Frameinterval
 
     checkAnimationFrameTime(deltaTime){
         if (this.animationFrameTimer > this.animationFrameInterval) {
@@ -38,11 +38,11 @@ class Enemy extends MovableObject {
             this.moveLeft();
             this.randomBounce();
         }
-        if (this.x < 0 - 2*this.width) this.x = world.level.levelEndX + 250; //move back into frame 
+        if (this.x < 0 - 2*this.width) this.x = world.level.levelEndX + 250;
     }
 
     scoreAgainstEnemy() {
-        if( !this.isHurt(800)){ // has not been hit in the last 1000ms ( !isHurt(1000) ) OR !receivedHit (wann wieder true setzen)
+        if( !this.isHurt(800)){ 
             this.receivedHit = true;
             //world.character.score++;
             world.character.receiveEnergy();

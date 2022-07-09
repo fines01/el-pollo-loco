@@ -16,14 +16,13 @@ class Character extends MovableObject {
     speedX = 8;//1.5;
     jumpHeight = 28;
 
-    // for controlling animation-fps withhin requestAnimationFrame()
     animationFPS = 35; //25;
     animationFrameInterval = 1000/this.animationFPS;
-    animationFrameTimer = 0; //cycles between 0 and ...frameInterval
+    animationFrameTimer = 0; //cycles between 0 and animationFrameInterval
 
     IMAGES_IDLE = [];
     IMAGES_SLEEPING = [];
-    IMAGES_ANGRY = []; //zusammenstellen
+    IMAGES_ANGRY = []; 
 
     IMAGES_WALKING = 
     [
@@ -76,6 +75,10 @@ class Character extends MovableObject {
         this.imgX = this.x + 25;
         this.imgWidth = this.width * 0.55;
         this.imgHeight = this.height * 0.55;
+    }
+
+    canThrow(collectedBottles) {
+        return (this.keyboard.ENTER && !this.isHurt(200) && collectedBottles > 0);
     }
 
     checkAnimationFrameTime(deltaTime) {

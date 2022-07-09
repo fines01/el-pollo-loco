@@ -17,11 +17,10 @@ class Level {
     }
     
     addBackgroundObjects(bgLengts){
-        for (let i = -1; i <= bgLengts; i++){ // bg-lengths plus 2 extra (before and after actual level-area)
+        for (let i = -1; i <= bgLengts; i++){
             let x = i * canvasWidth*2;
             let cw = canvasWidth;
             let bgLayerObjects = [ 
-                // new Cloud('img/5.Fondo/Capas/4.nubes/2.png', x*0.5+50, this.levelEndX),
                 new BackgroundObject('img/5.Fondo/Capas/3.Fondo3/Completo.png', x+25, 0, this.levelEndX),
                 new BackgroundObject('img/5.Fondo/Capas/2.Fondo2/completo.png', x+15, 0.5, this.levelEndX),
                 new BackgroundObject('img/5.Fondo/Capas/1.suelo-fondo1/completo.png', x, 1, this.levelEndX),
@@ -41,7 +40,6 @@ class Level {
         this.enemies.push(new Endboss(this.levelEndX) );
     }
 
-    // TODO/check: similar enough mb make one function instead?
     addCollectibles(amountCoins, amountBottles) {
         for (let i = 0; i < amountCoins; i++){
             this.collectibleObjects.push(new Coin(this.levelEndX));
