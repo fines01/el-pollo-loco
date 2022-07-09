@@ -15,8 +15,8 @@ let handleKeypresses = window.addEventListener('keydown', (e) => {
     if (e.code == 'Enter' && !world) {
         getId('screen-text-big').classList.add('text-dive-animation');
         window.setTimeout( ()=>{
-        startGame();
-    }, 300);
+            startGame();
+        }, 300);
     }
     if (e.code == 'Enter' && world && world.gameOver) {
         level = setLevel(1);
@@ -33,7 +33,7 @@ function startGame() {
     // level = setLevel();
     world = new World();
     world.gameOver = false;
-    world.run();
+    if (world.character.checkImgLoaded()) world.run();
 }
 
 function togglePause() {

@@ -26,7 +26,7 @@ class Level {
                 new BackgroundObject('img/5.Fondo/Capas/1.suelo-fondo1/completo.png', x, 1, this.levelEndX),
                 new Cloud('img/5.Fondo/Capas/4.nubes/Completo.png', x+50, this.levelEndX),
             ];
-            this.backgroundObjects.push(...bgLayerObjects);
+            this.backgroundObjects.push(...bgLayerObjects);        
         }
     }
 

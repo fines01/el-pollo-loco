@@ -21,7 +21,6 @@ class World {
         this.statusbars = [new StatusBar(-5, 'energy', 100), new StatusBar(20, 'coins', 0, 100 / this.level.amountCoins), new StatusBar(45, 'bottles', 0, 100 / this.level.amountBottles)];
         this.lastAnimationFrame = Date.now();
         this.draw();
-        //this.run();
     }
 
     draw() {
@@ -52,12 +51,6 @@ class World {
                 this.flipImageBack(objects[i]);
             }
         }
-    }
-
-    addObjectsToMap(objects) {
-        objects.forEach(o => {
-            this.addToMap(o);
-        });
     }
 
     flipImage(obj) {
@@ -99,7 +92,7 @@ class World {
         enemy.receivedHit = false;
     }
 
-    checkCollectibleCollisions(collectibleObject) {
+    checkCollectibleCollision(collectibleObject) {
         if (collectibleObject instanceof Coin && this.character.isColliding(collectibleObject)) {
             this.collectedCoins++;
             this.statusbars[1].setStatusbar(this.collectedCoins);
@@ -116,7 +109,7 @@ class World {
             this.checkEnemyCollisions(enemy);
         });
         this.level.collectibleObjects.forEach((collectible, index) => {
-            this.checkCollectibleCollisions(collectible);
+            this.checkCollectibleCollision(collectible);
         });
         // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies); // doesn't work, why ???
         this.removeMarkedObjects();
@@ -137,6 +130,7 @@ class World {
 
     checkThrowObjects() {
         if (this.character.canThrow(this.collectedBottles)) {
+            this.character.keyboard.ENTER = false;
             let bottleX;
             if (this.character.isReversed_x) bottleX = this.character.x;
             else bottleX = this.character.x + this.character.width * 0.5;
@@ -144,7 +138,6 @@ class World {
             this.throwableObjects.push(bottle);
             bottle.throw(bottleX, this.character.y + 80);
             this.collectedBottles--;
-            this.character.keyboard.ENTER = false;
             this.statusbars[2].setStatusbar(this.collectedBottles);
         }
     }
@@ -194,8 +187,8 @@ class World {
     }
 
     updateCharacter(deltaTime) {
-        this.character.move();
         this.character.checkAnimationFrameTime(deltaTime);
+        this.character.move();
         if (this.character.isDead()) this.setGameOver();
     }
 

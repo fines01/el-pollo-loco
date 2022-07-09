@@ -8,23 +8,61 @@ class DrawableObject {
     imgCache = [];
     markedForDeletion = false;
     showHitboxes = false;
+    
+    // check img loaded
+    allImagesLoaded = false; // überprüfen: imgCache in den alle bilder geladen werden
+    imgCacheCounter = 0;
+    imagesAmount = 0;
 
     imgY = this.y;
     imgX = this.x;
     imgWidth = this.width;
     imgHeight = this.height;
 
+    checkImgLoaded() {
+        if (this.imgCacheIsComplete()) {
+            for (let imgName of this.imgCache) {
+                if (!this.imgCache[imgName].complete) return false; // img haben einen complete-wert, returns boolean
+            }
+            return true;
+        } 
+        else {
+            return false;
+        }
+    }
+
+    imgCacheIsComplete() {
+        return this.imagesAmount === this.imgCacheCounter;
+    }
+
+    countImages(arr) {
+        if( this instanceof BackgroundObject || this instanceof Character ) { //objects i want to check
+            this.imagesAmount += arr.length;
+        }
+    }
+
     loadImage(imgPath){
-        this.img = new Image(); // creates new <img id="image">
-        this.img.src = imgPath;
+        if (imgPath){
+            this.img = new Image();
+            this.img.src = imgPath;
+            if (this.img.complete) return true;
+            else return false;
+        }
     }
 
     loadImages(arr){
         arr.forEach( (imgPath) => {
-            let img = new Image;
+            let img = new Image();
             img.src = imgPath;
+            this.imgCacheCounter++; // counter zum Abgleich mit imagesLength
             this.imgCache[imgPath] = img; // save img as json in image cache
+
+            //Vorschlag A
+            // img.onload = ()=> { // callback d ausgeführt wenn bild komplett geladen wurde
+            // }
+            
         });
+        this.countImages(arr);
     }
 
     drawObject(ctx){

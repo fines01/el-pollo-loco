@@ -8,8 +8,7 @@ class BackgroundObject extends MovableObject {
         this.x = x;
         this.y = 0;
         this.speedX = speedX; //ev in Verhältnis zum momentanen speedX vom Character: speedXModifier * world.character.speedX
-        this.move(levelEndX);
-
+        // if(this.checkImgLoaded()) this.move(levelEndX);
     }
     
     move(levelEndX) {

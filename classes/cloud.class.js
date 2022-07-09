@@ -8,7 +8,7 @@ class Cloud extends BackgroundObject {
         super().loadImage(imgPath);
         this.x = x;
         this.speedX = 0.09 + Math.random() * 0.11;
-        this.move(levelEndX);
+        // if (this.loadImage(imgPath)) this.move(levelEndX);
     }
 
     move(levelEndX) {

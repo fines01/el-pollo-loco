@@ -67,10 +67,11 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
         this.world = world;
+        // console.log(this.imgCacheIsComplete());
+        // console.log(this.checkImgLoaded());
     }
-    
+
     checkHitarea() {
-        // as sometimes  the actual image is much smaller than the size of the png file:
         this.imgY = this.y + 90;
         this.imgX = this.x + 25;
         this.imgWidth = this.width * 0.55;
@@ -85,54 +86,43 @@ class Character extends MovableObject {
         if (this.animationFrameTimer > this.animationFrameInterval) {
             this.animate();
             this.animationFrameTimer = 0;
-        } else {
+        } 
+        else {
             this.animationFrameTimer += deltaTime;
         }
     }
 
     animate(){
-
         this.applyGravity();
-
         if(this.isDead()){
             this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
             this.y += 2; // TODO fix 'bounce'
-            }
-        
-            else if(this.isHurt()){
-                this.playAnimation(this.IMAGES_HURT);
-            }
-        
-            else if(this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
-            }
-        
-            else if(this.isWalkingRight() || this.isWalkingLeft()){
-                this.sound_walking.play();
-                this.playAnimation(this.IMAGES_WALKING);
-            }
-
+        }
+        else if(this.isHurt()){
+            this.playAnimation(this.IMAGES_HURT);
+        }
+        else if(this.isAboveGround()) {
+            this.playAnimation(this.IMAGES_JUMPING);
+        }
+        else if(this.isWalkingRight() || this.isWalkingLeft()){
+            this.sound_walking.play();
+            this.playAnimation(this.IMAGES_WALKING);
+        }
     }
 
     move(){
-
         this.checkHitarea();
-
         if(this.isJumping()){
             this.jump();
         }
-
         if(this.isWalkingRight()){
             this.moveRight();
             this.isReversed_x = false;
         }
-
         if(this.isWalkingLeft()) {
             this.moveLeft();
             this.isReversed_x = true;
         }
-
         this.world.camera_x = -this.x + 100;
-
     }
 }
