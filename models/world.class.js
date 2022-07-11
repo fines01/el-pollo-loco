@@ -33,7 +33,6 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         //// End: Objects that should stay in place
         this.ctx.translate(-this.camera_x, 0);
-
     }
 
     addToMap(...objects) {
@@ -65,7 +64,7 @@ class World {
         this.ctx.restore();
     }
 
-    checkThrowableObjectsCollision(throwableObj, hitObj) {
+    checkThrowableObjectCollision(throwableObj, hitObj) {
         if (hitObj.isColliding(throwableObj)) { // && isEnemy(hitObj)
             hitObj.scoreAgainstEnemy();
             if (hitObj instanceof Chicken) this.level.addNewEnemy('Hen')
@@ -86,7 +85,7 @@ class World {
 
     checkEnemyCollisions(enemy) {
         this.throwableObjects.forEach(throwableObj => {
-            this.checkThrowableObjectsCollision(throwableObj, enemy);
+            this.checkThrowableObjectCollision(throwableObj, enemy);
         });
         this.checkCharacterCollision(enemy);
         enemy.receivedHit = false;
@@ -149,9 +148,9 @@ class World {
         this.setGameOverScreen();
     }
 
-    setGameOverScreen() {
-        if (this.character.isDead()) setLoserScreen(); // params: energy left, missed coins, time left?
-        else if (this.endboss.isDead() && this.level.amountCoins === this.collectedCoins) setWinScreen();
+    setGameOverScreen() { // BUG in case of (win at last sec? character dead msec after win?) shows all screens
+        if (this.endboss.isDead() && this.level.amountCoins === this.collectedCoins) setWinScreen();
+        else if (this.character.isDead()) setLoserScreen(); // params: energy left, missed coins, time left?
         else setLoserScreen();
     }
 
@@ -202,8 +201,8 @@ class World {
         this.level.enemies.forEach(enemy => {
             this.updateEnemy(enemy, deltaTime);
         });
-        this.updateCharacter(deltaTime),
-            this.run();
+        this.updateCharacter(deltaTime);
+        this.run();
     }
 
     run() {

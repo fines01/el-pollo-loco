@@ -2,9 +2,11 @@ class ThrowableObject extends CollectibleObject {
     
     width = 80;
     height = 80;
-    groundLevelY = canvasHeight - this.height;
+    groundLevelY = canvasHeight - this.height; // 400
     initialY = 370;
     //acceleration;
+
+    // TODO: add img & animations for throwing bottle (rotation & splash)
 
     constructor(levelEndX) {
         super();

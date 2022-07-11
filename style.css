@@ -15,7 +15,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0,0,0,0.75);
+    background-color: rgba(0,0,0,0.95);
     min-height: 100vh;
     max-height: 100%;
 }
@@ -31,7 +31,7 @@ h2 {
     color: brown;
     font-size: 2rem;
     position: absolute;
-    top: 15%;
+    top: 16%;
     max-width: 100%;
     max-height: 100%;
     z-index: 1;
@@ -42,7 +42,7 @@ h4{
     color: rgb(251, 251, 0);
     font-size: 1.5rem;
     position: absolute;
-    top: 15%;
+    top: 16%;
     z-index: 2;
 }
 
@@ -62,9 +62,10 @@ canvas {
 .screen{
     width: var(--canvasWidth);
     height:var(--canvasHeight);
-    /* margin: 1rem 0; */
-    border-top: 4px solid white;
-    border-bottom: 4px solid white;
+    margin: 1rem 0;
+    border-top: 6px solid white;
+    border-bottom: 6px solid white;
+    box-shadow: 0 0 6px 1px rgb(255, 255, 255, 0.5);
     border-radius: 4px;
     position: absolute;
     max-width: 100%;
@@ -78,7 +79,7 @@ canvas {
 .endscreen-text {
     color: rgb(251, 251, 0);
     font-size: 3rem;
-    top: 80%;
+    top: 82%;
     z-index: 2;
 }
 

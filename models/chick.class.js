@@ -1,6 +1,6 @@
 class Chick extends Enemy {
 
-    height = 75;
+    height = 75; // maybe smaller?
     width = 90;
     groundLevelY = 350;
 

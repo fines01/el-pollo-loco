@@ -54,13 +54,8 @@ class DrawableObject {
         arr.forEach( (imgPath) => {
             let img = new Image();
             img.src = imgPath;
-            this.imgCacheCounter++; // counter zum Abgleich mit imagesLength
-            this.imgCache[imgPath] = img; // save img as json in image cache
-
-            //Vorschlag A
-            // img.onload = ()=> { // callback d ausgeführt wenn bild komplett geladen wurde
-            // }
-            
+            this.imgCacheCounter++; 
+            this.imgCache[imgPath] = img;            
         });
         this.countImages(arr);
     }
@@ -79,9 +74,19 @@ class DrawableObject {
         }
     }
 
+    isCollidableObject(){
+        return (
+            this instanceof Character || 
+            this instanceof Chicken || 
+            this instanceof Chick || 
+            this instanceof Coin || 
+            this instanceof ThrowableObject || 
+            this instanceof Endboss);
+    }
+
     // draw hitboxes
     drawFrame(ctx){
-        if(this.showHitboxes && (this instanceof Character || this instanceof Chicken || this instanceof Chick || this instanceof Coin || this instanceof ThrowableObject || this instanceof Endboss) ){
+        if(this.showHitboxes && this.isCollidableObject()){
             ctx.beginPath();
             ctx.lineswidth = '3.5';
             ctx.strokeStyle = 'yellow';

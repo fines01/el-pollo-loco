@@ -84,6 +84,6 @@ function show(...elements) {
         let el = getId(elements[i]);
         if (el.classList.contains('d-none')) {
             el.classList.remove('d-none');
-         }
-     }
+        }
+    }
 }

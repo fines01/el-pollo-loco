@@ -3,7 +3,7 @@ class Enemy extends MovableObject {
     energy = 2;
     animationFPS = 25;
     animationFrameInterval = 1000 / this.animationFPS;
-    animationFrameTimer = 0; //cycles between 0 and Animation-Frameinterval
+    animationFrameTimer = 0;
 
     checkAnimationFrameTime(deltaTime){
         if (this.animationFrameTimer > this.animationFrameInterval) {

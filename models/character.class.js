@@ -5,7 +5,6 @@ class Character extends MovableObject {
     height = 210;
     width = 140;
 
-    // as iactual image is smaller than png:
     imgY = this.y + 120;
     imgX = this.x + 25;
     imgWidth = this.width*0.7;
@@ -67,8 +66,6 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
         this.world = world;
-        // console.log(this.imgCacheIsComplete());
-        // console.log(this.checkImgLoaded());
     }
 
     checkHitarea() {
@@ -92,8 +89,8 @@ class Character extends MovableObject {
         }
     }
 
-    animate(){
-        this.applyGravity();
+    animate(){ // über 14 Zeilen
+        this.applyGravity(); 
         if(this.isDead()){
             this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
             this.y += 2; // TODO fix 'bounce'
