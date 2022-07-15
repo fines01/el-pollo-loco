@@ -1,9 +1,7 @@
 class Chick extends Enemy {
 
-    height = 75; // maybe smaller?
-    width = 90;
     groundLevelY = 350;
-
+    
     IMAGES_WALKING = [
         'img/3.Secuencias_Enemy_b sico/Versi¢n_pollito/1.Paso_derecho.png',
         'img/3.Secuencias_Enemy_b sico/Versi¢n_pollito/2.Centro.png',
@@ -12,14 +10,16 @@ class Chick extends Enemy {
     IMAGE_DEAD = [
         'img/3.Secuencias_Enemy_b sico/Versi¢n_pollito/4.Muerte.png'
     ];
-
+    
     constructor(levelEndX){
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
-        this.x = 500 + Math.random() * (levelEndX-500);
+        this.x = 300 + Math.random() * (levelEndX-300);
         this.y = this.groundLevelY;
-        this.speedX = 0.75 + Math.random() * 3;
-        this.jumpHeight = Math.random() * 30;
+        this.height = 55 + Math.random() * 20;
+        this.width = this.height * 1.2;
+        this.jumpHeight = Math.random() * 30;//(90 - this.height);
+        this.speedX = 0.75 + Math.random() * 4;
         this.animateEnemies();
     }
 

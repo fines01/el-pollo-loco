@@ -4,6 +4,14 @@ class Enemy extends MovableObject {
     animationFPS = 25;
     animationFrameInterval = 1000 / this.animationFPS;
     animationFrameTimer = 0;
+    hurtSound = new Audio('audio/test/Hit_02.wav');
+    canHurt = true; // can hurt character
+
+    constructor(){
+        super();
+        this.hurtSound.playbackRate = 1.5;
+        this.hurtSound.volume = 0.35;
+    }
 
     checkAnimationFrameTime(deltaTime){
         if (this.animationFrameTimer > this.animationFrameInterval) {
@@ -43,9 +51,6 @@ class Enemy extends MovableObject {
 
     scoreAgainstEnemy() {
         if( !this.isHurt(800)){ 
-            this.receivedHit = true;
-            //world.character.score++;
-            world.character.receiveEnergy();
             this.receiveHit();
         }
     }

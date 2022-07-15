@@ -8,6 +8,13 @@
     margin: 0;
 }
 
+#bg-overlay {
+    background-color: rgb(255, 166, 0, 0.2);
+    position: absolute;
+    top:0; bottom:0;
+    left:0;right:0;
+}
+
 body {
     font-family: 'sans-serif';
     position: relative;
@@ -65,7 +72,7 @@ canvas {
     margin: 1rem 0;
     border-top: 6px solid white;
     border-bottom: 6px solid white;
-    box-shadow: 0 0 6px 1px rgb(255, 255, 255, 0.5);
+    box-shadow: 0 0 6px 4px rgb(255, 255, 255, 0.5);
     border-radius: 4px;
     position: absolute;
     max-width: 100%;

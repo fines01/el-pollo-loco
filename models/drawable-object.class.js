@@ -68,12 +68,6 @@ class DrawableObject {
         this.showHitboxes = !this.showHitboxes;
     }
 
-    checkMode() {
-        if (this.keyboard.F) {
-            this.toggleHitboxes();
-        }
-    }
-
     isCollidableObject(){
         return (
             this instanceof Character || 

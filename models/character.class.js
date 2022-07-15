@@ -1,7 +1,7 @@
 class Character extends MovableObject {
 
     x = 150;
-    y = 135;
+    y = 220;
     height = 210;
     width = 140;
 
@@ -11,14 +11,21 @@ class Character extends MovableObject {
     imgHeight = this.height*0.55;
     
     groundLevelY = 220;
-    sound_walking = new Audio('audio/step1.mp3');
     speedX = 8;//1.5;
     jumpHeight = 28;
-
+    
     animationFPS = 35; //25;
     animationFrameInterval = 1000/this.animationFPS;
-    animationFrameTimer = 0; //cycles between 0 and animationFrameInterval
-
+    animationFrameTimer = 0;
+    
+    audioPaths = 
+    [
+        'audio/step1.mp3', // walking sound
+        'audio/test/Hero_Death_00.wav', // dying sound - nope
+        'audio/test/hit26.mp3.flac', // hurting sound ...hmm
+        'audio/test/swosh-06.flac' // jumping sound flac
+    ];
+    
     IMAGES_IDLE = [];
     IMAGES_SLEEPING = [];
     IMAGES_ANGRY = []; 
@@ -42,7 +49,7 @@ class Character extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-36.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-37.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-38.png',
-        'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-39.png', //
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/3.Secuencia_salto/J-39.png', 
     ];
     IMAGES_HURT = [
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/4.Herido/H-41.png',
@@ -65,6 +72,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
+        this.setAudio();
         this.world = world;
     }
 
@@ -73,6 +81,14 @@ class Character extends MovableObject {
         this.imgX = this.x + 25;
         this.imgWidth = this.width * 0.55;
         this.imgHeight = this.height * 0.55;
+    }
+
+    setAudio() {
+        [this.walkingSound, this.dyingSound, this.hurtSound, this.jumpingSound] = this.createAudio(...this.audioPaths);
+        this.hurtSound.playbackRate = 2;
+        this.hurtSound.volume=0.3;
+        this.jumpingSound.playbackRate = 1.2;
+        this.walkingSound.playbackRate = 2;
     }
 
     canThrow(collectedBottles) {
@@ -89,21 +105,21 @@ class Character extends MovableObject {
         }
     }
 
-    animate(){ // über 14 Zeilen
+    animate() { // über 14 Zeilen !! kevin meint hier ev besser switch-case... meh
         this.applyGravity(); 
         if(this.isDead()){
-            this.playAnimationOnce(this.IMAGES_DYING); // TODO only play one sequence
-            this.y += 2; // TODO fix 'bounce'
+            this.playAnimationOnce(this.IMAGES_DYING);
+            this.groundLevelY += 20;
         }
-        else if(this.isHurt()){
+        else if(this.isHurt()){ // only if NOT jumping on enemy
             this.playAnimation(this.IMAGES_HURT);
+        }
+        else if((this.isWalkingRight() || this.isWalkingLeft() )&& !this.isAboveGround()){
+            this.walkingSound.play();
+            this.playAnimation(this.IMAGES_WALKING);
         }
         else if(this.isAboveGround()) {
             this.playAnimation(this.IMAGES_JUMPING);
-        }
-        else if(this.isWalkingRight() || this.isWalkingLeft()){
-            this.sound_walking.play();
-            this.playAnimation(this.IMAGES_WALKING);
         }
     }
 
@@ -120,6 +136,8 @@ class Character extends MovableObject {
             this.moveLeft();
             this.isReversed_x = true;
         }
+        // if (this.isDead()) this.dyindSound.play();
         this.world.camera_x = -this.x + 100;
     }
+    
 }

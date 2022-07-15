@@ -45,7 +45,7 @@ class Level {
             this.collectibleObjects.push(new Coin(this.levelEndX));
         }
         for (let i = 0; i < amountBottles; i++) {
-            this.collectibleObjects.push(new ThrowableObject(this.levelEndX));
+            this.collectibleObjects.push(new Bottle(this.levelEndX));
         }
     }
 

@@ -11,7 +11,13 @@ class World {
     maxGameTime = 30000; //ms
     gamePaused = false;
     gameOver = true;
+    audioPaths = [
+        //'audio/test/happy.mp3', // game music
+        'audio/it_takes_a_hero.wav', // game music
+        'audio/countdown3.mp3' // countdown sound
+    ]
 
+    
     constructor(levelNo = 1) {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -20,6 +26,7 @@ class World {
         this.endboss = this.level.enemies[this.level.enemies.length - 1];
         this.statusbars = [new StatusBar(-5, 'energy', 100), new StatusBar(20, 'coins', 0, 100 / this.level.amountCoins), new StatusBar(45, 'bottles', 0, 100 / this.level.amountBottles)];
         this.lastAnimationFrame = Date.now();
+        this.setAudio();
         this.draw();
     }
 
@@ -42,13 +49,9 @@ class World {
             }
             objects[i].drawObject(this.ctx);
             objects[i].drawFrame(this.ctx);
-            if (objects[i] instanceof StatusBar) {
-                objects[i].drawAmount(this.ctx)
-            };
+            if (objects[i] instanceof StatusBar) objects[i].drawAmount(this.ctx)
             if (objects[i] instanceof StatusBar && i === 0) objects[i].drawGameTime(this.ctx, this.gameTime, this.maxGameTime);
-            if (objects[i].isReversed_x) {
-                this.flipImageBack(objects[i]);
-            }
+            if (objects[i].isReversed_x) this.flipImageBack(objects[i]);
         }
     }
 
@@ -64,22 +67,34 @@ class World {
         this.ctx.restore();
     }
 
+    setAudio() {
+        [this.gameMusic, this.countdownSound] = this.character.createAudio(...this.audioPaths);
+        this.countdownSound.volume = 0.4;
+        this.gameMusic.volume = 0.2;
+        this.gameMusic.loop = true;
+        this.gameMusic.play();
+    }
+
     checkThrowableObjectCollision(throwableObj, hitObj) {
         if (hitObj.isColliding(throwableObj)) { // && isEnemy(hitObj)
             hitObj.scoreAgainstEnemy();
+            throwableObj.animateSplash();
             if (hitObj instanceof Chicken) this.level.addNewEnemy('Hen')
             else if (hitObj instanceof Chick) this.level.addNewEnemy('Chick');
+        }
+        if(throwableObj.isOnGround()){
+            throwableObj.animateSplash();
         }
     }
 
     checkCharacterCollision(enemy) {
-        if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOn(enemy)) {
+        if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOn(enemy) && !enemy.isDead()) { // because dead enemies don't get removed immediately (for visual effects) // --> new check-function isCollidingWith() or isHitting() ??
             this.character.receiveHit();
             this.statusbars[0].setStatusbar(this.character.energy);
         } else if (this.character.isJumpingOn(enemy)) { //
             enemy.scoreAgainstEnemy();
             if (enemy instanceof Chicken) this.level.addNewEnemy('Hen')
-            else this.level.addNewEnemy('Chick');
+            else if (enemy instanceof Chick) this.level.addNewEnemy('Chick');
         }
     }
 
@@ -88,15 +103,16 @@ class World {
             this.checkThrowableObjectCollision(throwableObj, enemy);
         });
         this.checkCharacterCollision(enemy);
-        enemy.receivedHit = false;
     }
 
     checkCollectibleCollision(collectibleObject) {
         if (collectibleObject instanceof Coin && this.character.isColliding(collectibleObject)) {
             this.collectedCoins++;
+            collectibleObject.collectSound.play();
             this.statusbars[1].setStatusbar(this.collectedCoins);
             collectibleObject.markedForDeletion = true;
-        } else if (collectibleObject instanceof ThrowableObject && this.character.isColliding(collectibleObject)) {
+        } else if (collectibleObject instanceof Bottle && this.character.isColliding(collectibleObject)) {
+            collectibleObject.collectSound.play();
             collectibleObject.markedForDeletion = true;
             this.collectedBottles++;
             this.statusbars[2].setStatusbar(this.collectedBottles);
@@ -110,15 +126,16 @@ class World {
         this.level.collectibleObjects.forEach((collectible, index) => {
             this.checkCollectibleCollision(collectible);
         });
-        // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies); // doesn't work, why ???
+        // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies);
         this.removeMarkedObjects();
     }
 
-    removeMarkedObjects2(...objArrs) {
-        for (let i = 0; i < objArrs.length; i++) {
-            objArrs[i] = objArrs[i].filter((obj) => !obj.markedForDeletion);
-        }
-    }
+    // TODO fix
+    // removeMarkedObjects2(...objArrs) {
+    //     for (let i = 0; i < objArrs.length; i++) {
+    //         objArrs[i] = objArrs[i].filter((obj) => !obj.markedForDeletion); // I don't actually change original arrays here
+    //     }
+    // }
 
     removeMarkedObjects() {
         //objArr = objArr.filter(obj => !obj.markedForDeletion); // gn - check 
@@ -130,15 +147,20 @@ class World {
     checkThrowObjects() {
         if (this.character.canThrow(this.collectedBottles)) {
             this.character.keyboard.ENTER = false;
-            let bottleX;
-            if (this.character.isReversed_x) bottleX = this.character.x;
-            else bottleX = this.character.x + this.character.width * 0.5;
-            let bottle = new ThrowableObject();
-            this.throwableObjects.push(bottle);
-            bottle.throw(bottleX, this.character.y + 80);
-            this.collectedBottles--;
-            this.statusbars[2].setStatusbar(this.collectedBottles);
+            this.throwBottle(); // return true or pass deltaTime
         }
+    }
+
+    throwBottle() {
+        let bottle = new Bottle();
+        this.throwableObjects.push(bottle);
+        let bottleX;
+        if (this.character.isReversed_x) bottleX = this.character.x;
+        else bottleX = this.character.x + this.character.width * 0.5;
+        bottle.throw(bottleX, this.character.y + 80);
+        this.collectedBottles--;
+        this.statusbars[2].setStatusbar(this.collectedBottles);
+        bottle.animateThrow(); //bottle.checkAnimationFrameTime(deltaTime); & remove animateThrow();
     }
 
     setGameOver() {
@@ -154,19 +176,36 @@ class World {
         else setLoserScreen();
     }
 
-    checkDevMode() {
+    setDevMode() {
         let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
         movableObjects.forEach(mo => {
-            if (this.character.keyboard.F) {
-                mo.showHitboxes = !mo.showHitboxes;
-            }
+            //if (this.character.keyboard.F) {
+            mo.showHitboxes = !mo.showHitboxes;
+            console.log(mo, mo.showHitboxes);
+            //}
         });
+    }
+
+    // checkDevMode() {
+    //     let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
+    //     movableObjects.forEach(mo => {
+    //         if (this.character.keyboard.F) {
+    //             mo.showHitboxes = !mo.showHitboxes;
+    //             console.log(mo, mo.showHitboxes);
+    //         }
+    //     });
+    // }
+
+    checkCountdown() {
+        if (this.statusbars[0].remainingTime == 10) this.gameMusic.playbackRate = 1.15;
+        if (this.statusbars[0].remainingTime == 3 && !this.gamePaused) this.countdownSound.play();
     }
 
     checkGameStatus() {
         this.checkCollisions();
         this.checkThrowObjects();
-        this.checkDevMode();
+        this.checkCountdown();
+        //this.checkDevMode();
     }
 
     setDeltaTime(timeStamp) {
@@ -193,7 +232,7 @@ class World {
 
     updateGame(timeStamp) {
         this.draw();
-        this.checkGameStatus();
+        this.checkGameStatus(); // for throw objects (checkThroeObjects)
         let deltaTime = this.setDeltaTime(timeStamp);
         this.level.backgroundObjects.forEach(bgo => {
             bgo.move();
@@ -211,6 +250,14 @@ class World {
             let timeStamp = Date.now();
             self.updateGame(timeStamp);
         });
+        // in game.js (TODO: continue playing countdownSound if in lastX sec after Pause)
+        if (this.gameOver || this.gamePaused) {
+            this.gameMusic.pause();
+            this.countdownSound.pause();
+        }
+        else {
+            this.gameMusic.play();
+        }
     }
 
 }

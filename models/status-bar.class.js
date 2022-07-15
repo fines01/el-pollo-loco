@@ -38,8 +38,9 @@ class StatusBar extends DrawableObject {
     fontFamily = 'Helvetica, sans-serif';
     amountBottles = 0;
     amountCoins = 0;
-
-
+    remainingTime;
+   
+    
     constructor(y, images, initialValue, ratio = 1) {
         super();
         this.y = y;
@@ -82,10 +83,10 @@ class StatusBar extends DrawableObject {
     
     drawGameTime(ctx, gameTime, maxGameTime) {
         ctx.font = 'bold ' + this.fontSize * 1.1 + 'px ' + this.fontFamily;
-        let remainingTime = ( (maxGameTime - gameTime) * 0.001).toFixed(1);
-        if (remainingTime < 10 ) ctx.fillStyle = 'red';
-        if (remainingTime < 0.0 ) remainingTime = 0.0;
-        ctx.fillText('Time: ' + remainingTime, canvasWidth*0.9, this.y + this.height -4 );
+        this.remainingTime = ( (maxGameTime - gameTime) * 0.001).toFixed(1);
+        if (this.remainingTime < 10 ) ctx.fillStyle = 'red';
+        if (this.remainingTime < 0.0 ) this.remainingTime = 0.0;
+        ctx.fillText('Time: ' + this.remainingTime, canvasWidth*0.9, this.y + this.height -4 );
     }
 
 }

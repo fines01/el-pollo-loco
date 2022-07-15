@@ -22,8 +22,12 @@ let handleKeypresses = window.addEventListener('keydown', (e) => {
         level = setLevel(1);
         startGame();
     }
-    if (e.code == 'KeyP' && world){
+    if (e.code == 'KeyP' && world) {
         togglePause();
+    }
+
+    if (e.code == 'KeyH' && world) {
+        world.setDevMode();
     }
 });
 

@@ -26,6 +26,16 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
+    createAudio(...audioPaths) {
+        let audios = [];
+        for (let i = 0; i < audioPaths.length; i++) {
+            let audio = new Audio (audioPaths[i]);
+            audios.push(audio);
+        }
+        if (audios.length === 1) return audios[0];
+        else return audios;
+    }
+
     playAnimationOnce(images){
         for(let i = 0; i < images.length; i++ ){
             let imgPath = images[i];
@@ -37,6 +47,7 @@ class MovableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) { 
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+                // if on ground again: play landing sound
             } 
             else {  
                 this.y = this.groundLevelY;
@@ -54,6 +65,7 @@ class MovableObject extends DrawableObject {
 
     jump() {
         this.speedY = this.jumpHeight;
+        if(this.jumpingSound) this.jumpingSound.play();
     }
     
     randomBounce() { // bounce left
@@ -92,14 +104,6 @@ class MovableObject extends DrawableObject {
         )
     }
 
-    // isCollidingMultiple(correction = 0, ...objects){
-    //     for (let i = 0; i < objects.length; i++){
-    //         this.isColliding(objects[i], correction);
-    //         // console.log(this,' HIT BY ', objects[i]);
-    //         this.receiveHit();
-    //     }
-    // }
-
     isJumpingOn(object) {
         return ( 
             this.isColliding(object) &&
@@ -113,20 +117,21 @@ class MovableObject extends DrawableObject {
         return (obj instanceof Chicken || obj instanceof Chick || obj instanceof Endboss);
     }
     
-    receiveHit(){
-        this.energy -= 2;
-        if (this.energy < 0) this.energy = 0;
-        if (this.energy > 0) this.lastHit = new Date().getTime(); // Timestamp: ms since 1.1.1970
-    }
+    // receiveEnergy(){
+    //     this.energy += 0.5;
+    //     if (this.energy > 100) this.energy = 100;
+    // }
 
-    receiveEnergy(){
-        this.energy += 0.5;
-        if (this.energy > 100) this.energy = 100;
+    receiveHit(){
+        this.energy -= 4;
+        if (this.energy < 0) this.energy = 0;
+        if (this.energy > 0) this.lastHit = Date.now();
+        if (this.hurtSound) this.hurtSound.play();
     }
     
     isHurt( ms = 250 ){
-        let dt = new Date().getTime() - this.lastHit; // ms since lastHit
-        return (dt < ms);
+        let deltaTime = Date.now() - this.lastHit; // ms since lastHit
+        return (deltaTime < ms);
     }
     
     isDead(){
