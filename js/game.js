@@ -1,6 +1,6 @@
 // get css variables
 // remove string 'px' and keep only the numeric values
-// Actually not necessary
+// Actually necessary?
 const root = document.documentElement;
 const canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '');
 const canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '');
@@ -39,21 +39,12 @@ function startGame() {
     if (world.checkWorldComplete()) world.run();
 }
 
-// function checkReady(){
-//     world.level.backgroundObjects.forEach( bgo=>{
-//         if (!bgo.checkImgLoaded()) return false;
-//     });
-//     if (!world.character.checkImgLoaded()) return false;
-//     return true;
-// }
-
 function togglePause() {
     world.gamePaused = !world.gamePaused;
     if (!world.gamePaused) {
         world.lastAnimationFrame = Date.now();
         world.run();
     }
-
 }
 
 function setWinScreen(){

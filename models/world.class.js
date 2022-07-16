@@ -203,14 +203,10 @@ class World {
     }
 
     setDevMode() {
-        // let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
-        // movableObjects.forEach(mo => {
-        //     mo.showHitbox = !mo.showHitbox;
-        // });
         this.character.showHitbox = !this.character.showHitbox;
     }
 
-    // as new enemies are being created during the game (always with showHitbox = false) maybe check and update during game (performance etc.?)
+    // as new enemies are being created during the game (always with showHitbox = false) maybe check and update during game
     checkDevMode() {
         let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
         movableObjects.forEach(mo => {
@@ -220,7 +216,13 @@ class World {
 
     checkCountdown() {
         if (this.statusbars[0].remainingTime == 10) this.gameMusic.playbackRate = 1.15;
-        if (this.statusbars[0].remainingTime == 3 && !this.gamePaused) this.countdownSound.play();
+        if (this.statusbars[0].remainingTime <= 3 && !this.gamePaused) this.countdownSound.play();
+        else if (this.gamePaused || this.gameOver) this.countdownSound.pause();
+    }
+
+    controlGameMusic() {
+        if (this.gameOver || this.gamePaused) this.gameMusic.pause();
+        else this.gameMusic.play();
     }
 
     checkGameStatus() {
@@ -267,19 +269,13 @@ class World {
     }
 
     run() {
+        this.controlGameMusic();
+        // game loop
         let self = this;
         if (!this.gameOver && !this.gamePaused) requestAnimationFrame(() => {
             let timeStamp = Date.now();
             self.updateGame(timeStamp);
         });
-        // in game.js (TODO: continue playing countdownSound if in lastX sec after Pause)
-        if (this.gameOver || this.gamePaused) {
-            this.gameMusic.pause();
-            this.countdownSound.pause();
-        }
-        else {
-            this.gameMusic.play();
-        }
     }
 
 }
