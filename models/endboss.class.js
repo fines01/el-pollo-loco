@@ -4,7 +4,7 @@ class Endboss extends Enemy { // or Gallina
     height = 400;
     width = 300;
     y = 50;
-    energy = 12; // = needs 3 hits
+    energy = 6; // = needs 3 hits
     animationFPS = 10; //25;
     animationFrameInterval = 1000 / this.animationFPS;
 

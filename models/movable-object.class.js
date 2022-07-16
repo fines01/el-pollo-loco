@@ -123,13 +123,13 @@ class MovableObject extends DrawableObject {
     // }
 
     receiveHit(){
-        this.energy -= 4;
+        this.energy -= 2;
         if (this.energy < 0) this.energy = 0;
         if (this.energy > 0) this.lastHit = Date.now();
         if (this.hurtSound) this.hurtSound.play();
     }
     
-    isHurt( ms = 250 ){
+    isHurt( ms = 125 ){
         let deltaTime = Date.now() - this.lastHit; // ms since lastHit
         return (deltaTime < ms);
     }

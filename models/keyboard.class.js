@@ -5,7 +5,6 @@ class Keyboard {
     UP = false;
     DOWN = false;
     SPACE = false;
-    F = false;
     ENTER = false;
 
     constructor(){
@@ -15,12 +14,10 @@ class Keyboard {
     handleKeypress(){
 
         window.addEventListener('keydown', (event) => {
-            //console.log(event.key, event.code);
 
             switch (event.code) {
                 case 'ArrowRight':
                     this.RIGHT = true;
-                    //console.log('this:', this);
                     break;
                 case 'ArrowLeft':
                     this.LEFT = true;
@@ -34,9 +31,6 @@ class Keyboard {
                 case 'Space':
                     this.SPACE = true;
                     break;
-                case 'KeyF':
-                    this.F = true;
-                    break;
                 case 'Enter':
                     this.ENTER = true;
                     break;
@@ -49,7 +43,6 @@ class Keyboard {
             switch (event.code) {
                 case 'ArrowRight':
                     this.RIGHT = false;
-                    //console.log(this);
                     break;
                 case 'ArrowLeft':
                     this.LEFT = false;
@@ -62,9 +55,6 @@ class Keyboard {
                     break;
                 case 'Space':
                     this.SPACE = false;
-                    break;
-                case 'KeyF':
-                    this.F = false;
                     break;
                 case 'Enter':
                     this.ENTER = false;

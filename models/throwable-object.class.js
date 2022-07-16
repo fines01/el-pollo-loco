@@ -1,5 +1,5 @@
 class ThrowableObject extends CollectibleObject {
-        
+
     // TODO wo interval - remove
     throw(x, y){
         this.x = x;
@@ -12,7 +12,6 @@ class ThrowableObject extends CollectibleObject {
 
             this.checkHitarea();
             this.applyGravity();
-            //this.playAnimation(this.IMAGES_ROTATE);
             if (this.y < this.groundLevelY) {
                 if (!world.character.isReversed_x) this.x += 16;
                 if (world.character.isReversed_x) this.x -= 16;

@@ -7,7 +7,7 @@ class DrawableObject {
     height;
     imgCache = [];
     markedForDeletion = false;
-    showHitboxes = false;
+    showHitbox = false;
     
     // check img loaded
     allImagesLoaded = false; // überprüfen: imgCache in den alle bilder geladen werden
@@ -22,7 +22,7 @@ class DrawableObject {
     checkImgLoaded() {
         if (this.imgCacheIsComplete()) {
             for (let imgName of this.imgCache) {
-                if (!this.imgCache[imgName].complete) return false; // img haben einen complete-wert, returns boolean
+                if (!this.imgCache[imgName].complete) return false; // complete: property of img, returns boolean
             }
             return true;
         } 
@@ -65,7 +65,7 @@ class DrawableObject {
     }
 
     toggleHitboxes() {
-        this.showHitboxes = !this.showHitboxes;
+        this.showHitbox = !this.showHitbox;
     }
 
     isCollidableObject(){
@@ -80,7 +80,7 @@ class DrawableObject {
 
     // draw hitboxes
     drawFrame(ctx){
-        if(this.showHitboxes && this.isCollidableObject()){
+        if(this.showHitbox && this.isCollidableObject()){
             ctx.beginPath();
             ctx.lineswidth = '3.5';
             ctx.strokeStyle = 'yellow';

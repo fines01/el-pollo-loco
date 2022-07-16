@@ -21,14 +21,14 @@ class Character extends MovableObject {
     audioPaths = 
     [
         'audio/step1.mp3', // walking sound
-        'audio/test/Hero_Death_00.wav', // dying sound - nope
-        'audio/test/hit26.mp3.flac', // hurting sound ...hmm
+        'audio/test/death-3.ogg', // dying sound
+        'audio/test/hit26.mp3.flac', // hurting sound 
         'audio/test/swosh-06.flac' // jumping sound flac
     ];
     
-    IMAGES_IDLE = [];
-    IMAGES_SLEEPING = [];
-    IMAGES_ANGRY = []; 
+    // IMAGES_IDLE = [];
+    // IMAGES_SLEEPING = [];
+    // IMAGES_ANGRY = []; 
 
     IMAGES_WALKING = 
     [
@@ -77,10 +77,10 @@ class Character extends MovableObject {
     }
 
     checkHitarea() {
-        this.imgY = this.y + 90;
+        this.imgY = this.y + 95;
         this.imgX = this.x + 25;
-        this.imgWidth = this.width * 0.55;
-        this.imgHeight = this.height * 0.55;
+        this.imgWidth = this.width * 0.5;
+        this.imgHeight = this.height * 0.5;
     }
 
     setAudio() {
@@ -89,12 +89,10 @@ class Character extends MovableObject {
         this.hurtSound.volume=0.3;
         this.jumpingSound.playbackRate = 1.2;
         this.walkingSound.playbackRate = 2;
+        this.dyingSound.volume = 0.1;
+        this.dyingSound.playbackRate = 2.5;
     }
-
-    canThrow(collectedBottles) {
-        return (this.keyboard.ENTER && !this.isHurt(200) && collectedBottles > 0);
-    }
-
+ 
     checkAnimationFrameTime(deltaTime) {
         if (this.animationFrameTimer > this.animationFrameInterval) {
             this.animate();
@@ -104,39 +102,49 @@ class Character extends MovableObject {
             this.animationFrameTimer += deltaTime;
         }
     }
-
-    animate() { // über 14 Zeilen !! kevin meint hier ev besser switch-case... meh
-        this.applyGravity(); 
-        if(this.isDead()){
-            this.playAnimationOnce(this.IMAGES_DYING);
-            this.groundLevelY += 20;
-        }
-        else if(this.isHurt()){ // only if NOT jumping on enemy
-            this.playAnimation(this.IMAGES_HURT);
-        }
-        else if((this.isWalkingRight() || this.isWalkingLeft() )&& !this.isAboveGround()){
-            this.walkingSound.play();
-            this.playAnimation(this.IMAGES_WALKING);
-        }
-        else if(this.isAboveGround()) {
-            this.playAnimation(this.IMAGES_JUMPING);
-        }
+    
+    canThrow(collectedBottles) {
+        return (this.keyboard.ENTER && !this.isHurt() && collectedBottles > 0);
     }
 
-    move(){
+    isWalking() {
+        return ( (this.isWalkingRight() || this.isWalkingLeft() ) && !this.isAboveGround()); // check unnecc ()
+    }
+
+    isHittingEnemy(enemy) {
+        return (this.isColliding(enemy) && !this.isHurt() && !this.isJumpingOn(enemy) && !enemy.isDead()); // because dead enemies don't get removed immediately (for visual effects)
+    }
+
+    animateDeath() {
+        this.playAnimationOnce(this.IMAGES_DYING);
+        this.groundLevelY += 20;
+        this.dyingSound.play();
+    }
+
+    walkRight() {
+        this.moveRight();
+        this.isReversed_x = false;
+    }
+
+    walkLeft() {
+        this.moveLeft();
+        this.isReversed_x = true;
+    }
+
+    animate() {
+        this.applyGravity(); 
+        if (this.isDead()) this.animateDeath();
+        else if (this.isHurt()) this.playAnimation(this.IMAGES_HURT);
+        else if (this.isWalking()) this.playAnimation(this.IMAGES_WALKING);
+        else if (this.isAboveGround()) this.playAnimation(this.IMAGES_JUMPING);
+    }
+
+    move() {
         this.checkHitarea();
-        if(this.isJumping()){
-            this.jump();
-        }
-        if(this.isWalkingRight()){
-            this.moveRight();
-            this.isReversed_x = false;
-        }
-        if(this.isWalkingLeft()) {
-            this.moveLeft();
-            this.isReversed_x = true;
-        }
-        // if (this.isDead()) this.dyindSound.play();
+        if (this.isJumping()) this.jump();
+        if (this.isWalkingRight()) this.walkRight()
+        if (this.isWalkingLeft()) this.walkLeft();
+        if (this.isWalking()) this.walkingSound.play();
         this.world.camera_x = -this.x + 100;
     }
     

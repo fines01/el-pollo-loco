@@ -34,11 +34,18 @@ let handleKeypresses = window.addEventListener('keydown', (e) => {
 function startGame() {
     hide('start-screen', 'game-over-screen', 'loser-screen', 'screen-text-big', 'screen-text-small');
     show('canvas');
-    // level = setLevel();
     world = new World();
     world.gameOver = false;
-    if (world.character.checkImgLoaded()) world.run();
+    if (world.checkWorldComplete()) world.run();
 }
+
+// function checkReady(){
+//     world.level.backgroundObjects.forEach( bgo=>{
+//         if (!bgo.checkImgLoaded()) return false;
+//     });
+//     if (!world.character.checkImgLoaded()) return false;
+//     return true;
+// }
 
 function togglePause() {
     world.gamePaused = !world.gamePaused;
@@ -54,14 +61,15 @@ function setWinScreen(){
     show('game-over-screen', 'screen-text-big', 'screen-text-small');
     text.innerHTML = "YOU WON!";
     text.classList.add('endscreen-text');
+    world.winSound.play();
 }
 
 function setLoserScreen(){
     show('loser-screen', 'screen-text-small');
+    world.loseSound.play();
 }
 
 function setHelpScreen(){}
-
 
 // HELPER FUNCTIONS 
 

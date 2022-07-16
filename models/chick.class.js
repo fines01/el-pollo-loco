@@ -18,7 +18,7 @@ class Chick extends Enemy {
         this.y = this.groundLevelY;
         this.height = 55 + Math.random() * 20;
         this.width = this.height * 1.2;
-        this.jumpHeight = Math.random() * 30;//(90 - this.height);
+        this.jumpHeight = Math.random() * 35;//(90 - this.height);
         this.speedX = 0.75 + Math.random() * 4;
         this.animateEnemies();
     }

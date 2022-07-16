@@ -12,12 +12,14 @@ class World {
     gamePaused = false;
     gameOver = true;
     audioPaths = [
-        //'audio/test/happy.mp3', // game music
+        //'audio/test/happy.mp3', // test music
+        // 'audio/test/CH-AY-NA.ogg', // game music -test1
         'audio/it_takes_a_hero.wav', // game music
-        'audio/countdown3.mp3' // countdown sound
+        'audio/countdown3.mp3', // countdown sound
+        'audio/test/Win Jingle.wav', // win jingle
+        'audio/test/Warp Jingle.wav', // lose jingle
     ]
 
-    
     constructor(levelNo = 1) {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
@@ -43,7 +45,7 @@ class World {
     }
 
     addToMap(...objects) {
-        for (let i = 0; i < objects.length; i++) {
+        for (let i = 0; i < objects.length; i++) { // for-of loop
             if (objects[i].isReversed_x) {
                 this.flipImage(objects[i]);
             }
@@ -68,8 +70,12 @@ class World {
     }
 
     setAudio() {
-        [this.gameMusic, this.countdownSound] = this.character.createAudio(...this.audioPaths);
+        [this.gameMusic, this.countdownSound, this.winSound, this.loseSound] = this.character.createAudio(...this.audioPaths);
         this.countdownSound.volume = 0.4;
+        this.winSound.volume = 0.4;
+        this.winSound.playbackRate = 1.5;
+        this.loseSound.volume = 0.5;
+        this.loseSound.playbackRate = 1.5;
         this.gameMusic.volume = 0.2;
         this.gameMusic.loop = true;
         this.gameMusic.play();
@@ -88,7 +94,7 @@ class World {
     }
 
     checkCharacterCollision(enemy) {
-        if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOn(enemy) && !enemy.isDead()) { // because dead enemies don't get removed immediately (for visual effects) // --> new check-function isCollidingWith() or isHitting() ??
+        if (this.character.isHittingEnemy(enemy)){
             this.character.receiveHit();
             this.statusbars[0].setStatusbar(this.character.energy);
         } else if (this.character.isJumpingOn(enemy)) { //
@@ -126,22 +132,22 @@ class World {
         this.level.collectibleObjects.forEach((collectible, index) => {
             this.checkCollectibleCollision(collectible);
         });
-        // this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies);
-        this.removeMarkedObjects();
+        //this.removeMarkedObjects();
+        this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies);
     }
 
-    // TODO fix
-    // removeMarkedObjects2(...objArrs) {
-    //     for (let i = 0; i < objArrs.length; i++) {
-    //         objArrs[i] = objArrs[i].filter((obj) => !obj.markedForDeletion); // I don't actually change original arrays here
-    //     }
-    // }
-
     removeMarkedObjects() {
-        //objArr = objArr.filter(obj => !obj.markedForDeletion); // gn - check 
         this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
         this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
         this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
+    }
+
+    removeMarkedObjects2(...objArrs) {
+        for (let i = 0; i < objArrs.length; i++) { // or for (arr of objArrs) !!
+            objArrs[i].forEach( (obj,objIndex)=>{
+                if (obj.markedForDeletion) objArrs[i].splice(objIndex,1);
+            });
+        }
     }
 
     checkThrowObjects() {
@@ -151,16 +157,30 @@ class World {
         }
     }
 
+    // TD. redo?
     throwBottle() {
+        // create new bottle
         let bottle = new Bottle();
         this.throwableObjects.push(bottle);
+        // set throw-x 
         let bottleX;
         if (this.character.isReversed_x) bottleX = this.character.x;
         else bottleX = this.character.x + this.character.width * 0.5;
+        // throw bottle
         bottle.throw(bottleX, this.character.y + 80);
+        bottle.animateThrow(); //bottle.checkAnimationFrameTime(deltaTime); & remove animateThrow();
+        // set game status-ui
         this.collectedBottles--;
         this.statusbars[2].setStatusbar(this.collectedBottles);
-        bottle.animateThrow(); //bottle.checkAnimationFrameTime(deltaTime); & remove animateThrow();
+    }
+
+    // check if images are fully loaded into imgCache in certain objects (only character and bg objects, as they take the longest)
+    checkWorldComplete() {
+        world.level.backgroundObjects.forEach(bgo => {
+            if (!bgo.checkImgLoaded()) return false;
+        });
+        if (!world.character.checkImgLoaded()) return false;
+        return true;
     }
 
     setGameOver() {
@@ -170,31 +190,33 @@ class World {
         this.setGameOverScreen();
     }
 
-    setGameOverScreen() { // BUG in case of (win at last sec? character dead msec after win?) shows all screens
-        if (this.endboss.isDead() && this.level.amountCoins === this.collectedCoins) setWinScreen();
-        else if (this.character.isDead()) setLoserScreen(); // params: energy left, missed coins, time left?
+    isGameWon() {
+        return (
+            this.endboss.isDead() && 
+            this.level.amountCoins === this.collectedCoins
+        );
+    }
+
+    setGameOverScreen() {
+        if (this.isGameWon()) setWinScreen();
         else setLoserScreen();
     }
 
     setDevMode() {
-        let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
-        movableObjects.forEach(mo => {
-            //if (this.character.keyboard.F) {
-            mo.showHitboxes = !mo.showHitboxes;
-            console.log(mo, mo.showHitboxes);
-            //}
-        });
+        // let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
+        // movableObjects.forEach(mo => {
+        //     mo.showHitbox = !mo.showHitbox;
+        // });
+        this.character.showHitbox = !this.character.showHitbox;
     }
 
-    // checkDevMode() {
-    //     let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
-    //     movableObjects.forEach(mo => {
-    //         if (this.character.keyboard.F) {
-    //             mo.showHitboxes = !mo.showHitboxes;
-    //             console.log(mo, mo.showHitboxes);
-    //         }
-    //     });
-    // }
+    // as new enemies are being created during the game (always with showHitbox = false) maybe check and update during game (performance etc.?)
+    checkDevMode() {
+        let movableObjects = [...this.level.enemies, ...this.level.collectibleObjects, this.character];
+        movableObjects.forEach(mo => {
+            mo.showHitbox = this.character.showHitbox;
+        });
+    }
 
     checkCountdown() {
         if (this.statusbars[0].remainingTime == 10) this.gameMusic.playbackRate = 1.15;
@@ -205,7 +227,7 @@ class World {
         this.checkCollisions();
         this.checkThrowObjects();
         this.checkCountdown();
-        //this.checkDevMode();
+        this.checkDevMode();
     }
 
     setDeltaTime(timeStamp) {
@@ -232,7 +254,7 @@ class World {
 
     updateGame(timeStamp) {
         this.draw();
-        this.checkGameStatus(); // for throw objects (checkThroeObjects)
+        this.checkGameStatus();
         let deltaTime = this.setDeltaTime(timeStamp);
         this.level.backgroundObjects.forEach(bgo => {
             bgo.move();

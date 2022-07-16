@@ -24,10 +24,10 @@ class Enemy extends MovableObject {
     }
 
     checkHitarea() {
-        this.imgY = this.y + 7;
+        this.imgY = this.y + 8;
         this.imgX = this.x + 5;
-        this.imgWidth = this.width * 0.85;
-        this.imgHeight = this.height * 0.79;
+        this.imgWidth = this.width * 0.7;
+        this.imgHeight = this.height * 0.75;
     }
 
     animateEnemies() {
