@@ -12,9 +12,9 @@ class World {
     gamePaused = false;
     gameOver = true;
     audioPaths = [
-        //'audio/test/happy.mp3', // test music
+        'audio/test/happy.mp3', // test music
         // 'audio/test/CH-AY-NA.ogg', // game music -test1
-        'audio/it_takes_a_hero.wav', // game music
+        // 'audio/it_takes_a_hero.wav', // game music
         'audio/countdown3.mp3', // countdown sound
         'audio/test/Win Jingle.wav', // win jingle
         'audio/test/Warp Jingle.wav', // lose jingle
@@ -23,6 +23,8 @@ class World {
     constructor(levelNo = 1) {
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
+        this.canvas.width = canvasWidth;
+        this.canvas.height = canvasHeight;
         this.character = new Character(this);
         this.level = level; //setLevel(levelNo);
         this.endboss = this.level.enemies[this.level.enemies.length - 1];

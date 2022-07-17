@@ -66,9 +66,16 @@ h4{
     cursor: pointer;
 }
 
+#screen-text-big:hover, #screen-text-small:hover, #help-note:hover{
+    text-decoration: underline;
+}
+
 canvas {
     background-image: linear-gradient(to bottom, rgba(2, 0, 128, 0.9), rgba(105, 215, 252, 0.45) 30%, rgba(255, 140, 0) 70%);
     z-index: 1;
+
+    /*wichtig für responsiveness laut tut*/
+    display: block;
 }
 
 #screen-frame {
@@ -89,6 +96,8 @@ canvas {
     display: flex;
     max-width: 100%;
     max-height: 100%;
+
+    /* display:block; */
 }
 
 #game-over-screen, #loser-screen {
@@ -102,6 +111,7 @@ canvas {
     justify-content: center;
     line-height: 1.75;
     z-index: 3;
+    position: relative;
 }
 
 #help-screen h4 {
@@ -109,15 +119,30 @@ canvas {
     top: 0;
     margin-top: 1rem;
     display: flex;
+    /* justify-content: center; */
     justify-content: space-between;
     margin: 0 8rem;
+
+    font-size: 1.25rem;
 }
 
 #help-screen h3 {
     color: rgb(251, 251, 0);
     text-align: center;
-    margin: 2rem 7rem;
     line-height: 1.5;
+    margin: 2rem 7rem;
+}
+
+#help-screen span:nth-child(2n+1) {
+    color: red;
+    /* position: relative;
+    right: 60%; */
+}
+
+#help-screen span:nth-child(2){
+    color: orange;
+    /* position: absolute;
+    left: 65%; */
 }
 
 .endscreen-text {
@@ -132,7 +157,7 @@ canvas {
 }
 
 .small-h {
-    font-size: 0.7rem;
+    font-size: 0.7rem !important;
     margin: 1rem 12rem 0 12rem !important;
 }
 
@@ -140,8 +165,120 @@ canvas {
     animation: text-dive-out 350ms linear 1; /*300ms (=timeout until game starts)*/
 }
 
+/* --- Animations ---*/
+
 @keyframes text-dive-out {
     0% {top: 20%;}
     50% {top: 55%; }
     100% { top: 150%;}
+}
+
+/* --- Mobile Views ---*/
+
+@media only screen and (max-width:720px){ /* standard --canvasWidth */
+    /* :root {
+        --canvasWidth: 100%;
+    } */
+
+    /* .screen, 
+    canvas,  */
+    #screen-frame {
+        width: 100%;
+    }
+
+    #screen-text-big, #screen-text-small {
+        font-size: 1.5rem;
+    }
+
+    #help-screen h4 {
+       font-size: 1rem;
+       margin: 0 3rem;
+    }
+
+    #help-screen h3 {
+        font-size: 1rem;
+        margin: 2rem 3rem;
+    }
+
+    .small-h {
+        font-size: 0.5rem !important;
+        margin: 0rem 6rem !important;
+    }
+
+}
+
+@media only screen and (max-height: 480px){ /* standard --canvasHeight */
+    /* :root {
+        --canvasHeight: 100vh;
+    } */
+    #screen-frame {
+        height: 100vh;
+    }
+
+    #help-note {
+        top: 95%;
+        right: 3%;
+        font-size: 0.8rem;
+        text-decoration: none !important;
+    }
+}
+
+@media only screen and (max-height: 390px){
+    #help-screen h4 {
+        font-size: 0.9rem;
+        margin: 0 7rem;
+    }
+    #help-screen h3 {
+        font-size: 0.8rem;
+        margin: 2rem 7rem;
+    }
+    .small-h {
+        font-size: 0.5rem !important;
+        margin: 0rem 7rem !important;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    #screen-text-big,
+    #screen-text-small {
+        font-size: 1.3rem;
+    }
+
+    #help-screen h4 {
+        font-size: 1rem;
+        margin: 0 3rem;
+    }
+
+    #help-screen h3 {
+        font-size: 0.8rem;
+        margin: 2rem 3rem;
+    }
+
+    .small-h {
+        font-size: 0.66rem !important;
+        margin: 0rem 3rem !important;
+    }
+}
+
+@media only screen and (max-width: 430px){
+    #screen-text-big,
+    #screen-text-small {
+        font-size: 1rem;
+    }
+
+    #help-screen h4 {
+        font-size: 0.6rem;
+        margin: 0 2rem;
+    }
+
+    #help-screen h3 {
+        font-size: 0.6rem;
+        margin: 2rem 2rem;
+    }
+
+    .small-h {
+        font-size: 0.4rem !important;
+        margin: 0rem 3rem !important;
+    }
 }

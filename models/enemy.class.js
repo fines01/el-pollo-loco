@@ -50,7 +50,7 @@ class Enemy extends MovableObject {
     }
 
     scoreAgainstEnemy() {
-        if( !this.isHurt(300)){ 
+        if( !this.isHurt(400)){ 
             this.receiveHit();
         }
     }
