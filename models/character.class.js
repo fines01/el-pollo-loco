@@ -90,7 +90,7 @@ class Character extends MovableObject {
         this.jumpingSound.playbackRate = 1.2;
         this.walkingSound.playbackRate = 2;
         this.dyingSound.volume = 0.1;
-        this.dyingSound.playbackRate = 2.5;
+        this.dyingSound.playbackRate = 2;
     }
  
     checkAnimationFrameTime(deltaTime) {

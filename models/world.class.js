@@ -113,15 +113,15 @@ class World {
 
     checkCollectibleCollision(collectibleObject) {
         if (collectibleObject instanceof Coin && this.character.isColliding(collectibleObject)) {
-            this.collectedCoins++;
-            collectibleObject.collectSound.play();
+            this.collectedCoins++; // refactor in collectItem(object, statusBarIndex, collectedItem) function)
             this.statusbars[1].setStatusbar(this.collectedCoins);
             collectibleObject.markedForDeletion = true;
-        } else if (collectibleObject instanceof Bottle && this.character.isColliding(collectibleObject)) {
             collectibleObject.collectSound.play();
-            collectibleObject.markedForDeletion = true;
+        } else if (collectibleObject instanceof Bottle && this.character.isColliding(collectibleObject)) {
             this.collectedBottles++;
             this.statusbars[2].setStatusbar(this.collectedBottles);
+            collectibleObject.markedForDeletion = true;
+            collectibleObject.collectSound.play();
         }
     }
 
@@ -190,16 +190,16 @@ class World {
         this.setGameOverScreen();
     }
 
-    isGameWon() {
+    checkWin() {
         return (
             this.endboss.isDead() && 
-            this.level.amountCoins === this.collectedCoins
+            this.level.amountCoins <= this.collectedCoins // >= instead of === because of bug: smt 21 coins collected?
         );
     }
 
     setGameOverScreen() {
-        if (this.isGameWon()) setWinScreen();
-        else setLoserScreen();
+        if (this.checkWin() && this.gameOver ) setWinScreen();
+        else if (this.gameOver) setLoserScreen();
     }
 
     setDevMode() {
@@ -215,9 +215,9 @@ class World {
     }
 
     checkCountdown() {
-        if (this.statusbars[0].remainingTime == 10) this.gameMusic.playbackRate = 1.15;
+        if (this.statusbars[0].remainingTime == 10) this.gameMusic.playbackRate = 1.3;
         if (this.statusbars[0].remainingTime <= 3 && !this.gamePaused) this.countdownSound.play();
-        else if (this.gamePaused || this.gameOver) this.countdownSound.pause();
+        if (this.gamePaused || this.gameOver) this.countdownSound.pause();
     }
 
     controlGameMusic() {

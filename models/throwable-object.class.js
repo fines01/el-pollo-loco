@@ -1,10 +1,20 @@
-class ThrowableObject extends CollectibleObject {
+class ThrowableObject extends MovableObject {
+
+    // constructor(x,y) { // Nope...
+    //     this.x = x;
+    //     this.y = y;
+    //     this.speedY = 20;
+    //     this.throwSound.play(); // or in animateThrow? --> - play only once at throw-start
+    // }
+
+    isThrown = false;
 
     // TODO wo interval - remove
     throw(x, y){
         this.x = x;
         this.y = y;
         this.speedY = 20;
+        this.isThrown = true;
         this.throwSound.play();
 
         // TODO: remove interval function
