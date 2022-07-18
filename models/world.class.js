@@ -8,16 +8,14 @@ class World {
     throwableObjects = [];
     score = 0;
     gameTime = 0;
-    maxGameTime = 30000; //ms
+    maxGameTime = 30000;
     gamePaused = false;
     gameOver = true;
     audioPaths = [
-        'audio/test/happy.mp3', // test music
-        // 'audio/test/CH-AY-NA.ogg', // game music -test1
-        // 'audio/it_takes_a_hero.wav', // game music
+        'audio/it_takes_a_hero.wav', // game music
         'audio/countdown3.mp3', // countdown sound
-        'audio/test/Win Jingle.wav', // win jingle
-        'audio/test/Warp Jingle.wav', // lose jingle
+        'audio/Win Jingle.wav', // win jingle
+        'audio/Warp Jingle.wav', // lose jingle
     ]
 
     constructor(levelNo = 1) {
@@ -72,7 +70,8 @@ class World {
     }
 
     setAudio() {
-        [this.gameMusic, this.countdownSound, this.winSound, this.loseSound] = this.character.createAudio(...this.audioPaths);
+        [this.gameMusic, this.countdownSound, this.winSound, this.loseSound] = this.character.createAudio(...this.audioPaths); // createAudio() function isin Class MovableObjects
+        //
         this.countdownSound.volume = 0.4;
         this.winSound.volume = 0.4;
         this.winSound.playbackRate = 1.5;
@@ -115,7 +114,7 @@ class World {
 
     checkCollectibleCollision(collectibleObject) {
         if (collectibleObject instanceof Coin && this.character.isColliding(collectibleObject)) {
-            this.collectedCoins++; // refactor in collectItem(object, statusBarIndex, collectedItem) function)
+            this.collectedCoins++; // refactor in collectItem(object, statusBarIndex, collectedItem) function? )
             this.statusbars[1].setStatusbar(this.collectedCoins);
             collectibleObject.markedForDeletion = true;
             collectibleObject.collectSound.play();
@@ -134,23 +133,23 @@ class World {
         this.level.collectibleObjects.forEach((collectible, index) => {
             this.checkCollectibleCollision(collectible);
         });
-        //this.removeMarkedObjects();
-        this.removeMarkedObjects2(this.level.collectibleObjects, this.throwableObjects, this.level.enemies);
+        this.removeMarkedObjects(this.level.collectibleObjects, this.throwableObjects, this.level.enemies);
     }
 
-    removeMarkedObjects() {
-        this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
-        this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
-        this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
-    }
-
-    removeMarkedObjects2(...objArrs) {
-        for (let i = 0; i < objArrs.length; i++) { // or for (arr of objArrs) !!
+    removeMarkedObjects(...objArrs) {
+        for (let i = 0; i < objArrs.length; i++) {
             objArrs[i].forEach( (obj,objIndex)=>{
                 if (obj.markedForDeletion) objArrs[i].splice(objIndex,1);
             });
         }
     }
+
+    // removeMarkedObjects2() {
+    //     this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
+    //     this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
+    //     this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
+    // }
+
 
     checkThrowObjects() {
         if (this.character.canThrow(this.collectedBottles)) {
@@ -159,7 +158,7 @@ class World {
         }
     }
 
-    // TD. redo?
+    // TD. redo !!
     throwBottle() {
         // create new bottle
         let bottle = new Bottle();
@@ -195,7 +194,7 @@ class World {
     checkWin() {
         return (
             this.endboss.isDead() && 
-            this.level.amountCoins <= this.collectedCoins // >= instead of === because of bug: smt 21 coins collected?
+            this.level.amountCoins <= this.collectedCoins // >= instead of === because of BUG: smt 21 coins collected?
         );
     }
 

@@ -21,9 +21,9 @@ class Character extends MovableObject {
     audioPaths = 
     [
         'audio/step1.mp3', // walking sound
-        'audio/test/death-3.ogg', // dying sound
-        'audio/test/hit26.mp3.flac', // hurting sound 
-        'audio/test/swosh-06.flac' // jumping sound flac
+        'audio/death-3.ogg', // dying sound
+        'audio/hit26.mp3.flac', // hurting sound 
+        'audio/swosh-06.flac' // jumping sound flac
     ];
     
     // IMAGES_IDLE = [];

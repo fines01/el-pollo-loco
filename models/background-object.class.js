@@ -1,7 +1,7 @@
 class BackgroundObject extends MovableObject {
     
-    width = canvasWidth*2; // world.canvas.width
-    height = canvasHeight; // world.canvas.height
+    width = canvasWidth*2; 
+    height = canvasHeight;
 
     constructor(imgPath, x, speedX, levelEndX){
         super().loadImage(imgPath);
@@ -14,12 +14,10 @@ class BackgroundObject extends MovableObject {
     move(levelEndX) {
         if (!(this instanceof Cloud)){
             if(this.keyboard.RIGHT && world.character.isWalkingRight()){
-                //if (this.x < -this.width) this.x = 0;
                 this.moveLeft();
                 this.isReversed_x = false;
             }
             if(this.keyboard.LEFT && world.character.isWalkingLeft()) {
-                //if (this.x > this.width ) this.x = -this.width;
                 this.moveRight();
                 this.isReversed_x = false;
             }

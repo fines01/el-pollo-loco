@@ -28,8 +28,8 @@ class MovableObject extends DrawableObject {
 
     createAudio(...audioPaths) {
         let audios = [];
-        for (let i = 0; i < audioPaths.length; i++) {
-            let audio = new Audio (audioPaths[i]);
+        for (let path of audioPaths) {
+            let audio = new Audio(path);
             audios.push(audio);
         }
         if (audios.length === 1) return audios[0];
@@ -37,8 +37,7 @@ class MovableObject extends DrawableObject {
     }
 
     playAnimationOnce(images){
-        for(let i = 0; i < images.length; i++ ){
-            let imgPath = images[i];
+        for(let imgPath of images ){
             this.img = this.imgCache[imgPath];
         }
     }

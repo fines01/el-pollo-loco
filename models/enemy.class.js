@@ -4,8 +4,7 @@ class Enemy extends MovableObject {
     animationFPS = 25;
     animationFrameInterval = 1000 / this.animationFPS;
     animationFrameTimer = 0;
-    hurtSound = new Audio('audio/test/Hit_02.wav');
-    canHurt = true; // can hurt character
+    hurtSound = new Audio('audio/Hit_02.wav');
 
     constructor(){
         super();

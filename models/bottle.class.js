@@ -11,7 +11,7 @@ class Bottle extends ThrowableObject {
     animationFrameTimer = 0;
 
     audioPaths = [
-        'audio/test/swish_3.wav', // throw sound
+        'audio/swish_3.wav', // throw sound
         'audio/Bottle Break.wav', // bottle break sound
         'audio/coin.wav' // collect bottle sound
     ];

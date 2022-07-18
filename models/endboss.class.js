@@ -48,11 +48,11 @@ class Endboss extends Enemy { // or Gallina
 
     constructor(levelEndX) {
         super().loadImage(this.IMAGES_ALERT[0]);
-        this.loadImages(this.IMAGES_ALERT);
-        this.loadImages(this.IMAGES_ATTACKING);
         this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
+        this.loadImages(this.IMAGES_ATTACKING);
         //this.speed = 0.15 + Math.random() * 0.45;
         this.x = levelEndX;
         this.animateEndboss();

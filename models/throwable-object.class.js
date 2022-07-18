@@ -1,25 +1,18 @@
 class ThrowableObject extends MovableObject {
 
-    // constructor(x,y) { // Nope...
-    //     this.x = x;
-    //     this.y = y;
-    //     this.speedY = 20;
-    //     this.throwSound.play(); // or in animateThrow? --> - play only once at throw-start
-    // }
-
-    isThrown = false;
-
-    // TODO wo interval - remove
     throw(x, y){
         this.x = x;
         this.y = y;
         this.speedY = 20;
         this.isThrown = true;
         this.throwSound.play();
-
+        this.applyThrow();
+    }
+    
+    // redo
+    applyThrow(){
         // TODO: remove interval function
-        setInterval( () => {
-
+        setInterval(() => {
             this.checkHitarea();
             this.applyGravity();
             if (this.y < this.groundLevelY) {
@@ -28,8 +21,7 @@ class ThrowableObject extends MovableObject {
             } else {
                 this.markedForDeletion = true;
             }
-
-        }, 1000/60);
+        }, 1000 / 60);
     }
 
     animateThrow() {

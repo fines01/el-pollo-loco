@@ -14,7 +14,6 @@ class Keyboard {
     handleKeypress(){
 
         window.addEventListener('keydown', (event) => {
-
             switch (event.code) {
                 case 'ArrowRight':
                     this.RIGHT = true;
@@ -35,11 +34,9 @@ class Keyboard {
                     this.ENTER = true;
                     break;
             }
-
         });
 
         window.addEventListener('keyup', (event) => {
-
             switch (event.code) {
                 case 'ArrowRight':
                     this.RIGHT = false;
@@ -62,6 +59,5 @@ class Keyboard {
             }
             
         });
-    
     }
 }
