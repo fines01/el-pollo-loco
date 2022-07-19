@@ -1,24 +1,19 @@
-// get css variables, remove string 'px' and keep only the numeric values
+// get css variables, remove string 'px' and keep only the numeric values (as str)
 const root = document.documentElement;
-let canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '');
-let canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '');
+let canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '')*1;
+let canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '')*1;
 
-let level, world;
+let level, world;// canvasWidth, canvasHeight;
 let helpScreenMode = false;
 let fullScreenMode = false;
 
 function init() {
+    setCanvasCssVars();
     level = setLevel(1);
 }
 
-function setMobileCanvas() {
-    if (window.innerWidth < canvasWidth) root.style.setProperty('--canvasWidth', window.innerWidth + 'px'); 
-    if (window.innerHeight < canvasHeight) root.style.setProperty('--canvasHeight', window.innerHeight + 'px');
-    if (window.innerWidth >= canvasWidth || window.innerHeight >= canvasHeight) closeFullScreen();
-}
-
 window.addEventListener('resize', (e)=>{
-    if (!fullScreenMode) setMobileCanvas();
+    setCanvasCssVars();
 });
 
 //let handleKeypresses = 
@@ -28,8 +23,8 @@ window.addEventListener('keydown', (e) => {
     if (e.code == 'KeyP' && world && !helpScreenMode) togglePause();
     if (e.code == 'KeyF' && world) world.setDevMode();
     if (e.code == 'KeyH') toggleHelpScreen();
-    if (e.code == 'KeyS') openFullScreen();
-    if (e.code == 'Escape') closeFullScreen();
+    if (e.code == 'KeyS' && !fullScreenMode) openFullWidthScreen();
+    if (e.code == 'Escape' && fullScreenMode && window.innerWidth > 720) closeFullScreen();
 });
 
 function beginGame(){
@@ -43,6 +38,8 @@ function restartGame(){
     // later: set level
     let levelNo = 1;
     level = setLevel(levelNo);
+    world.winSound.pause();
+    world.loseSound.pause();
     startGame();
 }
 
@@ -82,17 +79,44 @@ function toggleHelpScreen(){
         else helpScreenMode = false;
 }
 
-function openFullScreen() {
-    root.style.setProperty('--canvasWidth', window.innerWidth + 'px'); //canvasheight = canvasWidth/1.5 - keep ratio?
-    root.style.setProperty('--canvasHeight', window.innerHeight + 'px');
+// // RESPONSIVENESS & FULL SCREEN MODE
+
+function setCanvasCssVars() {
+    if (window.innerWidth < canvasWidth)  {
+        openFullWidthScreen();
+    }
+    else if (window.innerHeight < canvasHeight) {
+        openFullHeightScreen();
+    }
+    if (window.innerWidth >= canvasWidth && window.innerHeight >= canvasHeight) {
+        closeFullScreen();
+    }
+}
+
+function openFullWidthScreen() {
+    // set CSS variables
+    root.style.setProperty('--canvasWidth', window.innerWidth + 'px');
+    root.style.setProperty('--canvasHeight', window.innerWidth / 1.5 + 'px');
+    // adapt views
     getId('help-note').classList.add('help-note-fullscreen');
+    document.getElementsByTagName('h1')[0].classList.add('d-none');
+    fullScreenMode = true;
+}
+
+function openFullHeightScreen() {
+    root.style.setProperty('--canvasHeight', window.innerHeight + 'px');
+    root.style.setProperty('--canvasWidth', window.innerHeight * 1.5 + 'px');
+    // same as above --> refactor in function? (setFullScreenView() ?)
+    getId('help-note').classList.add('help-note-fullscreen');
+    document.getElementsByTagName('h1')[0].classList.add('d-none');
     fullScreenMode = true;
 }
 
 function closeFullScreen() {
     root.style.setProperty('--canvasWidth', canvasWidth + 'px');
     root.style.setProperty('--canvasHeight', canvasHeight + 'px');
-    getId('help-note').classList.remove('chelp-note-fullscreen');
+    getId('help-note').classList.remove('help-note-fullscreen');
+    document.getElementsByTagName('h1')[0].classList.remove('d-none');
     fullScreenMode = false;
 }
 
