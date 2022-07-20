@@ -11,6 +11,7 @@ class MovableObject extends DrawableObject {
     keyboard = new Keyboard();
     energy = 100;
     lastHit = 0;
+    // volumeModifier = 1;
 
     checkHitarea() { // mb not
         this.imgY = this.y;

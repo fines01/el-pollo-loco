@@ -3,20 +3,23 @@ const root = document.documentElement;
 let canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '')*1;
 let canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '')*1;
 
-let level, world;// canvasWidth, canvasHeight;
+let level, world;
 let helpScreenMode = false;
 let fullScreenMode = false;
+let levelCounter = 1;
+let maxLevels = 9;
 
 function init() {
     setCanvasCssVars();
-    level = setLevel(1);
+    level = setLevel();
 }
 
 window.addEventListener('resize', (e)=>{
     setCanvasCssVars();
 });
 
-//let handleKeypresses = 
+//// binding key press events 
+// let handleKeypresses = 
 window.addEventListener('keydown', (e) => {
     if (e.code == 'Enter' && !world && !helpScreenMode) beginGame();
     if (e.code == 'Enter' && world && world.gameOver && !world.gamePaused) restartGame();
@@ -27,20 +30,11 @@ window.addEventListener('keydown', (e) => {
     if (e.code == 'Escape' && fullScreenMode && window.innerWidth > 720) closeFullScreen();
 });
 
-function beginGame(){
+function beginGame( ms = 300){
     getId('screen-text-big').classList.add('text-dive-animation');
     window.setTimeout( ()=>{
         startGame();
-    }, 300);
-}
-
-function restartGame(){
-    // later: set level
-    let levelNo = 1;
-    level = setLevel(levelNo);
-    world.winSound.pause();
-    world.loseSound.pause();
-    startGame();
+    }, ms);
 }
 
 function startGame() {
@@ -51,17 +45,35 @@ function startGame() {
     if (world.checkWorldComplete()) world.run();
 }
 
+function restartGame() {
+    world.winSound.pause();
+    world.loseSound.pause();
+    checkLevel(); 
+    startGame(); // beginGame(235) and show Level w animation?
+    console.log('Start Level ', levelCounter, '!'); // Todo: show level
+}
+
 function setWinScreen(){
-    let text = getId('screen-text-big');
+    let wonText = getId('screen-text-big');
+    let levelText = getId('screen-text-small');
+    let nextLevel = levelCounter+1;
+    wonText.innerHTML = "YOU WON!";
+    wonText.classList.add('endscreen-text');
+    if (levelCounter < maxLevels) levelText.innerHTML= "Press Enter to Start Level " + nextLevel;
     show('game-over-screen', 'screen-text-big', 'screen-text-small');
-    text.innerHTML = "YOU WON!";
-    text.classList.add('endscreen-text');
     world.winSound.play();
 }
 
 function setLoserScreen(){
     show('loser-screen', 'screen-text-small');
+    // loseJinglePlayPromise = 
     world.loseSound.play();
+}
+
+function checkLevel() { // rename
+    if (levelCounter < maxLevels && world.checkWin()) levelCounter++;
+    else if (levelCounter == maxLevels && world.checkWin()) levelCounter = 1 ;
+    level = setLevel(levelCounter);
 }
 
 function togglePause() {

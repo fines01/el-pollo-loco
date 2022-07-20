@@ -26,9 +26,35 @@ class Character extends MovableObject {
         'audio/swosh-06.flac' // jumping sound flac
     ];
     
-    // IMAGES_IDLE = [];
-    // IMAGES_SLEEPING = [];
     // IMAGES_ANGRY = []; 
+
+    IMAGES_IDLE = 
+    [
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-1.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-2.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-3.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-4.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-5.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-6.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-7.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-8.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-9.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-10.png',
+    ];
+
+    IMAGES_SLEEPING = 
+    [
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-11.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-12.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-13.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-14.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-15.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-16.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-17.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-18.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-19.png',
+        'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-20.png',
+    ];
 
     IMAGES_WALKING = 
     [
@@ -69,10 +95,13 @@ class Character extends MovableObject {
     constructor(world) {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
+        this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_SLEEPING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DYING);
         this.setAudio();
+        this.setSpeed();
         this.world = world;
     }
 
@@ -92,6 +121,10 @@ class Character extends MovableObject {
         this.dyingSound.volume = 0.1;
         this.dyingSound.playbackRate = 2;
     }
+
+    setSpeed() {
+        this.speedX = 8 + ( (levelCounter-1) * 0.8);
+    }
  
     checkAnimationFrameTime(deltaTime) {
         if (this.animationFrameTimer > this.animationFrameInterval) {
@@ -102,6 +135,11 @@ class Character extends MovableObject {
             this.animationFrameTimer += deltaTime;
         }
     }
+
+    checkIdleTime( deltaTime) {
+        let trackTime;
+        
+    }
     
     canThrow(collectedBottles) {
         return (this.keyboard.ENTER && !this.isHurt() && collectedBottles > 0);
@@ -109,6 +147,10 @@ class Character extends MovableObject {
 
     isWalking() {
         return ( (this.isWalkingRight() || this.isWalkingLeft() ) && !this.isAboveGround()); // check unnecc ()
+    }
+
+    isStanding() {
+        return ( !this.isAboveGround() && !this.isWalking() && !this.isDead());
     }
 
     isHittingEnemy(enemy) {
@@ -136,6 +178,7 @@ class Character extends MovableObject {
         if (this.isDead()) this.animateDeath();
         else if (this.isHurt()) this.playAnimation(this.IMAGES_HURT);
         else if (this.isWalking()) this.playAnimation(this.IMAGES_WALKING);
+        else if (this.isStanding()) this.playAnimation(this.IMAGES_IDLE);
         else if (this.isAboveGround()) this.playAnimation(this.IMAGES_JUMPING);
     }
 

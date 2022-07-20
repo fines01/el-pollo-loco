@@ -5,12 +5,13 @@ class Level {
     collectibleObjects = [];
     collectibles;
 
-    constructor(amountHens, amountChicks, amountCoins, amountBottles, bgLengts) {
+    constructor(amountHens, amountChicks, amountCoins, amountBottles, bgLengts, maxGameTime) {
         this.levelEndX = (bgLengts-1) * canvasWidth * 2;
         this.amountHens = amountHens;
         this.amountChicks = amountChicks;
         this.amountCoins = amountCoins;
         this.amountBottles = amountBottles;
+        this.maxGameTime = maxGameTime;
         this.addBackgroundObjects(bgLengts);
         this.addEnemies(amountHens, amountChicks);
         this.addCollectibles(amountCoins, amountBottles);

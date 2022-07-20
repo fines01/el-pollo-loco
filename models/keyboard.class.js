@@ -6,12 +6,15 @@ class Keyboard {
     DOWN = false;
     SPACE = false;
     ENTER = false;
+    // also smth for: audio - controls (volume)
 
     constructor(){
-        this.handleKeypress();
+        this.handleKeyPress(); //bindKeyPressEvents()
+        this.handleButtonPress();
     }
     
-    handleKeypress(){
+    // bind key press events
+    handleKeyPress() {
 
         window.addEventListener('keydown', (event) => {
             switch (event.code) {
@@ -56,8 +59,45 @@ class Keyboard {
                 case 'Enter':
                     this.ENTER = false;
                     break;
-            }
-            
+            } 
         });
+    }
+
+    // bind button press events
+    handleButtonPress() {
+        getId('btn-left').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.LEFT = true;
+        });
+        getId('btn-right').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.RIGHT = true;
+        });
+        getId('btn-jump').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.UP = true;
+        });
+        getId('btn-throw').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.SPACE = true;
+        });
+        // 
+        getId('btn-left').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.LEFT = false;
+        });
+        getId('btn-right').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.RIGHT = false;
+        });
+        getId('btn-jump').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.UP = false;
+        });
+        getId('btn-throw').addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.SPACE = false;
+        });
+    
     }
 }

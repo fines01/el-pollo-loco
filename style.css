@@ -34,7 +34,7 @@ h1, p {
 }
 
 h2 {
-    color: brown;
+    color: rgb(165, 42, 42);
     font-size: 2rem;
     position: absolute;
     top: 10%;
@@ -83,8 +83,6 @@ canvas {
     position: absolute;
     display: flex;
     justify-content: center;
-
-    border: 2px solid red;
 }
 
 .screen {
@@ -98,8 +96,8 @@ canvas {
     max-width: 100%;
     max-height: 100%;
     /* display:block; */
-
-    border: 2px solid lime;
+    border: 1px solid lime;
+    box-sizing: border-box;
 }
 
 #game-over-screen, #loser-screen, #start-screen {

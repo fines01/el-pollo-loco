@@ -24,7 +24,9 @@ class World {
         this.canvas.width = canvasWidth;
         this.canvas.height = canvasHeight;
         this.character = new Character(this);
+        // this.volumeModifier = this.character.volumeModifier;
         this.level = level; //setLevel(levelNo);
+        this.maxGameTime = this.level.maxGameTime;
         this.endboss = this.level.enemies[this.level.enemies.length - 1];
         this.statusbars = [new StatusBar(-5, 'energy', 100), new StatusBar(20, 'coins', 0, 100 / this.level.amountCoins), new StatusBar(45, 'bottles', 0, 100 / this.level.amountBottles)];
         this.lastAnimationFrame = Date.now();
@@ -114,7 +116,7 @@ class World {
 
     checkCollectibleCollision(collectibleObject) {
         if (collectibleObject instanceof Coin && this.character.isColliding(collectibleObject)) {
-            this.collectedCoins++; // refactor in collectItem(object, statusBarIndex, collectedItem) function? )
+            this.collectedCoins++; // refactor?
             this.statusbars[1].setStatusbar(this.collectedCoins);
             collectibleObject.markedForDeletion = true;
             collectibleObject.collectSound.play();
@@ -149,8 +151,6 @@ class World {
     //     this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
     //     this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
     // }
-
-
     checkThrowObjects() {
         if (this.character.canThrow(this.collectedBottles)) {
             this.character.keyboard.ENTER = false;

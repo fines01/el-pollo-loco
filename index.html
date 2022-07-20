@@ -28,7 +28,7 @@
     <script src="models/level.class.js"></script>
     <!-- JavaScript -->
     <script src="js/game.js"></script>
-    <script src="js/levels/level1.js"></script>
+    <script src="js/levels.js"></script>
 </head>
 <body onload="init()">
     <div id="bg-overlay" class="d-none"></div>
@@ -41,18 +41,34 @@
         <img id ="start-screen" class="screen" src="img/9.Intro _ Outro Image/Start Screen/Opci¢n2.png" alt="start screen" >
         <img id="game-over-screen" class="screen d-none" src="img/9.Intro _ Outro Image/_Game over_ screen/3.Game over.png" alt="game over screen">
         <img id="loser-screen" class="screen d-none" src="img/9.Intro _ Outro Image/_Game over_ screen/1.you lost.png" alt="you lost screen">
+        <div id="help-screen" class="screen d-none">
+            <h4><span>ENTER</span> <span>Throw Bottle</span></h4>
+            <h4><span>ARROW-UP or SPACE</span> <span>Jump</span></h4>
+            <h4><span>ARROW-LEFT or ARROW-RIGHT</span> <span>Run</span></h4>
+            <h4><span>P</span> <span>Pause Game</span></h4>
+            <h4><span>H</span> <span>Toggle Helpscreen</span></h4>
+            <h4 id="fullscreen-keys-note"><span>S / ESC</span> <span>Open / Close Full Screen</span></h4>
+            <h3> COLLECT ALL <u>COINS</u> and destroy the endboss by hitting it with your collected bottles </h3>
+            <h4 class="small-h"><span>F:</span> <span class="small-p">Activate Developer-Mode (show Hit Frames)</span></h4>
+        </div>
+        <!-- key panels for mobile views -->
+        <!-- keys: start (toggle pause) sound-control or mute? help-->
+        <!-- keys: run forward, run backward && jump, throw -->
+        <div id="key-panel" class="screen panel"></div>
+        <div id="" class="screen panel">
+            <!-- keys left (right/left run) -->
+            <div class="panel-wrapper">
+                <button id="btn-left"></button>
+                <button id="btn-right"></button>
+            </div>
+            <!-- keys right (e.g. throw, jump) -->
+            <div class="panel-wrapper">
+                <button id="btn-jump"></button>
+                <button id="btn-throw"></button>
+            </div>
+        </div>
     </div>
 
-    <div class="screen d-none" id="help-screen">
-        <h4><span>ENTER</span> <span>Throw Bottle</span></h4>
-        <h4><span>ARROW-UP or SPACE</span> <span>Jump</span></h4>
-        <h4><span>ARROW-LEFT or ARROW-RIGHT</span> <span>Run</span></h4>
-        <h4><span>P</span> <span>Pause Game</span></h4>
-        <h4><span>H</span> <span>Toggle Helpscreen</span></h4>
-        <h4><span>S / ESC</span> <span>Open / Close Full Screen</span></h4>
-        <h3> COLLECT ALL COINS and destroy the endboss by hitting it with your collected bottles </h3>
-        <h4 class="small-h"><span>F:</span> <span class="small-p">Activate Developer-Mode (show Hit Frames)</span></h4>
-    </div>
 
 </body>
 </html>
