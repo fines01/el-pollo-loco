@@ -1,4 +1,4 @@
-// get css variables, remove string 'px' and keep only the numeric values (as str)
+/* set global canvas variables: get css variables, remove string 'px' and save the numeric values. */
 const root = document.documentElement;
 let canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '')*1;
 let canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '')*1;
@@ -9,16 +9,18 @@ let fullScreenMode = false;
 let levelCounter = 1;
 let maxLevels = 9;
 
-function init() {
+/** sets css variables and default (first) level on load of page */
+window.addEventListener('load', ()=>{
     setCanvasCssVars();
     level = setLevel();
-}
+});
 
+/** sets css variables after a resize event of the window */
 window.addEventListener('resize', (e)=>{
     setCanvasCssVars();
 });
 
-//// binding key press events 
+/** binds key press events to control the UI outside of the game */
 // let handleKeypresses = 
 window.addEventListener('keydown', (e) => {
     if (e.code == 'Enter' && !world && !helpScreenMode) beginGame();
@@ -30,6 +32,10 @@ window.addEventListener('keydown', (e) => {
     if (e.code == 'Escape' && fullScreenMode && window.innerWidth > 720) closeFullScreen();
 });
 
+/**
+ * Starts game after a given time
+ * @param {number} ms - milliseconds of timeout until the game is started
+ */
 function beginGame( ms = 300){
     getId('screen-text-big').classList.add('text-dive-animation');
     window.setTimeout( ()=>{
@@ -37,6 +43,10 @@ function beginGame( ms = 300){
     }, ms);
 }
 
+/**
+ * Sets HTML, creates an instance of the Class World and
+ * starts game-loop after a check if objects are fully loaded
+ */
 function startGame() {
     hide('start-screen', 'game-over-screen', 'loser-screen', 'screen-text-big', 'screen-text-small');
     show('canvas');
@@ -45,14 +55,20 @@ function startGame() {
     if (world.checkWorldComplete()) world.run();
 }
 
+/**
+ * Pauses potentially running audios, checks level and
+ * starts game with respective level
+ */
 function restartGame() {
     world.winSound.pause();
     world.loseSound.pause();
     checkLevel(); 
     startGame(); // beginGame(235) and show Level w animation?
-    console.log('Start Level ', levelCounter, '!'); // Todo: show level
 }
 
+/**
+ * sets win screen HTML and plays win jungle, increases level - counter
+ */
 function setWinScreen(){
     let wonText = getId('screen-text-big');
     let levelText = getId('screen-text-small');
@@ -64,18 +80,27 @@ function setWinScreen(){
     world.winSound.play();
 }
 
+/**
+ * sets loseer screen and plays loser jingle
+ */
 function setLoserScreen(){
     show('loser-screen', 'screen-text-small');
-    // loseJinglePlayPromise = 
     world.loseSound.play();
 }
 
-function checkLevel() { // rename
+/**
+ * sets level counter and instanciates a new level
+ */
+function checkLevel() { // rename?
     if (levelCounter < maxLevels && world.checkWin()) levelCounter++;
     else if (levelCounter == maxLevels && world.checkWin()) levelCounter = 1 ;
     level = setLevel(levelCounter);
 }
 
+/**
+ * toggles pause mode during game  
+ * and resets lastAnimationFrame when resuming game
+ */
 function togglePause() {
     world.gamePaused = !world.gamePaused;
     if (!world.gamePaused) {
@@ -84,6 +109,11 @@ function togglePause() {
     }
 }
 
+/**
+ * toggles help screen, sets helpscreenMode
+ * to make sure game is paused if help screen is on during game 
+ * and can't be started if help screen is on during start screen
+ */
 function toggleHelpScreen(){
         let actions = toggle('help-screen');
         if (world && !(actions[0] == 'show' && world.gamePaused)) togglePause();
@@ -91,8 +121,11 @@ function toggleHelpScreen(){
         else helpScreenMode = false;
 }
 
-// // RESPONSIVENESS & FULL SCREEN MODE
+/* --- ---responsiveness & full screen mode --- --- */
 
+/**
+ * checks for inner height and width of screen and sets css variables accordingly
+ */
 function setCanvasCssVars() {
     if (window.innerWidth < canvasWidth)  {
         openFullWidthScreen();
@@ -105,6 +138,11 @@ function setCanvasCssVars() {
     }
 }
 
+/**
+ * sets global CSS custom properties (variables) for full width canvas screens
+ * by setting --canvasWidth to full screen width and keeping the ratio for --camvasHeight
+ * and adapts the HTML view
+ */
 function openFullWidthScreen() {
     // set CSS variables
     root.style.setProperty('--canvasWidth', window.innerWidth + 'px');
@@ -115,6 +153,11 @@ function openFullWidthScreen() {
     fullScreenMode = true;
 }
 
+/**
+ * sets global CSS custom properties (variables) for full height canvas screens
+ * by setting --canvasHeight to full screen height and keeping the ratio for --camvasWidth
+ * and adapts the HTML view
+ */
 function openFullHeightScreen() {
     root.style.setProperty('--canvasHeight', window.innerHeight + 'px');
     root.style.setProperty('--canvasWidth', window.innerHeight * 1.5 + 'px');
@@ -124,6 +167,10 @@ function openFullHeightScreen() {
     fullScreenMode = true;
 }
 
+/**
+ * resets global CSS custom properties (variables) to their initial standard values
+ * and adapts HTML view
+ */
 function closeFullScreen() {
     root.style.setProperty('--canvasWidth', canvasWidth + 'px');
     root.style.setProperty('--canvasHeight', canvasHeight + 'px');
@@ -132,8 +179,14 @@ function closeFullScreen() {
     fullScreenMode = false;
 }
 
-// // HELPER FUNCTIONS 
+/* --- --- helper functions --- --- */
 
+/**
+ * this function provides a shorthand for the Document method getElementById()
+ * and allows to get multiple Elements in an array
+ * @param  {...string} idNames 
+ * @returns { (HTMLElement | HTMLElements[]) } 
+ */
 function getId(...idNames){
     let htmlElements = [];
     for (let id of idNames) {
@@ -143,8 +196,12 @@ function getId(...idNames){
     else return htmlElements;
 }
 
-function hide(...elements){
-    for (let elId of elements) {
+/**
+ * Hides any number of given HTML Elements
+ * @param  {...string} elementIDs - id names of HTML Elements
+ */
+function hide(...elementIDs){
+    for (let elId of elementIDs) {
         let el = getId(elId);
         if (!el.classList.contains('d-none')) {
             el.classList.add('d-none');
@@ -152,8 +209,12 @@ function hide(...elements){
     }
 }
 
-function show(...elements) {
-    for (let elId of elements) {
+/**
+ * Shows any number of given HTML Elements
+ * @param  {...string} elementIDs - id names of HTML Elements
+ */
+function show(...elementIDs) {
+    for (let elId of elementIDs) {
         let el = getId(elId);
         if (el.classList.contains('d-none')) {
             el.classList.remove('d-none');
@@ -161,9 +222,15 @@ function show(...elements) {
     }
 }
 
-function toggle(...elements){
+/**
+ * toggles the view of any number of given HTML Elements and 
+ * returns an array containing the respective action (hide or show) performed on the elements
+ * @param  {...string} elementIDs - id names of HTML Elements
+ * @returns { string[] }
+ */
+function toggle(...elementIDs){
     let actions = [];
-    for (let elId of elements) {
+    for (let elId of elementIDs) {
         let el = getId(elId);
         if (el.classList.contains('d-none')) { 
             el.classList.remove('d-none');

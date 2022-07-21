@@ -8,7 +8,6 @@ class DrawableObject {
     imgCache = [];
     markedForDeletion = false;
     showHitbox = false;
-    
     // check img loaded
     allImagesLoaded = false; // überprüfen: imgCache in den alle bilder geladen werden
     imgCacheCounter = 0;
@@ -19,6 +18,19 @@ class DrawableObject {
     imgWidth = this.width;
     imgHeight = this.height;
 
+    
+    /**
+     * checks the amount of total images against the amount of images in the imgCache for an object
+     * @returns {boolean}
+     */
+    imgCacheIsComplete() {
+        return this.imagesAmount === this.imgCacheCounter;
+    }
+
+    /**
+     * checks if the imgCache is complete and all image Elements are completely loaded
+     * @returns {boolean}
+     */
     checkImgLoaded() {
         if (this.imgCacheIsComplete()) {
             for (let imgName of this.imgCache) {
@@ -31,16 +43,21 @@ class DrawableObject {
         }
     }
 
-    imgCacheIsComplete() {
-        return this.imagesAmount === this.imgCacheCounter;
-    }
-
-    countImages(arr) {
+    /**
+     * counts total amount of given images for an object
+     * @param {string[]} imgSrcArr - array of image sources
+     */
+    countImages(imgSrcArr) {
         if( this instanceof BackgroundObject || this instanceof Character ) { //objects i want to check
-            this.imagesAmount += arr.length;
+            this.imagesAmount += imgSrcArr.length;
         }
     }
 
+    /**
+     * creates a new HTML Image Element and sets its source to the given path
+     * @param {string} imgPath - source of an image
+     * @returns {boolean}
+     */
     loadImage(imgPath){
         if (imgPath){
             this.img = new Image();
@@ -50,16 +67,27 @@ class DrawableObject {
         }
     }
 
-    loadImages(arr){
-        arr.forEach( (imgPath) => {
+    /**
+     * creates a new HTML Image Element for each image source given in an array,
+     * saves the image paths and their respective image Elements into the imgCache object [ src: img, ... ]
+     * @param {string[]} imgSrcArr 
+     */
+    loadImages(imgSrcArr){
+        imgSrcArr.forEach( (imgPath) => {
             let img = new Image();
             img.src = imgPath;
             this.imgCacheCounter++; 
             this.imgCache[imgPath] = img;            
         });
-        this.countImages(arr);
+        this.countImages(imgSrcArr);
     }
 
+    /**
+     * draws an object to the canvas via the CanvasRenderingContext2d.drawImage() method of the canvas 2D API
+     * the drawImage() method here takes five parameters from pre - defined properties of the respective objects:
+     * the HTMLImageElement, canvas-destination x & y coordinates, canvas-destination width & height.
+     * @param {Object} ctx - an instance of CanvasRenderingContext2d, the drawing context on the canvas
+     */
     drawObject(ctx){
         try {
             ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
@@ -70,10 +98,16 @@ class DrawableObject {
         }
     }
 
+    /**
+     * toggles hitboxes if developer mode is turned on/off
+     */
     toggleHitboxes() {
         this.showHitbox = !this.showHitbox;
     }
 
+    /**
+     * @returns {boolean}
+     */
     isCollidableObject(){
         return (
             this instanceof Character || 
@@ -84,7 +118,10 @@ class DrawableObject {
             this instanceof Endboss);
     }
 
-    // draw hitboxes
+    /**
+     * draws hitboxes on collidable objects if developer mode is turned on
+     * @param {object} ctx - an instance of CanvasRenderingContext2d, the drawing context on the canvas
+     */
     drawFrame(ctx){
         if(this.showHitbox && this.isCollidableObject()){
             ctx.beginPath();
