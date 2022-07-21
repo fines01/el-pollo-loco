@@ -73,6 +73,21 @@ class MovableObject extends DrawableObject {
         if (Math.random() < 0.4) this.moveLeft(); // adds a bit moredynamic
     }
 
+    pulse( pulseWidth ) {
+        if (this.width < this.initialWidth+pulseWidth && this.height < this.initialHeight+pulseWidth) {
+            this.width += pulseWidth;
+            this.height += pulseWidth;
+            this.x -= pulseWidth/2
+            this.y -= pulseWidth/2;
+        }
+        else {
+            this.width = this.initialWidth;
+            this.height = this.initialHeight;
+            this.x += pulseWidth / 2
+            this.y += pulseWidth / 2;
+        }
+    }
+
     isWalkingRight() {
         return (this.keyboard.RIGHT && this.x < this.world.level.levelEndX);
     }

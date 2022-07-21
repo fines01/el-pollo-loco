@@ -2,6 +2,8 @@ class Bottle extends ThrowableObject {
 
     width = 80;
     height = 80;
+    initialWidth = this.width;
+    initialHeight = this.height;
     groundLevelY = canvasHeight - this.height;
     initialY = 370;
     //acceleration;
@@ -9,6 +11,10 @@ class Bottle extends ThrowableObject {
     animationFPS = 20;
     animationFrameInterval = 1000 / this.animationFPS;
     animationFrameTimer = 0;
+
+    pulseAnimationFPS = 4;
+    pulseAnimationRatio = this.animationFPS/this.pulseAnimationFPS;
+    pulseTimer = 0;
 
     audioPaths = [
         'audio/swish_3.wav', // throw sound
@@ -36,8 +42,9 @@ class Bottle extends ThrowableObject {
         'img/6.botella/Rotaci¢n/Splash de salsa/Mesa de trabajo 1 copia 12.png'
     ]
 
-    constructor(levelEndX) {
+    constructor(levelEndX, throwObject = true) {
         super();
+        this.throwObject = throwObject;
         this.x = 200 + Math.random() * (levelEndX - 250);
         this.y = 100 + Math.random() * 225;        
         this.loadImage(this.IMAGE);
@@ -54,18 +61,27 @@ class Bottle extends ThrowableObject {
         this.imgHeight = this.height * 0.78;
     }
 
-    checkAnimationFrameTime(deltaTime) {
-        if (this.animationFrameTimer > this.animationFrameInterval) {
-            this.animateBottleThrow();
-            this.animationFrameTimer = 0;
-        } else {
-            this.animationFrameTimer += deltaTime;
+    animateBottlePulse() {
+        this.pulseTimer++; // needs lower animation FPS
+        if (this.pulseTimer >= this.pulseAnimationRatio) {
+            this.pulse(9);
+            this.pulseTimer = 0;
         }
     }
 
     animateBottleThrow() {
         this.throwSound.play();
         this.playAnimation(this.IMAGES_ROTATE);
+    }
+
+    checkAnimationFrameTime(deltaTime) {
+        if (this.animationFrameTimer > this.animationFrameInterval) {
+            if (this.throwObject) this.animateBottleThrow();
+            if (!this.throwObject) this.animateBottlePulse();
+            this.animationFrameTimer = 0;
+        } else {
+            this.animationFrameTimer += deltaTime;
+        }
     }
 
     setAudio() {

@@ -1,6 +1,6 @@
-class ThrowableObject extends MovableObject {
+class ThrowableObject extends CollectibleObject {
 
-    throw(x, y){
+    setThrowCoordinates(x, y){
         this.x = x;
         this.y = y;
         this.speedY = 20;
@@ -9,9 +9,9 @@ class ThrowableObject extends MovableObject {
         this.applyThrow();
     }
     
-    // redo
+    // maybe redo throw
     applyThrow(){
-        // TODO: remove interval function
+        // todo remove interval function, apply checkAnimationTimeFrame()
         setInterval(() => {
             this.checkHitarea();
             this.applyGravity();
@@ -35,5 +35,4 @@ class ThrowableObject extends MovableObject {
         this.splashSound.play();
     }
     
-
 }

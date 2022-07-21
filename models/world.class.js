@@ -136,21 +136,26 @@ class World {
             this.checkCollectibleCollision(collectible);
         });
         this.removeMarkedObjects(this.level.collectibleObjects, this.throwableObjects, this.level.enemies);
+        //this.removeMarkedObjects();
     }
 
     removeMarkedObjects(...objArrs) {
         for (let i = 0; i < objArrs.length; i++) {
             objArrs[i].forEach( (obj,objIndex)=>{
-                if (obj.markedForDeletion) objArrs[i].splice(objIndex,1);
+                if (obj.markedForDeletion) {
+                    objArrs[i].splice(objIndex,1)
+                    //i++;
+                };
             });
         }
     }
 
-    // removeMarkedObjects2() {
-    //     this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
-    //     this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
-    //     this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
-    // }
+    removeMarkedObjects2() {
+        this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
+        this.throwableObjects = this.throwableObjects.filter(throwableObj => !throwableObj.markedForDeletion);
+        this.level.enemies = this.level.enemies.filter(enemy => !enemy.markedForDeletion);
+    }
+
     checkThrowObjects() {
         if (this.character.canThrow(this.collectedBottles)) {
             this.character.keyboard.ENTER = false;
@@ -168,8 +173,8 @@ class World {
         if (this.character.isReversed_x) bottleX = this.character.x;
         else bottleX = this.character.x + this.character.width * 0.5;
         // throw bottle
-        bottle.throw(bottleX, this.character.y + 80);
-        bottle.animateThrow(); //bottle.checkAnimationFrameTime(deltaTime); & remove animateThrow();
+        bottle.setThrowCoordinates(bottleX, this.character.y + 80);
+        //bottle.animateThrow(); //bottle.checkAnimationFrameTime(deltaTime); & remove animateThrow();
         // set game status-ui
         this.collectedBottles--;
         this.statusbars[2].setStatusbar(this.collectedBottles);
@@ -265,6 +270,15 @@ class World {
         this.level.enemies.forEach(enemy => {
             this.updateEnemy(enemy, deltaTime);
         });
+        // instead of in throw()
+        this.throwableObjects.forEach( obj => {
+            obj.checkAnimationFrameTime(deltaTime);
+        });
+        this.level.collectibleObjects.forEach( obj=>{
+            if (obj instanceof Bottle) obj.checkAnimationFrameTime(deltaTime);
+        });
+
+        //animate throw objects or bottles & collectibles etc this.animateCollectibles();
         this.updateCharacter(deltaTime);
         this.run();
     }
