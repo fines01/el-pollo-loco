@@ -5,6 +5,15 @@ class Level {
     collectibleObjects = [];
     collectibles;
 
+    /**
+     * Instanciates a new level
+     * @param {number} amountHens - amount of enemies of type Chicken
+     * @param {number} amountChicks - amount of enemies of type Chick
+     * @param {number} amountCoins - amount of collectible coins
+     * @param {number} amountBottles - amount of collectible bottles
+     * @param {number} bgLengts - defines horizontal length of level
+     * @param {number} maxGameTime - maximum game time
+     */
     constructor(amountHens, amountChicks, amountCoins, amountBottles, bgLengts, maxGameTime) {
         this.levelEndX = (bgLengts-1) * canvasWidth * 2;
         this.amountHens = amountHens;
@@ -17,6 +26,10 @@ class Level {
         this.addCollectibles(amountCoins, amountBottles);
     }
     
+    /**
+     * Creates one set of a whole background layer per passed number of bgLayers
+     * @param {number} bgLengts - defines horizontal length of level
+     */
     addBackgroundObjects(bgLengts){
         for (let i = -1; i <= bgLengts; i++){
             let x = i * canvasWidth*2;
@@ -31,6 +44,11 @@ class Level {
         }
     }
 
+    /**
+     * Instanciates a set of enemies and one endboss and saves them in an array.
+     * @param {number} amountHens - amount of enemies of type Chicken
+     * @param {number} amountChicks - amount of enemies of type Chick
+     */
     addEnemies(amountHens, amountChicks){
         for (let i = 0; i < amountHens; i++){
             this.enemies.push(new Chicken(this.levelEndX));
@@ -41,6 +59,11 @@ class Level {
         this.enemies.push(new Endboss(this.levelEndX) );
     }
 
+    /**
+     * Instanciates a set of collectible objects and saves them in an array
+     * @param {number} amountCoins - amount of collectible coins
+     * @param {number} amountBottles - amount of collectible bottles
+     */
     addCollectibles(amountCoins, amountBottles) {
         for (let i = 0; i < amountCoins; i++){
             this.collectibleObjects.push(new Coin(this.levelEndX));
@@ -50,6 +73,11 @@ class Level {
         }
     }
 
+    /**
+     * Creates new enemies during the game and places them randomly on the canvas,
+     * to keep the amount of enemies constant
+     * @param {string} enemyType - determines the type of enemy
+     */
     addNewEnemy(enemyType){
         if (this.enemies.length < this.amountChicks + this.amountHens){
             if (enemyType === 'Hen'){

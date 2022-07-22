@@ -6,14 +6,19 @@ class Keyboard {
     DOWN = false;
     SPACE = false;
     ENTER = false;
-    // also smth for: audio - controls (volume)
+    // also keys for: audio - controls (volume) ?
 
+    /**
+     * Creates a Keyboard object to control user game inputs
+     */
     constructor(){
         this.handleKeyPress(); //bindKeyPressEvents()
         this.handleButtonPress();
     }
     
-    // bind key press events
+    /**
+     * Binds key press events
+     */
     handleKeyPress() {
 
         window.addEventListener('keydown', (event) => {
@@ -63,7 +68,9 @@ class Keyboard {
         });
     }
 
-    // bind button press events
+    /**
+     * Binds button press events
+     */
     handleButtonPress() {
         getId('btn-left').addEventListener('touchstart', (e) => {
             e.preventDefault();

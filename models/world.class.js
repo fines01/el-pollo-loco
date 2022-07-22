@@ -11,7 +11,8 @@ class World {
     maxGameTime = 30000;
     gamePaused = false;
     gameOver = true;
-    audioPaths = [
+    audioPaths = 
+    [
         'audio/it_takes_a_hero.wav', // game music
         'audio/countdown3.mp3', // countdown sound
         'audio/Win Jingle.wav', // win jingle
@@ -71,9 +72,12 @@ class World {
         this.ctx.restore();
     }
 
+    /**
+     * Creates Audio instances from given audio sources,
+     * and sets audio properties of playback speed and volume.
+     */
     setAudio() {
         [this.gameMusic, this.countdownSound, this.winSound, this.loseSound] = this.character.createAudio(...this.audioPaths); // createAudio() function isin Class MovableObjects
-        //
         this.countdownSound.volume = 0.4;
         this.winSound.volume = 0.4;
         this.winSound.playbackRate = 1.5;
@@ -260,10 +264,12 @@ class World {
         if (this.character.isDead()) this.setGameOver();
     }
 
+    // REFACTOR
     updateGame(timeStamp) {
         this.draw();
         this.checkGameStatus();
         let deltaTime = this.setDeltaTime(timeStamp);
+
         this.level.backgroundObjects.forEach(bgo => {
             bgo.move();
         });
@@ -285,7 +291,7 @@ class World {
 
     run() {
         this.controlGameMusic();
-        // game loop
+        // create game loop
         let self = this;
         if (!this.gameOver && !this.gamePaused) requestAnimationFrame(() => {
             let timeStamp = Date.now();

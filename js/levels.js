@@ -21,9 +21,11 @@ function setLevel(levelNumber = 1) {
     }
 
     // or auto-generate level
-    else {
+    else if (levelNumber < 11) {
         const level = new Level(levelNumber*5, levelNumber*5.5, 25, 9, 11, 25000);
         return level;
     }
+
+    // else return a bool --> & check if all levels are won
 }
 

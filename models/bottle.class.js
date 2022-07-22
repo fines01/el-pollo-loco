@@ -43,7 +43,7 @@ class Bottle extends ThrowableObject {
      * Creates either a collectible or throwable bottle object
      * @todo animations for Coins, Bottles, Enemies (Chicken, Chicks) only need to be initialized when game starts, not when they are created (at instnciating level)
      * @param {number} levelEndX - x coordinate of end of level
-     * @param {boolean} throwObject - true as default if bottle is created to be thrown, false if bottle is created to be collected
+     * @param {boolean} throwObject - true as default if bottle is created to be thrown, false if bottle is to be collected
      */
     constructor(levelEndX, throwObject = true) {
         super();
@@ -68,7 +68,7 @@ class Bottle extends ThrowableObject {
     }
 
     /**
-     * Checks the elapsed time in ms since the last animation frame against the defined animation frame interval of the object,
+     * Checks the elapsed time in ms since the last animation frame against the object's defined animation frame interval of the object,
      * and applies the animation if enough time has passed.
      * @param {number} deltaTime - ms since the last animation frame was served in the main game-loop 
      */
@@ -85,7 +85,7 @@ class Bottle extends ThrowableObject {
     /**
      * Adds a pulsing animation to bottles.
      * Since the pulsing animation needs to run at lower FPS, 
-     * the ratio to the main animationFPS (for throw animations) is used to time the pulsing animation
+     * the ratio to the object's main animationFPS (for throw animations) is used to time the pulsing animation
      */
     animateBottlePulse() {
         this.pulseTimer++;

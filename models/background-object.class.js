@@ -4,7 +4,7 @@ class BackgroundObject extends MovableObject {
     height = canvasHeight;
 
     /**
-     * Creates the background object
+     * Creates a background object
      * @todo remove parameter levelEndX or decide weather to redo move function
      * @param {string} imgPath - source of the background image
      * @param {number} x - x coordinate on the canvas
