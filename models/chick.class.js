@@ -1,7 +1,6 @@
 class Chick extends Enemy {
 
     groundLevelY = 350;
-    
     IMAGES_WALKING = [
         'img/3.Secuencias_Enemy_b sico/Versi¢n_pollito/1.Paso_derecho.png',
         'img/3.Secuencias_Enemy_b sico/Versi¢n_pollito/2.Centro.png',
@@ -11,6 +10,11 @@ class Chick extends Enemy {
         'img/3.Secuencias_Enemy_b sico/Versi¢n_pollito/4.Muerte.png'
     ];
     
+    /**
+     * Creates a baby chick object and starts its animation
+     * @todo animations for Coins, Chicken, Chicks only need to be initialized when game starts, not when they are created (at instnciating level)
+     * @param {number} levelEndX - x coordinate of level end
+     */
     constructor(levelEndX){
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);

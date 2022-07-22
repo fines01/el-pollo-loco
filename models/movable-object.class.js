@@ -19,12 +19,20 @@ class MovableObject extends DrawableObject {
         this.imgWidth = this.width;
         this.imgHeight = this.height;
     }
-        
-    playAnimation(images){
-        let i = this.currentImage % images.length;
-        let imgPath = images[i];
-        this.img = this.imgCache[imgPath];
-        this.currentImage++;
+
+    /**
+     * @todo maybe define function here
+     * right now I have my checkAnimationFrameTime() functions in following classes: 
+     * Bottle, Enemy, Character, (possibly ThrowableObjects)
+     * 
+     */
+    checkAnimationFrameTime(deltaTime, objectAnimation) {
+        if (this.animationFrameTimer > this.animationFrameInterval) {
+            // object specific animation function // this.animate()
+            this.animationFrameTimer = 0;
+        } else {
+            this.animationFrameTimer += deltaTime;
+        }
     }
 
     createAudio(...audioPaths) {
@@ -35,6 +43,13 @@ class MovableObject extends DrawableObject {
         }
         if (audios.length === 1) return audios[0];
         else return audios;
+    }
+
+    playAnimation(images){
+        let i = this.currentImage % images.length;
+        let imgPath = images[i];
+        this.img = this.imgCache[imgPath];
+        this.currentImage++;
     }
 
     playAnimationOnce(images){

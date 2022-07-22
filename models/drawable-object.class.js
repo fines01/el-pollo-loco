@@ -12,7 +12,6 @@ class DrawableObject {
     allImagesLoaded = false; // überprüfen: imgCache in den alle bilder geladen werden
     imgCacheCounter = 0;
     imagesAmount = 0;
-
     imgY = this.y;
     imgX = this.x;
     imgWidth = this.width;
@@ -20,7 +19,7 @@ class DrawableObject {
 
     
     /**
-     * checks the amount of total images against the amount of images in the imgCache for an object
+     * Checks the amount of total images against the amount of images in the imgCache for an object
      * @returns {boolean}
      */
     imgCacheIsComplete() {
@@ -28,7 +27,7 @@ class DrawableObject {
     }
 
     /**
-     * checks if the imgCache is complete and all image Elements are completely loaded
+     * Checks if the imgCache is complete and all image Elements are completely loaded
      * @returns {boolean}
      */
     checkImgLoaded() {
@@ -44,7 +43,7 @@ class DrawableObject {
     }
 
     /**
-     * counts total amount of given images for an object
+     * Counts total amount of given images for an object
      * @param {string[]} imgSrcArr - array of image sources
      */
     countImages(imgSrcArr) {
@@ -54,7 +53,7 @@ class DrawableObject {
     }
 
     /**
-     * creates a new HTML Image Element and sets its source to the given path
+     * Creates a new HTML Image Element and sets its source to the given path
      * @param {string} imgPath - source of an image
      * @returns {boolean}
      */
@@ -68,7 +67,7 @@ class DrawableObject {
     }
 
     /**
-     * creates a new HTML Image Element for each image source given in an array,
+     * Creates a new HTML Image Element for each image source given in an array,
      * saves the image paths and their respective image Elements into the imgCache object [ src: img, ... ]
      * @param {string[]} imgSrcArr 
      */
@@ -83,10 +82,10 @@ class DrawableObject {
     }
 
     /**
-     * draws an object to the canvas via the CanvasRenderingContext2d.drawImage() method of the canvas 2D API
-     * the drawImage() method here takes five parameters from pre - defined properties of the respective objects:
+     * Draws an object to the canvas via the CanvasRenderingContext2d.drawImage() method of the canvas 2D API
+     * The drawImage() method here takes five parameters from pre - defined properties of the respective objects:
      * the HTMLImageElement, canvas-destination x & y coordinates, canvas-destination width & height.
-     * @param {Object} ctx - an instance of CanvasRenderingContext2d, the drawing context on the canvas
+     * @param {Object} ctx - the game instance of CanvasRenderingContext2d, the drawing context on the canvas
      */
     drawObject(ctx){
         try {
@@ -99,7 +98,7 @@ class DrawableObject {
     }
 
     /**
-     * toggles hitboxes if developer mode is turned on/off
+     * Toggles hitboxes if developer mode is turned on/off
      */
     toggleHitboxes() {
         this.showHitbox = !this.showHitbox;
@@ -119,8 +118,8 @@ class DrawableObject {
     }
 
     /**
-     * draws hitboxes on collidable objects if developer mode is turned on
-     * @param {object} ctx - an instance of CanvasRenderingContext2d, the drawing context on the canvas
+     * Draws hitboxes on collidable objects if developer mode is turned on
+     * @param {object} ctx - the game instance of CanvasRenderingContext2d, the drawing context on the canvas
      */
     drawFrame(ctx){
         if(this.showHitbox && this.isCollidableObject()){

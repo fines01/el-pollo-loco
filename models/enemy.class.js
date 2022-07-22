@@ -6,13 +6,21 @@ class Enemy extends MovableObject {
     animationFrameTimer = 0;
     hurtSound = new Audio('audio/Hit_02.wav');
 
+    /**
+     * Sets enemy sound properties and speed modifier
+     */
     constructor(){
         super();
         this.hurtSound.playbackRate = 1.5;
         this.hurtSound.volume = 0.35;
-        this.speedModifier = (levelCounter - 1) * 0.4; // td change
+        this.speedModifier = (levelCounter - 1) * 0.4; // todo change speed modifier 
     }
 
+    /**
+     * Checks the elapsed time in ms since the last animation frame against the defined animation frame interval of the object,
+     * and applies the animation if enough time has passed.
+     * @param {number} deltaTime - ms since the last animation frame was served in the main game-loop
+     */
     checkAnimationFrameTime(deltaTime){
         if (this.animationFrameTimer > this.animationFrameInterval) {
             if (this instanceof Endboss) this.animateEndboss();
@@ -23,6 +31,9 @@ class Enemy extends MovableObject {
         }
     }
 
+    /**
+     * Corrects the dimensions of an object's actual hit area against the dimensions of its image element
+     */
     checkHitarea() {
         this.imgY = this.y + 8;
         this.imgX = this.x + 5;
@@ -30,12 +41,18 @@ class Enemy extends MovableObject {
         this.imgHeight = this.height * 0.75;
     }
 
+    /**
+     * Plays enemy animations
+     */
     animateEnemies() {
         this.applyGravity();
         if (this.isDead()) this.loadImage(this.IMAGE_DEAD);
         else this.playAnimation(this.IMAGES_WALKING);
     }
 
+    /**
+     * Moves enemy on canvas
+     */
     move() {
         this.checkHitarea();
         if (this.isDead()) {
@@ -49,6 +66,9 @@ class Enemy extends MovableObject {
         if (this.x < 0 - 2*this.width) this.x = world.level.levelEndX + 250;
     }
 
+    /**
+     * Hit enemy if it isn't already in hurt mode
+     */
     scoreAgainstEnemy() {
         if( !this.isHurt(400)){ 
             this.receiveHit();

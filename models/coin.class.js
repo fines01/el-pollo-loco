@@ -5,9 +5,13 @@ class Coin extends CollectibleObject {
     initialWidth = this.width;
     initialHeight = this.height;
     IMAGE_COIN = 'img/8.Coin/Moneda2.png';
-
-    rotationAngle = 0;
+    // rotationAngle = 0;
     
+    /**
+     * Creates a coin element and starts its animation
+     * @todo animations for Coins, Bottles, Enemies (Chicken, Chicks) only need to be initialized when game starts, not when they are created (at instnciating level)
+     * @param {number} levelEndX - x coordinate of level end
+     */
     constructor(levelEndX){
         super();
         this.x = 300 + Math.random() * (levelEndX - 400);
@@ -19,6 +23,9 @@ class Coin extends CollectibleObject {
         this.animateCoin(); 
     }
 
+    /**
+     * Corrects the dimensions of an object 's actual hit area against the dimensions of its image element
+     */
     checkHitarea() {
         this.imgY = this.y + 42;
         this.imgX = this.x + 42;
@@ -26,6 +33,11 @@ class Coin extends CollectibleObject {
         this.imgHeight = this.height * 0.3;
     }
 
+    /**
+     * Plays coin animation
+     * @todo remove setInterval function? Maybe animate all collectibles in CollectibleObject Class via checkAnimationTimeFrame()
+     * mb if checkAnimationFrameTime() is moved to MovableObjects class CollectibleObject class can be removed
+     */
     animateCoin() { // or animate all collectibles in CollectibleObject Class via checkAnimationTimeFrame
         setInterval(()=>{
             this.pulse(13);

@@ -2,7 +2,6 @@ class Chicken extends Enemy {
 
     height = 90;
     width = 95;
-    
     IMAGES_WALKING = [
          'img/3.Secuencias_Enemy_b sico/Versi¢n_Gallinita (estas salen por orden de la gallina gigantona)/1.Ga_paso_derecho.png',
          'img/3.Secuencias_Enemy_b sico/Versi¢n_Gallinita (estas salen por orden de la gallina gigantona)/2-Ga_centro.png',
@@ -12,6 +11,11 @@ class Chicken extends Enemy {
         'img/3.Secuencias_Enemy_b sico/Versi¢n_Gallinita (estas salen por orden de la gallina gigantona)/4.G_muerte.png'
     ];
 
+    /**
+     * Creates a chicken object and starts its animation.
+     * @todo animations for Coins, Chicken, Chicks, move for BGO and Clouds only need to be initialized when game starts, not when they are created (at instnciating level)
+     * @param {number} levelEndX - x coordinate of level end
+     */
     constructor(levelEndX) {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages(this.IMAGES_WALKING);
