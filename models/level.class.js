@@ -7,12 +7,12 @@ class Level {
 
     /**
      * Instanciates a new level
-     * @param {number} amountHens - amount of enemies of type Chicken
-     * @param {number} amountChicks - amount of enemies of type Chick
-     * @param {number} amountCoins - amount of collectible coins
-     * @param {number} amountBottles - amount of collectible bottles
+     * @param {number} amountHens - number of enemies of type Chicken
+     * @param {number} amountChicks - number of enemies of type Chick
+     * @param {number} amountCoins - number of collectible coins
+     * @param {number} amountBottles - number of collectible bottles
      * @param {number} bgLengts - defines horizontal length of level
-     * @param {number} maxGameTime - maximum game time
+     * @param {number} maxGameTime - maximum game time in ms
      */
     constructor(amountHens, amountChicks, amountCoins, amountBottles, bgLengts, maxGameTime) {
         this.levelEndX = (bgLengts-1) * canvasWidth * 2;
@@ -27,7 +27,7 @@ class Level {
     }
     
     /**
-     * Creates one set of a whole background layer per passed number of bgLayers
+     * Instanciates one background layer set per passed number of bgLayers and stores them in an array 'backgroundObkects'
      * @param {number} bgLengts - defines horizontal length of level
      */
     addBackgroundObjects(bgLengts){
@@ -45,7 +45,7 @@ class Level {
     }
 
     /**
-     * Instanciates a set of enemies and one endboss and saves them in an array.
+     * Instanciates a set of enemies and one endboss and stores them in an array 'enemies'.
      * @param {number} amountHens - amount of enemies of type Chicken
      * @param {number} amountChicks - amount of enemies of type Chick
      */
@@ -60,7 +60,7 @@ class Level {
     }
 
     /**
-     * Instanciates a set of collectible objects and saves them in an array
+     * Instanciates a set of collectible objects and stores them in an array 'collectibleObjects'
      * @param {number} amountCoins - amount of collectible coins
      * @param {number} amountBottles - amount of collectible bottles
      */

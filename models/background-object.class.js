@@ -11,20 +11,17 @@ class BackgroundObject extends MovableObject {
      * @param {number} speedX - speed of horizontal movement
      * @param {number} levelEndX - x corrdinate of end of level
      */
-    constructor(imgPath, x, speedX, levelEndX){
+    constructor(imgPath, x, speedX){
         super().loadImage(imgPath);
         this.x = x;
         this.y = 0;
         this.speedX = speedX; //ev in Verhältnis zum momentanen speedX vom Character: speedXModifier * world.character.speedX
-        // if(this.checkImgLoaded()) this.move(levelEndX);
     }
     
     /**
      * Moves the background object horizontally to create a parallax effect
-     * @todo Decide weather to keep parameter levelEndX (used to move bg objects back into frame) or keep function like this
-     * @param {number} levelEndX 
      */
-    move(levelEndX) {
+    move() {
         if (!(this instanceof Cloud)){
             if(this.keyboard.RIGHT && world.character.isWalkingRight()){
                 this.moveLeft();

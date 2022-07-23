@@ -24,7 +24,7 @@ class Coin extends CollectibleObject {
     }
 
     /**
-     * Corrects the dimensions of an object 's actual hit area against the dimensions of its image element
+     * Corrects the dimensions of an object 's actual hit area compared to the dimensions of its image element
      */
     checkHitarea() {
         this.imgY = this.y + 42;

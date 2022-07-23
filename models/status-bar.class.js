@@ -105,7 +105,7 @@ class StatusBar extends DrawableObject {
     /**
      * Draws countdown of remaining game time on canvas
      * @param {Object} ctx - the game instance of CanvasRenderingContext2d, the drawing context on the canvas
-     * @param {number} gameTime - game time passed during game in ms
+     * @param {number} gameTime - elapsed game time during game in ms
      * @param {number} maxGameTime - maximum allowed time to finish a level in ms
      */
     drawGameTime(ctx, gameTime, maxGameTime) {

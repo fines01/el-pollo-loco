@@ -6,10 +6,9 @@ class Keyboard {
     DOWN = false;
     SPACE = false;
     ENTER = false;
-    // also keys for: audio - controls (volume) ?
-
+    
     /**
-     * Creates a Keyboard object to control user game inputs
+     * Creates a Keyboard object to control the user's game inputs
      */
     constructor(){
         this.handleKeyPress(); //bindKeyPressEvents()
@@ -20,7 +19,6 @@ class Keyboard {
      * Binds key press events
      */
     handleKeyPress() {
-
         window.addEventListener('keydown', (event) => {
             switch (event.code) {
                 case 'ArrowRight':

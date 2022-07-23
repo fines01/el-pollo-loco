@@ -19,7 +19,7 @@ class DrawableObject {
 
     
     /**
-     * Checks the amount of total images against the amount of images in the imgCache for an object
+     * Checks the number of total images of an object against the number of images in its imgCache
      * @returns {boolean}
      */
     imgCacheIsComplete() {
@@ -43,7 +43,8 @@ class DrawableObject {
     }
 
     /**
-     * Counts total amount of given images for an object
+     * Counts total amount of images in all passed image arrays for given objects.
+     * Note: only background objects and the character are currently checked for completion
      * @param {string[]} imgSrcArr - array of image sources
      */
     countImages(imgSrcArr) {
@@ -68,7 +69,7 @@ class DrawableObject {
 
     /**
      * Creates a new HTML Image Element for each image source given in an array,
-     * saves the image paths and their respective image Elements into the imgCache object [ src: img, ... ]
+     * stores the image paths and their respective image Elements into the imgCache object [ src: img, ... ]
      * @param {string[]} imgSrcArr 
      */
     loadImages(imgSrcArr){
@@ -82,9 +83,9 @@ class DrawableObject {
     }
 
     /**
-     * Draws an object to the canvas via the CanvasRenderingContext2d.drawImage() method of the canvas 2D API
+     * Draws an object to the canvas via the CanvasRenderingContext2d.drawImage() method of the canvas 2D API.
      * The drawImage() method here takes five parameters from pre - defined properties of the respective objects:
-     * the HTMLImageElement, canvas-destination x & y coordinates, canvas-destination width & height.
+     * the current image element, canvas-destination x & y coordinates, canvas-destination width & height.
      * @param {Object} ctx - the game instance of CanvasRenderingContext2d, the drawing context on the canvas
      */
     drawObject(ctx){
@@ -98,13 +99,14 @@ class DrawableObject {
     }
 
     /**
-     * Toggles hitboxes if developer mode is turned on/off
+     * Toggles hitboxes
      */
     toggleHitboxes() {
         this.showHitbox = !this.showHitbox;
     }
 
     /**
+     * Checks if an object is collidable
      * @returns {boolean}
      */
     isCollidableObject(){

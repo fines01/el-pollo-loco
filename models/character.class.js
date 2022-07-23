@@ -26,8 +26,6 @@ class Character extends MovableObject {
         'audio/swosh-06.flac' // jumping sound flac
     ];
     
-    // IMAGES_ANGRY = []; 
-
     IMAGES_IDLE = 
     [
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-1.png',
@@ -41,7 +39,6 @@ class Character extends MovableObject {
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-9.png',
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/IDLE/I-10.png',
     ];
-
     IMAGES_SLEEPING = 
     [
         'img/2.Secuencias_Personaje-Pepe-correcci¢n/1.IDLE/LONG_IDLE/I-11.png',
@@ -93,7 +90,7 @@ class Character extends MovableObject {
     ];
 
     /**
-     * Creates the character
+     * Creates a character instance
      * @param {Object} world - current instance of World object
      */
     constructor(world) {
@@ -110,7 +107,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Corrects the dimensions of an object's actual hit area against the dimensions of its image element
+     * Corrects the dimensions of an object 's actual hit area compared to the dimensions of its image element
      */
     checkHitarea() {
         this.imgY = this.y + 95;
@@ -120,9 +117,9 @@ class Character extends MovableObject {
     }
 
     /**
-     * Creates Audio instances from the given audio sources,
-     * and sets audio properties of playback speed and volume.
-     */
+    * Creates Audio instances from given audio sources,
+    * sets their audio properties of playback speed and volume.
+    */
     setAudio() {
         [this.walkingSound, this.dyingSound, this.hurtSound, this.jumpingSound] = this.createAudio(...this.audioPaths);
         this.hurtSound.playbackRate = 2;
@@ -134,18 +131,17 @@ class Character extends MovableObject {
     }
 
     /**
-     * Sets horizontal speed of character depending on the current level
+     * Sets speed of character depending on the current level
      */
     setSpeed() {
         this.speedX = 8 + ( (levelCounter-1) * 0.8);
     }
  
-    /**
-     * Checks elapsed time in ms since last animation frame against the object's defined animation frame interval of the object,
-     * and applies the animation if enough time has passed.
-     * @todo move this function in MovableObject class?
-     * @param {number} deltaTime - ms since the last animation frame was served in the main game-loop 
-     */
+   /**
+    * Compares the elapsed time in ms since the last animation frame to the object's defined animation frame interval,
+    * applies the animation if enough time has passed.
+    * @param {number} deltaTime - ms since the last animation frame was served in the game-loop 
+    */
     checkAnimationFrameTime(deltaTime) {
         if (this.animationFrameTimer > this.animationFrameInterval) {
             this.animate();
@@ -157,17 +153,16 @@ class Character extends MovableObject {
     }
 
     /**
-     * @todo check standing time of character and play sleeping animations if character is idle for too long??
+     * @todo [MAYBE] check standing time of character and play sleeping animations if character is idle for too long??
      * @param {number} deltaTime 
      */
     checkIdleTime( deltaTime) {
         let trackTime;
-        
+        //...
     }
     
     /**
-     * Determines if character is able to throw a bottle and
-     * checks for corresponding keypress event
+     * Determines if character is able to throw a bottle and checks for corresponding user inputs
      * @param {number} collectedBottles - amount of collected bottles
      * @returns 
      */
@@ -183,12 +178,17 @@ class Character extends MovableObject {
         return ( !this.isAboveGround() && !this.isWalking() && !this.isDead());
     }
 
+    /**
+     * Checks if character hurts an enemy
+     * @param {Object} enemy 
+     * @returns {boolean}
+     */
     isHittingEnemy(enemy) {
         return (this.isColliding(enemy) && !this.isHurt() && !this.isJumpingOn(enemy) && !enemy.isDead()); // because dead enemies don't get removed immediately (for visual effects)
     }
 
     /**
-     * play dying animation of character
+     * Plays visual and acoustic dying animation of character
      */
     animateDeath() {
         this.playAnimationOnce(this.IMAGES_DYING);
@@ -207,7 +207,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Play character animation depending on character states
+     * Plays visual character animation depending on character states
      */
     animate() {
         this.applyGravity(); 
@@ -219,7 +219,7 @@ class Character extends MovableObject {
     }
 
     /**
-     * Update character movement on canvas
+     * Updates character movement on canvas
      */
     move() {
         this.checkHitarea();

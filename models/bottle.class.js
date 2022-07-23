@@ -58,7 +58,7 @@ class Bottle extends ThrowableObject {
     }
 
     /**
-     * Corrects the dimensions of an object's actual hit area against the dimensions of its image element
+     * Corrects the dimensions of an object's actual hit area compared to the dimensions of its image element
      */
     checkHitarea() {
         this.imgY = this.y + 8;
@@ -68,9 +68,9 @@ class Bottle extends ThrowableObject {
     }
 
     /**
-     * Checks the elapsed time in ms since the last animation frame against the object's defined animation frame interval of the object,
-     * and applies the animation if enough time has passed.
-     * @param {number} deltaTime - ms since the last animation frame was served in the main game-loop 
+     * Compares the elapsed time in ms since the last animation frame to the object's defined animation frame interval,
+     * applies the animation if enough time has passed.
+     * @param {number} deltaTime - ms since the last animation frame was served in the game-loop 
      */
     checkAnimationFrameTime(deltaTime) {
         if (this.animationFrameTimer > this.animationFrameInterval) {
@@ -95,15 +95,15 @@ class Bottle extends ThrowableObject {
         }
     }
 
-    /** Animates bottle throw */
+    /** Plays visual and acoustic bottle throw animation */
     animateBottleThrow() {
         this.throwSound.play();
         this.playAnimation(this.IMAGES_ROTATE);
     }
 
     /**
-     * Creates Audio instances from the given audio sources,
-     * and sets the audio properties of playback speed and volume.
+     * Creates Audio instances from given audio sources,
+     * sets their audio properties of playback speed and volume.
      */
     setAudio() {
         [this.throwSound, this.splashSound, this.collectSound] = this.createAudio(...this.audioPaths);

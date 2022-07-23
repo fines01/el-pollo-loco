@@ -46,6 +46,7 @@ class Endboss extends Enemy {
 
     /**
      * Creates endboss and starts its animation
+     * @todo only start animation as soon as world is instanciated OR as soon as Endboss is in frame
      * @param {number} levelEndX - x coordinate of level end
      */
     constructor(levelEndX) {
@@ -63,7 +64,7 @@ class Endboss extends Enemy {
     }
 
     /**
-     * Corrects the dimensions of an object 's actual hit area against the dimensions of its image element
+     * Corrects the dimensions of an object 's actual hit area compared to the dimensions of its image element
      */
     checkHitarea() {    
         this.imgY = this.y + 70;
