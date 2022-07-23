@@ -24,7 +24,6 @@ class Cloud extends BackgroundObject {
      */
     move() {
         this.moveLeft();
-        console.log(this.levelEndX);
         if (this.x < 0 - this.width) this.x = this.levelEndX;
     }
 }
