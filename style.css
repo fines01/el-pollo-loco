@@ -25,6 +25,9 @@ body {
     background-color: rgba(0,0,0,0.95);
     min-height: 100vh;
     max-height: 100%;
+
+    color: white;
+    line-height: 2;
 }
 
 h1, p {
@@ -52,12 +55,22 @@ h4{
     z-index: 2;
 }
 
-#help-note {
-    color: rgb(251, 251, 0);
+#help-icon {
+    /* color: rgb(251, 251, 0); */
     /* font-weight: bold; */
     position: absolute;
-    top: 105%;
-    right: 0%;
+    bottom: 2%;
+    top: 92%;
+    right: 2%;
+    z-index: 4;
+    cursor: pointer;
+}
+
+#fullscreen-icon {
+    position: absolute;
+    bottom: 2%;
+    top: 92%;
+    left: 2%;
     z-index: 4;
     cursor: pointer;
 }
@@ -66,7 +79,7 @@ h4{
     cursor: pointer;
 }
 
-#screen-text-big:hover, #screen-text-small:hover, #help-note:hover{
+#screen-text-big:hover, #screen-text-small:hover {
     text-decoration: underline;
 }
 
@@ -96,7 +109,8 @@ canvas {
     max-width: 100%;
     max-height: 100%;
     /* display:block; */
-    border: 1px solid lime;
+    border-top: 1px solid lime;
+    border-bottom: 1px solid lime;
     box-sizing: border-box;
 }
 
@@ -150,12 +164,12 @@ canvas {
     left: 65%; */
 }
 
-.help-note-fullscreen {
+/* .help-icon-fullscreen {
     font-size: 0.95rem;
-    top: 95% !important; /*!important because id > class assignment*/
+    top: 95% !important;
     right: 3% !important;
     text-decoration: none !important;
-}
+} */
 
 .endscreen-text {
     color: rgb(251, 251, 0);
@@ -175,6 +189,54 @@ canvas {
 
 .text-dive-animation {
     animation: text-dive-out 350ms linear 1; /*300ms (=timeout until game starts)*/
+}
+
+.panel {
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    left: 0; right:0;
+}
+
+.panel-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.control-btn {
+    margin: 0 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    border: 1px solid white;
+    width: 25px;
+    /* cursor: pointer; */
+}
+
+#key-panel-top {
+    top: -50px;
+    /* border: 1px solid red; */
+}
+
+#key-panel-bottom{
+    bottom: -50px;
+    /* border: 1px solid lime; */
+
+}
+
+.info-link {
+    position: absolute;
+    top: 2%;
+    left: 1%;
+}
+
+.attribution {
+    font-weight: bold;
+}
+.attribution a {
+    color: lime;
+    text-decoration: none;
 }
 
 /* --- --- Animations --- ---*/
@@ -202,7 +264,7 @@ canvas {
         display: none;
     }
 
-    #fullscreen-keys-note{
+    #fullscreen-demo{
         display: none !important;
     }
 
@@ -227,13 +289,12 @@ canvas {
        margin: 0 3rem;
     }
 
-    #help-note {
+    /* #help-icon {
         font-size: 0.95rem;
-         top: 95% !important;
-        /*!important because id > class assignment*/
+        top: 95% !important;
         right: 3% !important;
         text-decoration: none !important;
-    }
+    } */
 
     #help-screen h3 {
         font-size: 1rem;
@@ -261,12 +322,12 @@ canvas {
         top: -6%;
     }
 
-    #help-note {
+    /* #help-icon {
         top: 95%;
         right: 3%;
         font-size: 0.95rem;
         text-decoration: none !important;
-    }
+    } */
 }
 
 @media only screen and (max-height: 390px){

@@ -27,44 +27,53 @@
     <script src="models/character.class.js"></script>
     <script src="models/level.class.js"></script>
     <!-- JavaScript -->
+    <script src="js/checkDevice.js"></script>
     <script src="js/game.js"></script>
     <script src="js/levels.js"></script>
 </head>
 <body>
+    <a class="info-link" title="attributions" href="imprint.html" target="_blank"><img src="img/icons/info.ico" alt=""></a>
     <div id="bg-overlay" class="d-none"></div>
     <div id="screen-frame" class="">
         <h1>El Pollo Loco</h1>
         <canvas id="canvas" class="screen d-none"></canvas>
         <h2 id="screen-text-big" onclick="beginGame()">Press Enter to begin!</h2>
         <h4 id="screen-text-small" class="d-none" onclick="restartGame()">Press Enter to restart</h4>
-        <p id="help-note" onclick="toggleHelpScreen()">Press <b>H:</b> Toggle Help</p>
+        <p id="help-icon" onclick="toggleHelpScreen()" ontouchstart="toggleHelpScreen()"> <img src="img/icons/help.ico" title="toggle helpscreen"></p>
+        <img id="fullscreen-icon" src="img/icons/fullscreen.ico" onclick="toggleFullScreen()" ontouchstart="toggleFullScreen()" title="toggle fullscreen" alt="fullscreen icon">
         <img id ="start-screen" class="screen" src="img/9.Intro _ Outro Image/Start Screen/Opci¢n2.png" alt="start screen" >
         <img id="game-over-screen" class="screen d-none" src="img/9.Intro _ Outro Image/_Game over_ screen/3.Game over.png" alt="game over screen">
         <img id="loser-screen" class="screen d-none" src="img/9.Intro _ Outro Image/_Game over_ screen/1.you lost.png" alt="you lost screen">
         <div id="help-screen" class="screen d-none">
-            <h4><span>ENTER</span> <span>Throw Bottle</span></h4>
-            <h4><span>ARROW-UP or SPACE</span> <span>Jump</span></h4>
-            <h4><span>ARROW-LEFT or ARROW-RIGHT</span> <span>Run</span></h4>
-            <h4><span>P</span> <span>Pause Game</span></h4>
-            <h4><span>H</span> <span>Toggle Helpscreen</span></h4>
-            <h4 id="fullscreen-keys-note"><span>S / ESC</span> <span>Open / Close Full Screen</span></h4>
+            <h4><span id="throw-demo">ENTER</span> <span>Throw Bottle</span></h4>
+            <h4><span id="jump-demo">ARROW-UP or SPACE</span> <span>Jump</span></h4>
+            <h4><span id="move-left-demo">ARROW-LEFT or ARROW-RIGHT</span> <span>Run</span></h4>
+            <h4><span id="pause-demo">P</span> <span>Pause Game</span></h4>
+            <h4><span id="help-demo">H</span> <span>Toggle Helpscreen</span></h4>
+            <h4 id="fullscreen-demo"><span>S / ESC</span> <span>Open / Close Full Screen</span></h4>
             <h3> COLLECT ALL <u>COINS</u> and destroy the endboss by hitting it with your collected bottles </h3>
             <h4 class="small-h"><span>F:</span> <span class="small-p">Activate Developer-Mode (show Hit Frames)</span></h4>
         </div>
+
         <!-- key panels for mobile views -->
         <!-- keys: start (toggle pause) sound-control or mute? help-->
         <!-- keys: run forward, run backward && jump, throw -->
-        <div id="key-panel" class="screen panel"></div>
-        <div id="" class="screen panel">
+        <div id="key-panel-top" class="panel">
+            <div class="panel-wrapper"></div>
+            <div class="panel-wrapper">
+                <img id="btn-pause" class="control-btn" src="img/icons/pause-1.ico" title="toggle pause" alt="pause button">
+            </div>
+        </div>
+        <div id="key-panel-bottom" class="panel">
             <!-- keys left (right/left run) -->
             <div class="panel-wrapper">
-                <button id="btn-left"></button>
-                <button id="btn-right"></button>
+                <img id="btn-left" class="control-btn" src="img/icons/left.ico" title="move left" alt="move left button">
+                <img id="btn-right" class="control-btn" src="img/icons/right.ico" title="move-right" alt="move right button">
             </div>
             <!-- keys right (e.g. throw, jump) -->
             <div class="panel-wrapper">
-                <button id="btn-jump"></button>
-                <button id="btn-throw"></button>
+                <img id="btn-jump" class="control-btn" src="img/icons/jump.ico" title="jump" alt="jump">
+                <img id="btn-throw" class="control-btn" src="img/icons/throw.ico" title="throw bottle" alt="">
             </div>
         </div>
     </div>
