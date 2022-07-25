@@ -37,6 +37,8 @@ class World {
         this.lastAnimationFrame = Date.now();
         this.setAudio();
         this.draw();
+
+        // start enemy and bg objects? move and animate
     }
 
     /**
@@ -373,7 +375,7 @@ class World {
         // instead of in throw()
         this.throwableObjects.forEach( obj => {obj.checkAnimationFrameTime(deltaTime);});
         this.level.collectibleObjects.forEach( obj=>{
-            if (obj instanceof Bottle) obj.checkAnimationFrameTime(deltaTime);
+           obj.checkAnimationFrameTime(deltaTime);
         });
         //animate throw objects or bottles & collectibles etc this.animateCollectibles();
         this.updateCharacter(deltaTime);

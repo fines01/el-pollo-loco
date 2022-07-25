@@ -68,21 +68,6 @@ class Bottle extends ThrowableObject {
     }
 
     /**
-     * Compares the elapsed time in ms since the last animation frame to the object's defined animation frame interval,
-     * applies the animation if enough time has passed.
-     * @param {number} deltaTime - ms since the last animation frame was served in the game-loop 
-     */
-    checkAnimationFrameTime(deltaTime) {
-        if (this.animationFrameTimer > this.animationFrameInterval) {
-            if (this.throwObject) this.animateBottleThrow();
-            if (!this.throwObject) this.animateBottlePulse();
-            this.animationFrameTimer = 0;
-        } else {
-            this.animationFrameTimer += deltaTime;
-        }
-    }
-
-    /**
      * Adds a pulsing animation to bottles.
      * Since the pulsing animation needs to run at lower FPS, 
      * the ratio to the object's main animationFPS (for throw animations) is used to time the pulsing animation
@@ -99,6 +84,14 @@ class Bottle extends ThrowableObject {
     animateBottleThrow() {
         this.throwSound.play();
         this.playAnimation(this.IMAGES_ROTATE);
+    }
+
+    /**
+     * Contains all bottle animations to be called in the checkAnimationFrameTime(dt) function
+     */
+    animate() {
+        if (this.throwObject) this.animateBottleThrow();
+        if (!this.throwObject) this.animateBottlePulse();
     }
 
     /**

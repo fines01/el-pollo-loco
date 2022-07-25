@@ -17,25 +17,15 @@ class MovableObject extends DrawableObject {
     imgHeight = this.height;
     // volumeModifier = 1;
 
-    /**
-     * Corrects the dimensions of an object 's actual hit area compared to the dimensions of its image element
-     */
-    // checkHitarea() {
-    //     this.imgY = this.y; // sets default values
-    //     this.imgX = this.x;
-    //     this.imgWidth = this.width;
-    //     this.imgHeight = this.height;
-    // }
-
-    /**
-     * @todo maybe define function here
-     * right now I have my checkAnimationFrameTime() functions in following classes: 
-     * Bottle, Enemy, Character, (possibly ThrowableObjects)
-     * 
-     */
-    checkAnimationFrameTime(deltaTime, objectAnimation) {
+   /**
+    * Compares the elapsed time in ms since the last animation frame to the object's defined animation frame interval,
+    * applies the object's animation if enough time has passed.
+    * @param {number} deltaTime - ms since the last animation frame was served in the game-loop 
+    */
+    checkAnimationFrameTime(deltaTime) {
         if (this.animationFrameTimer > this.animationFrameInterval) {
-            // object specific animation function // this.animate()
+            // object specific animation function as callback or:
+            this.animate()
             this.animationFrameTimer = 0;
         } else {
             this.animationFrameTimer += deltaTime;

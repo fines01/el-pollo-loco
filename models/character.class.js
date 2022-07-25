@@ -137,21 +137,6 @@ class Character extends MovableObject {
         this.speedX = 8 + ( (levelCounter-1) * 0.8);
     }
  
-   /**
-    * Compares the elapsed time in ms since the last animation frame to the object's defined animation frame interval,
-    * applies the animation if enough time has passed.
-    * @param {number} deltaTime - ms since the last animation frame was served in the game-loop 
-    */
-    checkAnimationFrameTime(deltaTime) {
-        if (this.animationFrameTimer > this.animationFrameInterval) {
-            this.animate();
-            this.animationFrameTimer = 0;
-        } 
-        else {
-            this.animationFrameTimer += deltaTime;
-        }
-    }
-
     /**
      * @todo [MAYBE] check standing time of character and play sleeping animations if character is idle for too long??
      * @param {number} deltaTime 
