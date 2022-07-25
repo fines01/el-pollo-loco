@@ -11,8 +11,7 @@ class Chick extends Enemy {
     ];
     
     /**
-     * Creates a baby chick object and starts its animation
-     * @todo animations for Coins, Chicken, Chicks only need to be initialized when game starts, not when they are created (at instnciating level)
+     * Creates a baby chick object
      * @param {number} levelEndX - x coordinate of level end
      */
     constructor(levelEndX){
@@ -24,7 +23,6 @@ class Chick extends Enemy {
         this.width = this.height * 1.2;
         this.jumpHeight = Math.random() * 35;//(90 - this.height);
         this.speedX = (0.75 + Math.random() * 4) + this.speedModifier;
-        this.animateEnemies();
     }
 
 }

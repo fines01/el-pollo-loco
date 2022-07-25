@@ -12,8 +12,7 @@ class Chicken extends Enemy {
     ];
 
     /**
-     * Creates a chicken object and starts its animation.
-     * @todo animations for Coins, Chicken, Chicks, move for BGO and Clouds only need to be initialized when game starts, not when they are created (at instnciating level)
+     * Creates a chicken object
      * @param {number} levelEndX - x coordinate of level end
      */
     constructor(levelEndX) {
@@ -24,8 +23,6 @@ class Chicken extends Enemy {
         this.groundLevelY = this.y;
         this.speedX = 1 + Math.random() * 3 + this.speedModifier;
         this.jumpHeight = Math.random() * 7;
-        this.applyGravity();
-        this.animateEnemies();
     }
 
 }
