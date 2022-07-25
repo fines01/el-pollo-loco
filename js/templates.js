@@ -9,7 +9,7 @@ function desktopHelpScreenHTML() {
         <h4><span>P</span> <span>Pause Game</span></h4>
         <h4><span>H</span> <span>Toggle Helpscreen</span></h4>
         <h4 id="fullscreen-demo"><span>S / ESC</span> <span>Open / Close Full Screen</span></h4>
-        <h4><span class="btn-toggle-touch" ontouchstart="toggleTouchOption()">C</span> <span class="">Toggle Touchscreen Options</span></h4>
+        <h4><span class="btn-toggle-touch" onclick="toggleTouchOption()" ontouchstart="toggleTouchOption()">C</span> <span class="">Toggle Touchscreen Options</span></h4>
         <h6>Your device has been recognized as a desktop device.</h6>
         <h3> COLLECT ALL <u>COINS</u> and destroy the endboss by hitting it with your collected bottles </h3>
         <h4 id="dev-demo" class="small-h"><span>F:</span> <span class="small-p">Activate Developer-Mode (show Hit Frames)</span></h4>
@@ -27,7 +27,7 @@ function mobileHelpScreenHTML() {
         <h4><img src="img/icons/pause-1.ico"> <span>Pause Game</span></h4>
         <h4> <img src="img/icons/help-white.ico" class="helpscreen-icon"> <span>Toggle Helpscreen</span></h4>
         <h4 id="fullscreen-demo"> <img src="img/icons/fullscreen.ico"> <span>Open / Close Full Screen</span></h4>
-        <h4><span class="btn-toggle-touch btn-toggle-white" ontouchstart="toggleTouchOption()">C</span> <span class="">Toggle Touchscreen Options</span></h4>
+        <h4><span class="btn-toggle-touch btn-toggle-white" onclick="toggleTouchOption()" ontouchstart="toggleTouchOption()">C</span> <span class="">Toggle Touchscreen Options</span></h4>
         <h6>Your device has been recognized as a mobile device.</h6>
         <h3> COLLECT ALL <u>COINS</u> and destroy the endboss by hitting it with your collected bottles </h3>
     `;
