@@ -13,8 +13,8 @@ class World {
     gameOver = true;
     audioPaths = 
     [
-        'audio/test/CH-AY-NA.ogg', // test
-        //'audio/it_takes_a_hero.wav', // game music
+        // 'audio/test/CH-AY-NA.ogg', // test
+        'audio/it_takes_a_hero.wav', // game music
         'audio/countdown3.mp3', // countdown sound
         'audio/Win Jingle.wav', // win jingle
         'audio/Warp Jingle.wav', // lose jingle

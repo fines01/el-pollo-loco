@@ -12,7 +12,7 @@ class Keyboard {
      */
     constructor(){
         this.handleKeyPress(); //bindKeyPressEvents()
-        this.handleButtonPress();
+        this.handleTouchButtonPress();
     }
     
     /**
@@ -69,7 +69,7 @@ class Keyboard {
     /**
      * Binds button press events
      */
-    handleButtonPress() {
+    handleTouchButtonPress() {
         getId('btn-left').addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.LEFT = true;
@@ -84,9 +84,9 @@ class Keyboard {
         });
         getId('btn-throw').addEventListener('touchstart', (e) => {
             e.preventDefault();
-            this.SPACE = true;
+            this.ENTER = true;
         });
-        // 
+        
         getId('btn-left').addEventListener('touchend', (e) => {
             e.preventDefault();
             this.LEFT = false;
@@ -101,7 +101,7 @@ class Keyboard {
         });
         getId('btn-throw').addEventListener('touchend', (e) => {
             e.preventDefault();
-            this.SPACE = false;
+            this.ENTER = false;
         });
     
     }

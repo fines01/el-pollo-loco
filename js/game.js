@@ -3,24 +3,25 @@ const root = document.documentElement;
 let canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '')*1;
 let canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '')*1;
 
-let level, world;
+let level, world, userIsOnMobileDevice;
 let helpScreenMode = false;
 let fullScreenMode = false;
 let levelCounter = 1;
 let maxLevels = 9;
 
-/** sets css variables and default (first) level on load of page */
+/** Sets css variables and sets the default (first) level on pageload */
 window.addEventListener('load', ()=>{
-    setCanvasCssVars();
+    initDeviceMode();
+    bindTouchButtonEvents();
     level = setLevel();
 });
 
-/** sets css variables after a resize event of the window */
+/** Sets css variables after a resize event of the window */
 window.addEventListener('resize', (e)=>{
-    setCanvasCssVars();
+   initDeviceMode();
 });
 
-/** binds key press events to control the UI outside of the game */
+/** Binds key press events to control UI outside of the game logic */
 // let handleKeypresses = 
 window.addEventListener('keydown', (e) => {
     if (e.code == 'Enter' && !world && !helpScreenMode) beginGame();
@@ -29,8 +30,41 @@ window.addEventListener('keydown', (e) => {
     if (e.code == 'KeyF' && world) world.setDevMode();
     if (e.code == 'KeyH') toggleHelpScreen();
     if (e.code == 'KeyS' && !fullScreenMode) openFullWidthScreen();
+    if (e.code == 'KeyC') toggleTouchOption();
     if (e.code == 'Escape' && fullScreenMode && window.innerWidth > 720) closeFullScreen();
 });
+
+/** Binds touchscreen button-press events to control UI */
+function bindTouchButtonEvents() {
+    // getId('btn-start').addEventListener('touchstart', (e) => {
+    //     e.preventDefault();
+    //     if (!world && !helpScreenMode) beginGame();
+    //     if(world && world.gameOver && !world.gamePaused) restartGame();
+    // });
+    getId('btn-pause').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (world && !helpScreenMode) togglePause();
+    });
+    getId('help-icon').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        toggleHelpScreen();
+    });
+    getId('fullscreen-icon').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        toggleFullScreen();
+    });
+    
+}
+
+/**
+ * Checks the device mode (desktop or mobile) and initializes game accordingly
+ */
+function initDeviceMode() {
+    userIsOnMobileDevice = checkIfUserIsOnMobileDevice();
+    logDevice(); // Check
+    setCanvasCssVars();
+    setStartScreen();
+}
 
 /**
  * Starts game after a given time
@@ -44,52 +78,64 @@ function beginGame( ms = 300){
 }
 
 /**
- * Sets HTML, creates an instance of the Class World and
+ * Sets HTML, creates an instance of World and
  * starts game-loop after a check if objects are fully loaded
  */
 function startGame() {
     hide('start-screen', 'game-over-screen', 'loser-screen', 'screen-text-big', 'screen-text-small');
     show('canvas');
+    // userIsOnMobileDevice = checkIfUserIsOnMobileDevice();
+    if( fullScreenMode || userIsOnMobileDevice) show('key-panel-top', 'key-panel-bottom');
+    else hide('key-panel-top', 'key-panel-bottom');
     world = new World();
     world.gameOver = false;
     if (world.checkWorldComplete()) world.run();
 }
 
 /**
- * Pauses potentially running audios, checks level and
- * starts game with respective level
+ * Checks level and starts game with respective level
+ * @todo [DECIDE:] pause jingles or only start new level after jugles ended? (note: 1 possibility has the downside that a new game is started 'accidentally' after hitting throw-Enter in a game)
  */
 function restartGame() {
-    world.winSound.pause();
-    world.loseSound.pause();
-    checkLevel(); 
-    startGame(); // beginGame(235) and show Level w animation?
+    // world.winSound.pause();
+    // world.loseSound.pause();
+    if (world.winSound.ended || world.loseSound.ended){
+        checkLevel(); 
+        startGame(); // beginGame(235) and show Level w animation?
+    }
+}
+
+function setStartScreen(){
+    getId('screen-text-big').innerHTML = screenTextBigHTML();
 }
 
 /**
- * sets win screen HTML and plays win jungle, increases level - counter
+ * Sets win screen HTML and plays win jingle, increases level - counter
  */
 function setWinScreen(){
-    let wonText = getId('screen-text-big');
-    let levelText = getId('screen-text-small');
+    let winText, levelText;
     let nextLevel = levelCounter+1;
-    wonText.innerHTML = "YOU WON!";
-    wonText.classList.add('endscreen-text');
-    if (levelCounter < maxLevels) levelText.innerHTML= "Press Enter to Start Level " + nextLevel;
+    [winText, levelText] = getId('screen-text-big', 'screen-text-small');
+    if (levelCounter < maxLevels) levelText.innerHTML = screenTextSmallHTML(nextLevel);
+    winText.classList.add('endscreen-text');
+    winText.innerHTML = "YOU WON!";
     show('game-over-screen', 'screen-text-big', 'screen-text-small');
+    hide('key-panel-top', 'key-panel-bottom')
     world.winSound.play();
 }
 
 /**
- * sets loseer screen and plays loser jingle
+ * Sets loseer screen and plays loser jingle
  */
 function setLoserScreen(){
     show('loser-screen', 'screen-text-small');
+    hide('key-panel-top', 'key-panel-bottom');
+    getId('screen-text-small').innerHTML = screenTextSmallHTML();
     world.loseSound.play();
 }
 
 /**
- * sets level counter and instanciates a new level
+ * Sets level counter and instanciates a new level
  */
 function checkLevel() { // rename?
     if (levelCounter < maxLevels && world.checkWin()) levelCounter++;
@@ -98,8 +144,8 @@ function checkLevel() { // rename?
 }
 
 /**
- * toggles pause mode during game  
- * and resets lastAnimationFrame when resuming game
+ * Toggles pause mode during game,
+ * resets lastAnimationFrame when resuming game
  */
 function togglePause() {
     world.gamePaused = !world.gamePaused;
@@ -110,82 +156,142 @@ function togglePause() {
 }
 
 /**
- * toggles help screen, sets helpscreenMode
- * to make sure game is paused if help screen is on during game 
- * and can't be started if help screen is on during start screen
+ * Toggles help screen, makes sure game is paused if help screen is on during game 
+ * and game can't be started if help screen is on during start screen
  */
 function toggleHelpScreen(){
         let actions = toggle('help-screen');
         if (world && !(actions[0] == 'show' && world.gamePaused)) togglePause();
-        if (actions[0] == 'show') helpScreenMode = true;
-        else helpScreenMode = false;
+        if (actions[0] == 'show') showHelpScreen();
+        else closeHelpScreen();
+}
+
+/**
+ * Shows the correct help screen for either desktop or mobile mode
+ */
+function showHelpScreen() {
+    helpScreenMode = true;
+    let helpScreenHTML;
+    if (userIsOnMobileDevice) helpScreenHTML = mobileHelpScreenHTML();
+    else helpScreenHTML = desktopHelpScreenHTML();
+    getId('help-screen').innerHTML = helpScreenHTML;
+}
+
+/** */
+function closeHelpScreen() {
+    helpScreenMode = false;
+    getId('help-screen').innerHTML = '';
+}
+
+/**
+ * Toggles touchscreen options.
+ * User can toggle options in case the device was not correctly recognized.
+ */
+function toggleTouchOption() {
+    userIsOnMobileDevice = !userIsOnMobileDevice;
+    if (helpScreenMode) showHelpScreen();
+    if (world && userIsOnMobileDevice && !world.gameOver) show('key-panel-top','key-panel-bottom');
+    if (world && !userIsOnMobileDevice) hide('key-panel-top', 'key-panel-bottom');
+    if (!world) setStartScreen();
+    else getId('screen-text-small').innerHTML = screenTextSmallHTML();
 }
 
 /* --- ---responsiveness & full screen mode --- --- */
 
 /**
- * checks for inner height and width of screen and sets css variables accordingly
+ * Checks for inner height and width of screen and sets global CSS variables accordingly
  */
 function setCanvasCssVars() {
-    if (window.innerWidth < canvasWidth)  {
-        openFullWidthScreen();
-    }
-    else if (window.innerHeight < canvasHeight) {
+    if (window.innerHeight <= canvasHeight) {
         openFullHeightScreen();
     }
-    if (window.innerWidth >= canvasWidth && window.innerHeight >= canvasHeight) {
+    else if (window.innerWidth <= canvasWidth)  {
+        openFullWidthScreen();
+    }
+    if (window.innerWidth > canvasWidth && window.innerHeight > canvasHeight) {
         closeFullScreen();
     }
 }
 
 /**
- * sets global CSS custom properties (variables) for full width canvas screens
- * by setting --canvasWidth to full screen width and keeping the ratio for --camvasHeight
- * and adapts the HTML view
+ * Sets global CSS custom properties (css variables) for full width canvas screens
+ * by setting --canvasWidth to full screen width and keeping the ratio for --camvasHeight,
+ * adapts the HTML view
  */
 function openFullWidthScreen() {
-    // set CSS variables
-    root.style.setProperty('--canvasWidth', window.innerWidth + 'px');
-    root.style.setProperty('--canvasHeight', window.innerWidth / 1.5 + 'px');
-    // adapt views
-    getId('help-note').classList.add('help-note-fullscreen');
-    document.getElementsByTagName('h1')[0].classList.add('d-none');
+    root.style.setProperty('--canvasWidth', document.documentElement.clientWidth + 'px');
+    root.style.setProperty('--canvasHeight', document.documentElement.clientWidth / 1.5 + 'px');
     fullScreenMode = true;
+    setFullWidthStyle();
 }
 
 /**
- * sets global CSS custom properties (variables) for full height canvas screens
- * by setting --canvasHeight to full screen height and keeping the ratio for --camvasWidth
- * and adapts the HTML view
+ * Adjusts the view for full screen mode
+ */
+function setFullWidthStyle() {
+    let panelTop, panelBottom;
+    //show('key-panel-top', 'key-panel-bottom');
+    getId('help-icon').classList.add('help-icon-fullscreen');
+    document.getElementsByTagName('h1')[0].classList.add('d-none');
+    [panelTop, panelBottom] = getId('key-panel-top', 'key-panel-bottom');
+    panelTop.classList.add('panel-top-fullscreen')
+    panelBottom.classList.add('panel-bottom-fullscreen');
+    if (window.innerWidth <= canvasWidth || window.innerHeight <= canvasHeight) hide('fullscreen-icon');
+}
+
+/**
+ * Removes adjusted views for fullscreen mode
+ */
+function removeFullWidthStyle() {
+    let panelTop, panelBottom;
+    [panelTop, panelBottom] = getId('key-panel-top', 'key-panel-bottom');
+    hide('key-panel-top', 'key-panel-bottom'); //if (!onMobileDevice)
+    show('fullscreen-icon');
+    getId('help-icon').classList.remove('help-icon-fullscreen');
+    document.getElementsByTagName('h1')[0].classList.remove('d-none');
+    panelTop.classList.remove('panel-top-fullscreen')
+    panelBottom.classList.remove('panel-bottom-fullscreen');
+}
+
+/**
+ * Sets global CSS custom properties (css variables) for full height canvas screens
+ * by setting --canvasHeight to full screen height and keeping the ratio for --camvasWidth,
+ * adapts the HTML view
  */
 function openFullHeightScreen() {
-    root.style.setProperty('--canvasHeight', window.innerHeight + 'px');
-    root.style.setProperty('--canvasWidth', window.innerHeight * 1.5 + 'px');
-    // same as above --> refactor in function? (setFullScreenView() ?)
-    getId('help-note').classList.add('help-note-fullscreen');
-    document.getElementsByTagName('h1')[0].classList.add('d-none');
+    root.style.setProperty('--canvasHeight', document.documentElement.clientHeight + 'px');
+    root.style.setProperty('--canvasWidth', document.documentElement.clientHeight * 1.5 + 'px');
+    setFullWidthStyle();
     fullScreenMode = true;
 }
 
 /**
- * resets global CSS custom properties (variables) to their initial standard values
- * and adapts HTML view
+ * Resets global CSS custom properties (css variables) to their initial standard values,
+ * adapts HTML view
  */
 function closeFullScreen() {
     root.style.setProperty('--canvasWidth', canvasWidth + 'px');
     root.style.setProperty('--canvasHeight', canvasHeight + 'px');
-    getId('help-note').classList.remove('help-note-fullscreen');
-    document.getElementsByTagName('h1')[0].classList.remove('d-none');
     fullScreenMode = false;
+    removeFullWidthStyle();
+}
+
+/**
+ * Checks current fullscren mode and client screen dimensions, opens or closes full screen accordingly
+ */
+function toggleFullScreen() {
+    if (!fullScreenMode && window.innerHeight == canvasHeight) openFullHeightScreen();
+    else if (!fullScreenMode) openFullWidthScreen();
+    else if (fullScreenMode && window.innerWidth > 720) closeFullScreen();
 }
 
 /* --- --- helper functions --- --- */
 
 /**
- * this function provides a shorthand for the Document method getElementById()
+ * This function provides a shorthand for the Document method getElementById()
  * and allows to get multiple Elements in an array
  * @param  {...string} idNames 
- * @returns { (HTMLElement | HTMLElements[]) } 
+ * @returns { (HTMLElement | HTMLElement[]) } 
  */
 function getId(...idNames){
     let htmlElements = [];
@@ -197,7 +303,7 @@ function getId(...idNames){
 }
 
 /**
- * Hides any number of given HTML Elements
+ * Hides any number of passed HTML Elements
  * @param  {...string} elementIDs - id names of HTML Elements
  */
 function hide(...elementIDs){
@@ -210,7 +316,7 @@ function hide(...elementIDs){
 }
 
 /**
- * Shows any number of given HTML Elements
+ * Shows any number of passed HTML Elements
  * @param  {...string} elementIDs - id names of HTML Elements
  */
 function show(...elementIDs) {
@@ -223,7 +329,7 @@ function show(...elementIDs) {
 }
 
 /**
- * toggles the view of any number of given HTML Elements and 
+ * Toggles the view of any number of passed HTML Elements and 
  * returns an array containing the respective action (hide or show) performed on the elements
  * @param  {...string} elementIDs - id names of HTML Elements
  * @returns { string[] }

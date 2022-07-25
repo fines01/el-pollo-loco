@@ -72,7 +72,7 @@ class MovableObject extends DrawableObject {
     /**
      * Plays an animation by iterating once over the passed images array and alternately 
      * assigning the object's img property to the corresponding HTMLImageElement Object from the imgCache.
-     * @todo not actually necessary (I could also just check currentImage & play while currentImage < imagesArr.length etc.)
+     * @todo [DECIDE:] keep? Not actually necessary (I could also just check currentImage & play while currentImage < imagesArr.length etc.)
      * @param {string[]} images - array of image sources
      */
     playAnimationOnce(images){
