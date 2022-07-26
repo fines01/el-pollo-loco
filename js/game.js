@@ -242,7 +242,7 @@ function setFullWidthStyle() {
     document.getElementsByTagName('h1')[0].classList.add('d-none');
     [panelTop, panelBottom] = getId('key-panel-top', 'key-panel-bottom');
     panelTop.classList.add('panel-top-fullscreen')
-    panelBottom.classList.add('panel-bottom-fullscreen');
+    panelBottom.classList.add('panel-bottom-fullscreen'); // remove?
     if (window.innerWidth <= canvasWidth || window.innerHeight <= canvasHeight) hide('fullscreen-icon');
 }
 
@@ -254,7 +254,7 @@ function removeFullWidthStyle() {
     [panelTop, panelBottom] = getId('key-panel-top', 'key-panel-bottom');
     hide('key-panel-top', 'key-panel-bottom'); //if (!onMobileDevice)
     show('fullscreen-icon');
-    getId('help-icon').classList.remove('help-icon-fullscreen');
+    getId('help-icon').classList.remove('help-icon-fullscreen'); //remove?
     document.getElementsByTagName('h1')[0].classList.remove('d-none');
     panelTop.classList.remove('panel-top-fullscreen')
     panelBottom.classList.remove('panel-bottom-fullscreen');

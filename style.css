@@ -282,8 +282,10 @@ canvas {
 }
 
 .attribution {
-    font-weight: bold;
+    /* font-weight: bold; */
+    margin: 3rem;
 }
+
 .attribution a {
     color: lime;
     text-decoration: none;
