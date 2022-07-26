@@ -1,6 +1,6 @@
 function setLevel(levelNumber = 1) {
     if (levelNumber === 1){
-        const level = new Level(7, 9, 15, 10 , 4, 40000); // Easy TEST level // hens, chicks, coins, bottles, bg-lengths, max game time
+        const level = new Level(7, 9, 15, 10 , 4, 35000); // Easy TEST level // hens, chicks, coins, bottles, bg-lengths, max game time
         return level;
     }
     if (levelNumber === 2) {
