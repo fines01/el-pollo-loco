@@ -37,8 +37,6 @@ class World {
         this.lastAnimationFrame = Date.now();
         this.setAudio();
         this.draw();
-
-        // start enemy and bg objects? move and animate
     }
 
     /**
@@ -153,7 +151,7 @@ class World {
     }
 
     /**
-     * Checks character collisions for a collectible object and applies consequences
+     * Checks character collisions with a collectible object and applies consequences
      * @param {Object} collectibleObject 
      */
     checkCollectibleCollision(collectibleObject) {
@@ -186,7 +184,7 @@ class World {
 
     /**
      * Removes marked objects from passed arrays
-     * @todo FIX (splice in forEach() ? )
+     * @todo [FIX] (splice in forEach() )
      * @param  {...Objects} objArrs 
      */
     removeMarkedObjects(...objArrs) {
@@ -211,7 +209,7 @@ class World {
 
     /**
      * Checks if character can throw a bottle and initializes the throw
-     * @todo [REDO:] redo throw?
+     * @todo [REDO:] redo throw!?
      */
     checkThrowObjects() {
         if (this.character.canThrow(this.collectedBottles)) {
@@ -236,7 +234,7 @@ class World {
         // throw bottle
         bottle.setThrowStart(bottleX, this.character.y + 80);
         //bottle.animateThrow(); //bottle.checkAnimationFrameTime(deltaTime); & remove animateThrow();
-        // set game status-ui
+        // update game status UI
         this.collectedBottles--;
         this.statusbars[2].setStatusbar(this.collectedBottles);
     }

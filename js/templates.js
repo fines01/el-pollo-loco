@@ -38,10 +38,10 @@ function mobileHelpScreenHTML() {
  * @returns {string} - HTML string
  */
 function screenTextSmallHTML(nextLevel = false ) {
-    if ( !userIsOnMobileDevice && !nextLevel) return 'Press ENTER to restart';
-    else if (userIsOnMobileDevice && !nextLevel) return '<img id="btn-start" src="img/icons/play-yellow-1.ico"> Restart';
+    if ( !userIsOnMobileDevice && !nextLevel) return 'Press ENTER to restart Level ' + levelCounter;
+    else if (userIsOnMobileDevice && !nextLevel) return '<img id="btn-start ontouchstart="restartGame()" src="img/icons/play-yellow-1.ico"> Restart Level ' + levelCounter;
     else if ( !userIsOnMobileDevice && nextLevel) return 'Press ENTER to Start Level ' + nextLevel;
-    else if (userIsOnMobileDevice && nextLevel) return '<img id="btn-start" src="img/icons/play-yellow-1.ico"> Start Level ' + nextLevel;
+    else if (userIsOnMobileDevice && nextLevel) return '<img id="btn-start" src="img/icons/play-yellow-1.ico" ontouchstart="restartGame()"> Start Level ' + nextLevel;
 }
 
 /** 

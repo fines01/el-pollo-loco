@@ -204,17 +204,20 @@ function toggleTouchOption() {
 
 /**
  * Checks for inner height and width of screen and sets global CSS variables accordingly
- * @todo check for bigger screens if full height or full width screen should be opened
+ * @todo decide if full screen mode should be preserved on resize event as done here (eg when a mobile device is tilted)
  */
 function setCanvasCssVars() {
-    if (window.innerHeight <= canvasHeight && screenIsWide()) {
+    if (window.innerHeight <= canvasHeight && wideScreenAspectRatio()) {
         openFullHeightScreen();
-    } else if (window.innerWidth <= canvasWidth) {
+    } 
+    else if (window.innerWidth <= canvasWidth) {
         openFullWidthScreen();
     }
-    if (window.innerWidth > canvasWidth && window.innerHeight > canvasHeight) {
+    if (window.innerWidth > canvasWidth && window.innerHeight > canvasHeight && !fullScreenMode) {
         closeFullScreen();
     }
+   else if (fullScreenMode && wideScreenAspectRatio()) openFullHeightScreen();
+   else openFullWidthScreen();
 }
 
 /**
@@ -284,19 +287,19 @@ function closeFullScreen() {
  * Checks current fullscren mode and client screen dimensions, opens or closes full screen accordingly
  */
 function toggleFullScreen() {
-    if ( !fullScreenMode && screenIsWide()) openFullHeightScreen();
+    if (!fullScreenMode && wideScreenAspectRatio()) openFullHeightScreen();
     else if (!fullScreenMode) openFullWidthScreen();
     else if (fullScreenMode && window.innerWidth > 720) closeFullScreen();
 }
 
 /**
- * Checks weather the width of the screen is too large compared to its height to open a full width screen
+ * Checks if the screen's width is too large compared to its height to open a full width screen
  * @returns {boolean}
  */
-function screenIsWide() {
+function wideScreenAspectRatio() {
     return (
         (window.innerHeight <= canvasHeight && window.innerWidth >= canvasWidth) || // checks against canvas dimensions
-        window.innerHeight * 1.5 / window.innerWidth < 1 // checks hight to width ratio //NOTE: window.innerHeight / (window.innerWidth / 1.5), where window.innerWidth/1.5 is the canvas height-to-width ratio
+        window.innerHeight * 1.5 / window.innerWidth < 1 // checks hight to width ratio //NOTE: window.innerHeight / (window.innerWidth / 1.5) --> window.innerWidth/1.5 is the canvas height-to-width ratio
     );
 }
 
