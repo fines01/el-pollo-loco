@@ -255,11 +255,11 @@ class World {
     /**
      * Sets game over and shows game-over screen
      */
-    setGameOver() {
+    setGameOver(reason = undefined) {
         setTimeout(() => {
             this.gameOver = true;
         }, 500);
-        this.setGameOverScreen();
+        this.setGameOverScreen(reason);
     }
 
     /**
@@ -276,9 +276,11 @@ class World {
     /**
      * Sets the correct end-screen & UI depending on the win status
      */
-    setGameOverScreen() {
+    setGameOverScreen(reasonLost) {
+        if (!reasonLost) reasonLost = 'coins';
+        let missedCoins = this.level.amountCoins - this.collectedCoins;
         if (this.checkWin() && this.gameOver ) setWinScreen();
-        else if (this.gameOver) setLoserScreen();
+        else if (this.gameOver) setLoserScreen(reasonLost, missedCoins);
     }
 
     /**
@@ -335,7 +337,7 @@ class World {
         let deltaTime = timeStamp - this.lastAnimationFrame;
         this.lastAnimationFrame = timeStamp;
         this.gameTime += deltaTime;
-        if (this.gameTime > this.maxGameTime) this.setGameOver();
+        if (this.gameTime > this.maxGameTime) this.setGameOver('time');
         return deltaTime;
     }
 
@@ -359,7 +361,7 @@ class World {
     updateCharacter(deltaTime) {
         this.character.checkAnimationFrameTime(deltaTime);
         this.character.move();
-        if (this.character.isDead()) this.setGameOver();
+        if (this.character.isDead()) this.setGameOver('character');
     }
 
     /**

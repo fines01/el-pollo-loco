@@ -124,11 +124,14 @@ function setWinScreen() {
 /**
  * Sets loseer screen and plays loser jingle
  */
-function setLoserScreen() {
-    show('loser-screen', 'screen-text-small');
+function setLoserScreen(reasonLost, missedCoins) {
+    show('loser-screen', 'screen-text-small', 'screen-text-big');
     hide('key-panel-top', 'key-panel-bottom');
     getId('screen-text-small').innerHTML = screenTextSmallHTML();
+    let loseText = getId('screen-text-big');
+    loseText.classList.add('endscreen-text')
     world.loseSound.play();
+    loseText.innerHTML = screenTextBigHTML(reasonLost, missedCoins);
 }
 
 /**

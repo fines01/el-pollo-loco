@@ -45,12 +45,15 @@ function screenTextSmallHTML(nextLevel = false ) {
 }
 
 /** 
- * Checks if user is on a touch or desktop device, returns the corresponding HTML.
+ * Checks if user is on a touch or desktop device and eventual reasons for a lost game, returns the corresponding HTML.
  * @returns {string} - HTML string
  */
-function screenTextBigHTML() {
-    if(!userIsOnMobileDevice) return'Press ENTER to begin!';
-    else return '<img id="btn-start" src="img/icons/play-sb.ico" ontouchstart="beginGame()"> Start Game!'
+function screenTextBigHTML( lose = undefined, value = undefined ) {
+    if (lose == 'coins') return `Missed coins: ${value}`;
+    else if (lose == 'character') return 'You died!'
+    else if (lose == 'time') return 'Time is up!'
+    else if(!userIsOnMobileDevice && !lose) return'Press ENTER to begin!';
+    else if (userIsOnMobileDevice && !lose) return '<img id="btn-start" src="img/icons/play-sb.ico" ontouchstart="beginGame()"> Start Game!'
 }
 
 /** 
