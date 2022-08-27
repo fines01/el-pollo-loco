@@ -11,7 +11,7 @@ class Character extends MovableObject {
     imgHeight = this.height*0.55;
 
     groundLevelY = 220;
-    speedX = 8;//1.5;
+    speedX = 4;//1.5;
     jumpHeight = 28;
     
     animationFPS = 35; //25;

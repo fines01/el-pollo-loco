@@ -3,9 +3,12 @@ class Keyboard {
     LEFT = false;
     RIGHT = false;
     UP = false;
-    DOWN = false;
     SPACE = false;
     ENTER = false;
+
+    // touchButtons = getId('btn-left', 'btn-right', 'btn-jump', 'btn-throw');
+    // keys = ['LEFT', 'RIGHT', 'UP', 'ENTER', 'SPACE'];
+    // keyCodes = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'Enter', 'Space']
     
     /**
      * Creates a Keyboard object to control the user's game inputs
@@ -19,8 +22,8 @@ class Keyboard {
      * Binds key press events
      */
     handleKeyPress() {
-        window.addEventListener('keydown', (event) => {
-            switch (event.code) {
+        window.addEventListener('keydown', (e) => {
+            switch (e.code) {
                 case 'ArrowRight':
                     this.RIGHT = true;
                     break;
@@ -29,9 +32,6 @@ class Keyboard {
                     break;
                 case 'ArrowUp':
                     this.UP = true;
-                    break;
-                case 'ArrowDown':
-                    this.DOWN = true;
                     break;
                 case 'Space':
                     this.SPACE = true;
@@ -42,8 +42,8 @@ class Keyboard {
             }
         });
 
-        window.addEventListener('keyup', (event) => {
-            switch (event.code) {
+        window.addEventListener('keyup', (e) => {
+            switch (e.code) {
                 case 'ArrowRight':
                     this.RIGHT = false;
                     break;
@@ -52,9 +52,6 @@ class Keyboard {
                     break;
                 case 'ArrowUp':
                     this.UP = false;
-                    break;
-                case 'ArrowDown':
-                    this.DOWN = false;
                     break;
                 case 'Space':
                     this.SPACE = false;
@@ -70,39 +67,20 @@ class Keyboard {
      * Binds button press events
      */
     handleTouchButtonPress() {
-        getId('btn-left').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.LEFT = true;
+        let btns = getId('btn-left', 'btn-right', 'btn-jump', 'btn-throw');
+        let keys = ['LEFT', 'RIGHT', 'UP', 'ENTER'];
+        btns.forEach((btn, index)=> {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this[keys[index]] = true;
+            });
         });
-        getId('btn-right').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.RIGHT = true;
+        btns.forEach((btn, index) => {
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this[keys[index]] = false;
+            });
         });
-        getId('btn-jump').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.UP = true;
-        });
-        getId('btn-throw').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            this.ENTER = true;
-        });
-        
-        getId('btn-left').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.LEFT = false;
-        });
-        getId('btn-right').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.RIGHT = false;
-        });
-        getId('btn-jump').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.UP = false;
-        });
-        getId('btn-throw').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.ENTER = false;
-        });
-    
     }
+
 }

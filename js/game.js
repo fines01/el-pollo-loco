@@ -36,13 +36,7 @@ window.addEventListener('keydown', (e) => {
 
 /** Binds touchscreen button-press events to control UI */
 function bindTouchButtonEvents() {
-    // if( getId('btn-start')) getId('btn-start').addEventListener('touchstart', (e) => {
-    //     e.preventDefault();
-    //     if (!world && !helpScreenMode) beginGame();
-    //     if(world && world.gameOver && !world.gamePaused) restartGame();
-    // });
     getId('btn-pause').addEventListener('touchstart', (e) => {
-        //e.preventDefault();
         if (world && !helpScreenMode) togglePause();
     }, {
         passive: true
@@ -52,7 +46,6 @@ function bindTouchButtonEvents() {
         toggleHelpScreen();
     });
     getId('fullscreen-icon').addEventListener('touchstart', (e) => {
-        //e.preventDefault();
         toggleFullScreen();
     }, {
         passive: true

@@ -1,4 +1,4 @@
-class ThrowableObject extends CollectibleObject {
+class ThrowableObject extends MovableObject {
 
     /**
      * Sets throw coordinates for the beginning of a throw, 

@@ -185,7 +185,7 @@ class World {
     /**
      * Removes marked objects from passed arrays
      * @todo [FIX] (splice in forEach() )
-     * @param  {...Objects} objArrs 
+     * @param  {...Object} objArrs 
      */
     removeMarkedObjects(...objArrs) {
         for (let i = 0; i < objArrs.length; i++) {
@@ -199,7 +199,7 @@ class World {
 
     /**
       * Removes marked objects from given arrays
-      * @param  {...Objects} objArrs 
+      * @param  {...Object} objArrs 
     */
     removeMarkedObjects2() {
         this.level.collectibleObjects = this.level.collectibleObjects.filter(collectible => !collectible.markedForDeletion);
@@ -396,7 +396,6 @@ class World {
      */
     run() {
         this.controlGameMusic();
-        // create game loop
         let self = this;
         if (!this.gameOver && !this.gamePaused) requestAnimationFrame(() => {
             let timeStamp = Date.now();
