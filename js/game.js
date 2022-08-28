@@ -1,5 +1,6 @@
 /* set global canvas variables: get css variables, remove string 'px' and save the numeric values. */
 const root = document.documentElement;
+
 let canvasWidth = getComputedStyle(root).getPropertyValue('--canvasWidth').replace('px', '') * 1;
 let canvasHeight = getComputedStyle(root).getPropertyValue('--canvasHeight').replace('px', '') * 1;
 
@@ -19,6 +20,7 @@ window.addEventListener('load', () => {
 /** Sets css variables after a resize event of the window */
 window.addEventListener('resize', (e) => {
     initDeviceMode();
+    if (!document.fullscreenElement && fullScreenMode) closeFullScreen(); // because Chrome does not fire a key event when using esc to leave fullscreen.
 });
 
 /** Binds key press events to control UI outside of the game logic */
@@ -29,9 +31,9 @@ window.addEventListener('keydown', (e) => {
     if (e.code == 'KeyP' && world && !helpScreenMode) togglePause();
     if (e.code == 'KeyF' && world) world.setDevMode();
     if (e.code == 'KeyH') toggleHelpScreen();
-    if (e.code == 'KeyS' && !fullScreenMode) toggleFullScreen();
     if (e.code == 'KeyC') toggleTouchOption();
-    if (e.code == 'Escape' && fullScreenMode && window.innerWidth > 720) closeFullScreen();
+    if (e.code == 'KeyS' && !fullScreenMode) toggleFullScreen();
+    if (e.code == 'Escape' && fullScreenMode) toggleFullScreen();
 });
 
 /** Binds touchscreen button-press events to control UI */
@@ -94,11 +96,9 @@ function startGame() {
  * @todo [DECIDE:] pause jingles or only start new level after jugles ended? (note: 1 possibility has the downside that a new game is started 'accidentally' after hitting throw-Enter in a game)
  */
 function restartGame() {
-    // world.winSound.pause();
-    // world.loseSound.pause();
     if (world.winSound.ended || world.loseSound.ended) {
         checkLevel();
-        startGame(); // beginGame(235) and show Level w animation?
+        startGame();
     }
 }
 
@@ -204,16 +204,16 @@ function toggleTouchOption() {
  */
 function setCanvasCssVars() {
     if (window.innerHeight <= canvasHeight && wideScreenAspectRatio()) {
-        openFullHeightScreen();
+        setFullHeightScreen();
     } 
     else if (window.innerWidth <= canvasWidth) {
-        openFullWidthScreen();
+        setFullWidthScreen();
     }
     if (window.innerWidth > canvasWidth && window.innerHeight > canvasHeight && !fullScreenMode) {
         closeFullScreen();
     }
-   else if (fullScreenMode && wideScreenAspectRatio()) openFullHeightScreen();
-   else openFullWidthScreen();
+   else if (fullScreenMode && wideScreenAspectRatio()) setFullHeightScreen();
+   else setFullWidthScreen();
 }
 
 /**
@@ -221,7 +221,7 @@ function setCanvasCssVars() {
  * by setting --canvasWidth to full screen width and keeping the ratio for --camvasHeight,
  * adapts the HTML view
  */
-function openFullWidthScreen() {
+function setFullWidthScreen() {
     root.style.setProperty('--canvasWidth', document.documentElement.clientWidth + 'px');
     root.style.setProperty('--canvasHeight', document.documentElement.clientWidth / 1.5 + 'px');
     fullScreenMode = true;
@@ -258,12 +258,14 @@ function removeFullWidthStyle() {
 
 /**
  * Sets global CSS custom properties (css variables) for full height canvas screens
- * by setting --canvasHeight to full screen height and keeping the ratio for --camvasWidth,
+ * by setting --canvasHeight to full screen height,
  * adapts the HTML view
  */
-function openFullHeightScreen() {
+function setFullHeightScreen() {
+
     root.style.setProperty('--canvasHeight', document.documentElement.clientHeight + 'px');
-    root.style.setProperty('--canvasWidth', document.documentElement.clientHeight * 1.5 + 'px');
+    // //root.style.setProperty('--canvasWidth', document.documentElement.clientHeight * 1.5 + 'px');
+    root.style.setProperty('--canvasWidth', document.documentElement.clientWidth + 'px');
     setFullWidthStyle();
     fullScreenMode = true;
 }
@@ -273,19 +275,32 @@ function openFullHeightScreen() {
  * adapts HTML view
  */
 function closeFullScreen() {
-    root.style.setProperty('--canvasWidth', canvasWidth + 'px');
-    root.style.setProperty('--canvasHeight', canvasHeight + 'px');
+    if (window.innerWidth >= canvasWidth && window.innerHeight >= canvasHeight ) {
+        root.style.setProperty('--canvasWidth', canvasWidth + 'px');
+        root.style.setProperty('--canvasHeight', canvasHeight + 'px');
+    }
     fullScreenMode = false;
-    removeFullWidthStyle();
+    removeFullWidthStyle();   
 }
 
 /**
  * Checks current fullscren mode and client screen dimensions, opens or closes full screen accordingly
  */
 function toggleFullScreen() {
-    if (!fullScreenMode && wideScreenAspectRatio()) openFullHeightScreen();
-    else if (!fullScreenMode) openFullWidthScreen();
+
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) //fullScreenMode set in set..FullScreen() 
+    document.documentElement.requestFullscreen().then(() => console.log('open fullscreen')).catch(err => console.log(err));
+
+    else if (document.fullscreenElement) {
+        document.exitFullscreen().then(() => console.log('close fullscreen')).catch(err => console.log(err));
+    }
+    
+    if (!fullScreenMode && wideScreenAspectRatio()) setFullHeightScreen();
+    else if (!fullScreenMode) setFullWidthScreen();
     else if (fullScreenMode && window.innerWidth > 720) closeFullScreen();
+    
+    console.log(fullScreenMode);
+
 }
 
 /**

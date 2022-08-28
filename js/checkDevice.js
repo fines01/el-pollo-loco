@@ -8,19 +8,10 @@ function checkIfUserIsOnMobileDevice() {
    let userAgent = navigator.userAgent.toLowerCase();
    let width = screen.availWidth;
    let height = screen.availHeight;
-
-   if(userAgent.includes('mobi') || userAgent.includes('tablet')){
-      return true;
-   }
-   if(userAgent.includes('android')) {
-      if(height > width && width < 800) {
-         // Screen is higher than it’s wide, so we have portrait mode
-         return true;
-      }
-      if(width > height && height < 800) {
-         // Screen is wider than it’s high, so we have landscape mode
-         return true;
-      }
+   if (userAgent.includes('mobi') || userAgent.includes('tablet')) return true;
+   if (userAgent.includes('android')) {
+      if (height > width && width < 800) return true; // Screen is higher than it’s wide, so we have portrait mode
+      if (width > height && height < 800) return true; // Screen is wider than it’s high, so we have landscape mode
    }
    return false;
 }
@@ -29,9 +20,8 @@ function checkIfUserIsOnMobileDevice() {
  * Logs the detected user's device type (mobile or desktop) in the console
  */
 function logDevice() {
-   if (userIsOnMobileDevice) {
+   if (userIsOnMobileDevice) 
       console.log('CHECK: You are on a mobile device.');
-   } else {
+    else 
       console.log('CHECK: You are on a desktop device.');
-   }
 }

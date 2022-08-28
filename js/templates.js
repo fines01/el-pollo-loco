@@ -65,28 +65,4 @@ function endScreenTextSmallHTML() {
     else return 'YOU WON ALL LEVELS! <img src=""> Start again';
 }
 
-// function keyPanelTopHTML() {
-//     return /*html*/ `
-//         <div class="panel-wrapper"></div>
-//         <div class="panel-wrapper">
-//             <img id="btn-pause" class="control-btn" src="img/icons/pause-1.ico" title="toggle pause" alt="pause button">
-//         </div>
-//     `;
-// }
-
-// function keypanelBottomHTML() {
-//     return /*html*/ `
-//         <!-- keys left (right/left run) -->
-//          <div class="panel-wrapper">
-//             <img id="btn-left" class="control-btn" src="img/icons/left.ico" title="move left" alt="move left button">
-//             <img id="btn-right" class="control-btn" src="img/icons/right.ico" title="move-right" alt="move right button">
-//         </div>
-//         <!-- keys right (e.g. throw, jump) -->
-//          <div class="panel-wrapper">
-//             <img id="btn-jump" class="control-btn" src="img/icons/jump.ico" title="jump" alt="jump">
-//             <img id="btn-throw" class="control-btn" src="img/icons/throw.ico" title="throw bottle" alt="">
-//         </div>
-//     `;
-// }
-
 
