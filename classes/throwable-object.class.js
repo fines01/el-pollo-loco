@@ -35,17 +35,6 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * play throw animation
-     * @todo [DECIDE IF:] remove setInterval() function & instead apply checkAnimationFrameTime() here as well?
-     * @todo [DECIDE IF:] play throw sound here (but only at the beginning of the throw, so only at first animation loop)
-     */
-    animateThrow() {
-        setInterval(()=>{
-            this.playAnimation(this.IMAGES_ROTATE);
-        },1000/20);
-    }
-
-    /**
      * play visual and auditory splash animation
      */
     animateSplash() {

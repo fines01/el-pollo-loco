@@ -13,7 +13,6 @@ class World {
     gameOver = true;
     audioPaths = 
     [
-        //'audio/test/happy.mp3', // test
         'audio/it_takes_a_hero.wav',
         'audio/countdown3.mp3',
         'audio/win_jingle.wav',

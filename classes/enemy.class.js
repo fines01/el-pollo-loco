@@ -32,6 +32,7 @@ class Enemy extends MovableObject {
         if (this.animationFrameTimer > this.animationFrameInterval) {
             if (this instanceof Endboss) this.animateEndboss();
             else this.animateEnemies();
+            this.setVolume();
             this.animationFrameTimer = 0;
         } else {
             this.animationFrameTimer += deltaTime;
@@ -55,14 +56,6 @@ class Enemy extends MovableObject {
         this.applyGravity();
         if (this.isDead()) this.loadImage(this.IMAGE_DEAD);
         else this.playAnimation(this.IMAGES_WALKING);
-    }
-
-    /**
-     * Contains all enemie animations to be called in the checkAnimationFrameTime(dt) function
-     */
-    animate() {
-        if (this instanceof Endboss) this.animateEndboss();
-        else this.animateEnemies();
     }
 
     /**

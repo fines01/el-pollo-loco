@@ -500,6 +500,10 @@ input[type="range"]::-ms-fill-upper {
         justify-content: space-around;
     }
 
+    #volume-slider {
+        right: 1rem;
+    }
+
 }
 
 @media only screen and (max-height: 600px) {
@@ -555,6 +559,10 @@ input[type="range"]::-ms-fill-upper {
     .panel-bottom-fullscreen {
         margin-left: 0;
         margin-right: 0;
+    }
+
+    #help-screen {
+        line-height: 1.5;
     }
 
     #help-icon {

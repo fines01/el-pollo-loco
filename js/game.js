@@ -23,8 +23,6 @@ window.addEventListener('load', () => {
 window.addEventListener('resize', (e) => {
     if (!document.fullscreenElement && fullScreenMode && !userIsOnMobileDevice) closeFullScreen(); // because Chrome does not fire a key event when using esc to leave fullscreen.
     initDeviceMode();
-    // if (userIsOnMobileDevice) setFullScreenView();
-    // else toggleTouchButtons();
 });
 
 /** Binds key press events to control UI outside of the game logic */
@@ -56,7 +54,6 @@ function bindTouchButtonEvents() {
     }, {
         passive: true
     });
-
 }
 
 /**
@@ -66,7 +63,7 @@ function initDeviceMode() {
     userIsOnMobileDevice = checkIfUserIsOnMobileDevice();
     logDevice(); // Check
     setCanvasCssVars();
-    if (!world) setStartScreen();
+    if (!world) getId('screen-text-big').innerHTML = screenTextBigHTML();;
     toggleControlHelp();
     if (userIsOnMobileDevice) setFullScreenView();
     else toggleTouchButtons();
@@ -108,11 +105,10 @@ function restartGame() {
     }
 }
 
-function setStartScreen() {
-    getId('screen-text-big').innerHTML = screenTextBigHTML();
-}
-
-function setVolume() {
+/**
+ * Adjusts the volume modifier to set sound volumes according to user input
+ */
+function adjustVolume() {
     let value = getId('volume-slider').value;
     volumeModifier = value * 0.01;
 }
@@ -202,15 +198,21 @@ function toggleTouchOption() {
     userIsOnMobileDevice = !userIsOnMobileDevice;
     if (helpScreenMode) showHelpScreen();
     toggleTouchButtons();
-    if (!world) setStartScreen();
+    if (!world) getId('screen-text-big').innerHTML = screenTextBigHTML();
     else getId('screen-text-small').innerHTML = screenTextSmallHTML();
 }
 
+/**
+ * Checks device and game status and shows or hides game control touchbuttons accordingly
+ */
 function toggleTouchButtons() {
     if (world && userIsOnMobileDevice && !world.gameOver) show('key-panel-top', 'key-panel-bottom'); // and add margin-left to .btn-toggle-touch
     if (world && !userIsOnMobileDevice) hide('key-panel-top', 'key-panel-bottom');
 }
 
+/**
+ * Shows the most important control buttons for the game on desktop devices
+ */
 function toggleControlHelp() {
     if (userIsOnMobileDevice) hide('control-help');
     else show('control-help');
@@ -223,17 +225,13 @@ function toggleControlHelp() {
  * @todo decide if full screen mode should be preserved on resize event as done here (eg when a mobile device is tilted)
  */
 function setCanvasCssVars() {
-    if (window.innerHeight <= canvasHeight && wideScreenAspectRatio()) {
-        setFullHeightScreen();
-    } 
-    else if (window.innerWidth <= canvasWidth) {
-        setFullWidthScreen();
-    }
-    if (window.innerWidth > canvasWidth && window.innerHeight > canvasHeight && !fullScreenMode) {
+    if (window.innerHeight <= canvasHeight && wideScreenAspectRatio()) setFullHeightScreen();
+    else if (window.innerWidth <= canvasWidth) setFullWidthScreen();
+    
+    if (window.innerWidth > canvasWidth && window.innerHeight > canvasHeight && !fullScreenMode)
         closeFullScreen();
-    }
-   else if (fullScreenMode && wideScreenAspectRatio()) setFullHeightScreen();
-   else setFullWidthScreen();
+    else if (fullScreenMode && wideScreenAspectRatio()) setFullHeightScreen();
+    else setFullWidthScreen();
 }
 
 /**
@@ -253,7 +251,6 @@ function setFullWidthScreen() {
  */
 function setFullWidthStyle() {
     let panelTop, panelBottom;
-    //show('key-panel-top', 'key-panel-bottom');
     getId('help-icon').classList.add('help-icon-fullscreen');
     document.getElementsByTagName('h1')[0].classList.add('d-none');
     [panelTop, panelBottom] = getId('key-panel-top', 'key-panel-bottom');
@@ -282,9 +279,7 @@ function removeFullWidthStyle() {
  * adapts the HTML view
  */
 function setFullHeightScreen() {
-
     root.style.setProperty('--canvasHeight', document.documentElement.clientHeight + 'px');
-    // //root.style.setProperty('--canvasWidth', document.documentElement.clientHeight * 1.5 + 'px');
     root.style.setProperty('--canvasWidth', document.documentElement.clientWidth + 'px');
     setFullWidthStyle();
     fullScreenMode = true;
@@ -309,16 +304,13 @@ function closeFullScreen() {
 function toggleFullScreen() {
 
     if (!document.fullscreenElement && document.documentElement.requestFullscreen) { //fullScreenMode set in set..FullScreen() 
-        document.documentElement.requestFullscreen().then(() => console.log('open fullscreen')).catch(err => console.log(err));
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
     }
 
     else if (document.fullscreenElement) {
-        document.exitFullscreen().then(() => console.log('close fullscreen')).catch(err => console.log(err));
+        document.exitFullscreen().catch(err => console.log(err));
     }
     setFullScreenView();
-
-    console.log(fullScreenMode);
-
 }
 
 function setFullScreenView() {

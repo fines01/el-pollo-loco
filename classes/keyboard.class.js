@@ -5,10 +5,6 @@ class Keyboard {
     UP = false;
     SPACE = false;
     ENTER = false;
-
-    // touchButtons = getId('btn-left', 'btn-right', 'btn-jump', 'btn-throw');
-    // keys = ['LEFT', 'RIGHT', 'UP', 'ENTER', 'SPACE'];
-    // keyCodes = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'Enter', 'Space']
     
     /**
      * Creates a Keyboard object to control the user's game inputs
@@ -23,44 +19,60 @@ class Keyboard {
      */
     handleKeyPress() {
         window.addEventListener('keydown', (e) => {
-            switch (e.code) {
-                case 'ArrowRight':
-                    this.RIGHT = true;
-                    break;
-                case 'ArrowLeft':
-                    this.LEFT = true;
-                    break;
-                case 'ArrowUp':
-                    this.UP = true;
-                    break;
-                case 'Space':
-                    this.SPACE = true;
-                    break;
-                case 'Enter':
-                    this.ENTER = true;
-                    break;
-            }
+            this.checkKeydown(e.code);
         });
 
         window.addEventListener('keyup', (e) => {
-            switch (e.code) {
-                case 'ArrowRight':
-                    this.RIGHT = false;
-                    break;
-                case 'ArrowLeft':
-                    this.LEFT = false;
-                    break;
-                case 'ArrowUp':
-                    this.UP = false;
-                    break;
-                case 'Space':
-                    this.SPACE = false;
-                    break;
-                case 'Enter':
-                    this.ENTER = false;
-                    break;
-            } 
+            this.checkKeyup(e.code);
         });
+    }
+
+    /**
+     * Checks key codes of keydown events and sets key values accordingly
+     * @param { string } keyCode - key code of a keypress event
+     */
+    checkKeydown(keyCode) {
+        switch (keyCode) {
+            case 'ArrowRight':
+                this.RIGHT = true;
+                break;
+            case 'ArrowLeft':
+                this.LEFT = true;
+                break;
+            case 'ArrowUp':
+                this.UP = true;
+                break;
+            case 'Space':
+                this.SPACE = true;
+                break;
+            case 'Enter':
+                this.ENTER = true;
+                break;
+        }
+    }
+
+    /**
+     * Checks key codes of keyup events and sets key values accordingly
+     * @param { string } keyCode - key code of a keypress event
+     */
+    checkKeyup(keyCode) {
+        switch (keyCode) {
+            case 'ArrowRight':
+               this.RIGHT = false;
+                break;
+            case 'ArrowLeft':
+                this.LEFT = false;
+                break;
+            case 'ArrowUp':
+                this.UP = false;
+                break;
+            case 'Space':
+                this.SPACE = false;
+                break;
+            case 'Enter':
+                this.ENTER = false;
+                break;
+        }
     }
 
     /**
