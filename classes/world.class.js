@@ -97,12 +97,12 @@ class World {
      */
     setAudio() {
         [this.gameMusic, this.countdownSound, this.winSound, this.loseSound] = this.character.createAudio(...this.audioPaths);
-        this.countdownSound.volume = 0.4;
-        this.winSound.volume = 0.4;
+        this.countdownSound.volume = 0.4 * volumeModifier;
+        this.winSound.volume = 0.4 * volumeModifier;
         this.winSound.playbackRate = 1.5;
-        this.loseSound.volume = 0.5;
+        this.loseSound.volume = 0.5 * volumeModifier;
         this.loseSound.playbackRate = 1.5;
-        this.gameMusic.volume = 0.2;
+        this.gameMusic.volume = 0.2 * volumeModifier;
         this.gameMusic.loop = true;
         this.gameMusic.play();
     }
@@ -314,8 +314,21 @@ class World {
      * Starts and stops game music according to the game satus
      */
     controlGameMusic() {
+        this.checkVolumeChanges();
         if (this.gameOver || this.gamePaused) this.gameMusic.pause();
         else this.gameMusic.play();
+    }
+
+    checkVolumeChanges() {
+        this.countdownSound.volume = 0.4 * volumeModifier;
+        this.winSound.volume = 0.4 * volumeModifier;
+        this.loseSound.volume = 0.5 * volumeModifier;
+        this.gameMusic.volume = 0.2 * volumeModifier;
+
+        this.character.hurtSound.volume = 0.3 * volumeModifier;;
+        this.character.jumpingSound.volume = 1 * volumeModifier;
+        this.character.walkingSound.volume = 1 * volumeModifier;
+        this.character.dyingSound.volume = 0.1 * volumeModifier;
     }
 
     /**

@@ -24,6 +24,10 @@ class Coin extends MovableObject {
         this.collectSound.playbackRate = 1.5;
     }
 
+    setVolume() {
+        this.collectSound.volume = 1 * volumeModifier;
+    }
+
     /**
      * Corrects the dimensions of an object 's actual hit area compared to the dimensions of its image element
      */
@@ -40,6 +44,7 @@ class Coin extends MovableObject {
      */
     animate() {
         this.pulse(13);
+        this.setVolume();
     }
 
 }

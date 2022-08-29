@@ -8,7 +8,8 @@ let level, world, userIsOnMobileDevice;
 let helpScreenMode = false;
 let fullScreenMode = false;
 let levelCounter = 1;
-let maxLevels = 9;
+let maxLevels = 10;
+let volumeModifier = 0.8;
 
 /** Sets css variables and sets the default (first) level on pageload */
 window.addEventListener('load', () => {
@@ -109,6 +110,11 @@ function restartGame() {
 
 function setStartScreen() {
     getId('screen-text-big').innerHTML = screenTextBigHTML();
+}
+
+function setVolume() {
+    let value = getId('volume-slider').value;
+    volumeModifier = value * 0.01;
 }
 
 /**
@@ -310,7 +316,7 @@ function toggleFullScreen() {
         document.exitFullscreen().then(() => console.log('close fullscreen')).catch(err => console.log(err));
     }
     setFullScreenView();
-    
+
     console.log(fullScreenMode);
 
 }

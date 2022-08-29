@@ -92,6 +92,7 @@ class Bottle extends ThrowableObject {
     animate() {
         if (this.throwObject) this.animateBottleThrow();
         if (!this.throwObject) this.animateBottlePulse();
+        this.setVolume();
     }
 
     /**
@@ -101,8 +102,14 @@ class Bottle extends ThrowableObject {
     setAudio() {
         [this.throwSound, this.splashSound, this.collectSound] = this.createAudio(...this.audioPaths);
         this.splashSound.playbackRate = 2;
-        this.collectSound.volume = 0.6;
         this.throwSound.playbackRate = 1.5;
+        this.setVolume();
+    }
+
+    setVolume(){
+        this.collectSound.volume = 0.6 * volumeModifier;
+        this.throwSound.volume = 1 * volumeModifier;
+        this.splashSound.volume = 1 * volumeModifier;
     }
 
     /**

@@ -12,8 +12,12 @@ class Enemy extends MovableObject {
     constructor(){
         super();
         this.hurtSound.playbackRate = 1.5;
-        this.hurtSound.volume = 0.35;
+        this.setVolume();
         this.speedModifier = (levelCounter - 1) * 0.4; // todo change speed modifier 
+    }
+
+    setVolume() {
+        this.hurtSound.volume = 0.35 * volumeModifier;
     }
 
     /**
@@ -62,6 +66,7 @@ class Enemy extends MovableObject {
      * Updates enemy movement on canvas
      */
     move() {
+        this.setVolume();
         this.checkHitarea();
         if (this.isDead()) {
             setTimeout(() => {

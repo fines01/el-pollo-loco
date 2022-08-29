@@ -60,7 +60,11 @@ class Endboss extends Enemy {
         this.x = levelEndX;
         this.animateEndboss();
         this.hurtSound.playbackRate = 0.5;
-        this.hurtSound.volume = 0.55;
+        this.setVolume();
+    }
+
+    setVolume() {
+        this.hurtSound.volume = 0.55 * volumeModifier;
     }
 
     /**
@@ -77,6 +81,7 @@ class Endboss extends Enemy {
      * Plays endboss animations
      */
     animateEndboss() {
+        this.setVolume();
             this.checkHitarea();
             if (this.keyboard.RIGHT || this.keyboard.LEFT){
                 this.playAnimation(this.IMAGES_WALKING);
