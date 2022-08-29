@@ -24,6 +24,9 @@ class Coin extends MovableObject {
         this.collectSound.playbackRate = 1.5;
     }
 
+    /**
+    * Sets the audio vulume properties in relation to a modifier
+    */
     setVolume() {
         this.collectSound.volume = 1 * volumeModifier;
     }

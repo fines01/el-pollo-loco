@@ -106,6 +106,9 @@ class Bottle extends ThrowableObject {
         this.setVolume();
     }
 
+    /**
+     * Sets the audio vulume properties in relation to a modifier
+     */
     setVolume(){
         this.collectSound.volume = 0.6 * volumeModifier;
         this.throwSound.volume = 1 * volumeModifier;

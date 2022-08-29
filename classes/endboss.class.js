@@ -63,6 +63,9 @@ class Endboss extends Enemy {
         this.setVolume();
     }
 
+    /**
+    * Sets the audio vulume properties in relation to a modifier
+    */
     setVolume() {
         this.hurtSound.volume = 0.55 * volumeModifier;
     }

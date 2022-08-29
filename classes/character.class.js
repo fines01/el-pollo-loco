@@ -123,13 +123,21 @@ class Character extends MovableObject {
     setAudio() {
         [this.walkingSound, this.dyingSound, this.hurtSound, this.jumpingSound] = this.createAudio(...this.audioPaths);
         this.hurtSound.playbackRate = 2;
-        this.hurtSound.volume= 0.3 * volumeModifier;;
         this.jumpingSound.playbackRate = 1.2;
         this.walkingSound.playbackRate = 2;
-        this.dyingSound.volume = 0.1 * volumeModifier;
         this.dyingSound.playbackRate = 2;
-        this.jumpingSound.volume = 1 * volumeModifier;
+        this.setVolume();
+    }
+    
+    /**
+     * Sets the audio vulume properties in relation to a modifier
+     * so that the volume can be adjusted by the user.
+     */
+    setVolume() {
         this.walkingSound.volume = 1 * volumeModifier;
+        this.dyingSound.volume = 0.1 * volumeModifier;
+        this.hurtSound.volume= 0.3 * volumeModifier;;
+        this.jumpingSound.volume = 1 * volumeModifier;
     }
 
     /**
@@ -197,6 +205,7 @@ class Character extends MovableObject {
      * Plays visual character animation depending on character states
      */
     animate() {
+        this.setVolume();
         this.applyGravity(); 
         if (this.isDead()) this.animateDeath();
         else if (this.isHurt()) this.playAnimation(this.IMAGES_HURT);

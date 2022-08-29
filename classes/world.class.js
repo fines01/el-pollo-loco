@@ -13,8 +13,8 @@ class World {
     gameOver = true;
     audioPaths = 
     [
-        'audio/test/happy.mp3', // alt.: brutal game music
-        //'audio/it_takes_a_hero.wav',
+        //'audio/test/happy.mp3', // test
+        'audio/it_takes_a_hero.wav',
         'audio/countdown3.mp3',
         'audio/win_jingle.wav',
         'audio/warp_jingle.wav',
@@ -29,8 +29,7 @@ class World {
         this.canvas.width = canvasWidth;
         this.canvas.height = canvasHeight;
         this.character = new Character(this);
-        // this.volumeModifier = this.character.volumeModifier;
-        this.level = level; //setLevel(levelNo);
+        this.level = level;
         this.maxGameTime = this.level.maxGameTime;
         this.endboss = this.level.enemies[this.level.enemies.length - 1];
         this.statusbars = [new StatusBar(-5, 'energy', 100), new StatusBar(20, 'coins', 0, 100 / this.level.amountCoins), new StatusBar(45, 'bottles', 0, 100 / this.level.amountBottles)];
@@ -97,14 +96,23 @@ class World {
      */
     setAudio() {
         [this.gameMusic, this.countdownSound, this.winSound, this.loseSound] = this.character.createAudio(...this.audioPaths);
-        this.countdownSound.volume = 0.4 * volumeModifier;
-        this.winSound.volume = 0.4 * volumeModifier;
+        this.setVolume();
         this.winSound.playbackRate = 1.5;
-        this.loseSound.volume = 0.5 * volumeModifier;
         this.loseSound.playbackRate = 1.5;
-        this.gameMusic.volume = 0.2 * volumeModifier;
         this.gameMusic.loop = true;
         this.gameMusic.play();
+    }
+    
+    /**
+     * Sets the audio vulume properties in relation to a modifier
+     * so that the volume can be adjusted by the user.
+     */
+    setVolume() {
+        this.gameMusic.volume = 0.2 * volumeModifier;
+        this.countdownSound.volume = 0.4 * volumeModifier;
+        this.winSound.volume = 0.4 * volumeModifier;
+        this.loseSound.volume = 0.5 * volumeModifier;
+
     }
 
     /**
@@ -233,7 +241,6 @@ class World {
         else bottleX = this.character.x + this.character.width * 0.5;
         // throw bottle
         bottle.setThrowStart(bottleX, this.character.y + 80);
-        //bottle.animateThrow(); //bottle.checkAnimationFrameTime(deltaTime); & remove animateThrow();
         // update game status UI
         this.collectedBottles--;
         this.statusbars[2].setStatusbar(this.collectedBottles);
@@ -319,16 +326,14 @@ class World {
         else this.gameMusic.play();
     }
 
+    /**
+     * checks for the eventually changed volume modifier and sets audio volume properties in relation to the modifier
+     * @Todo do an actual check first or just keep setting volume?
+     */
     checkVolumeChanges() {
-        this.countdownSound.volume = 0.4 * volumeModifier;
-        this.winSound.volume = 0.4 * volumeModifier;
-        this.loseSound.volume = 0.5 * volumeModifier;
-        this.gameMusic.volume = 0.2 * volumeModifier;
-
-        this.character.hurtSound.volume = 0.3 * volumeModifier;;
-        this.character.jumpingSound.volume = 1 * volumeModifier;
-        this.character.walkingSound.volume = 1 * volumeModifier;
-        this.character.dyingSound.volume = 0.1 * volumeModifier;
+        this.setVolume();
+        this.character.setVolume();
+        // setVolume for bottles, throwobj, coins, enemies are updated in their resp animate functions 8for now)
     }
 
     /**
