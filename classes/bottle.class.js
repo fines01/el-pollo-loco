@@ -15,9 +15,9 @@ class Bottle extends ThrowableObject {
     pulseTimer = 0;
 
     audioPaths = [
-        'audio/swish_3.wav', // throw sound
-        'audio/Bottle Break.wav', // bottle break sound
-        'audio/coin.wav' // collect bottle sound
+        'audio/bottle_throw.wav', 
+        'audio/bottle_break.wav',
+        'audio/bottle_collect.wav'
     ];
     IMAGE = 'img/6.botella/1.Marcador.png'; // img/6.botella/1.Marcador.png // 'img/7.Marcadores/Icono/Botella.png'
     IMAGES_GROUND = [

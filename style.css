@@ -10,7 +10,6 @@
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
-    font-family: 'Roboto';
     position: relative;
     display: flex;
     flex-direction: column;
@@ -109,11 +108,15 @@ h4{
 }
 
 #screen-text-big, #screen-text-small {
-    cursor: pointer;
+    /* cursor: pointer; */
     font-family: 'Coming Soon', cursive;
 }
 
-#screen-text-big:hover, #screen-text-small:hover {
+#begin-game, #screen-text-small {
+    cursor: pointer;
+}
+
+#begin-game:hover, #screen-text-small:hover {
     text-decoration: underline;
 }
 
@@ -295,7 +298,7 @@ canvas {
     justify-content: center;
 }
 
-.key-help {
+#control-help {
     color: yellow;
     font-family: 'Coming Soon';
     position: absolute;
@@ -323,6 +326,7 @@ canvas {
     color: yellow;
     text-decoration: none;
 }
+
 
 /* --- --- Animations --- ---*/
 
@@ -421,7 +425,7 @@ canvas {
         font-size: 0.9rem;
     }
 
-    .key-help {
+    #control-help {
         font-size: 0.9rem;
         justify-content: space-around;
     }
@@ -487,7 +491,7 @@ canvas {
         top: 88%;
     }
 
-    .key-help {
+    #control-help {
         font-size: 0.8rem;
     }
 }
@@ -530,7 +534,7 @@ canvas {
         display: none !important;
     }
 
-    .key-help {
+    #control-help {
         font-size: 0.7rem;
     }
 }
@@ -593,7 +597,7 @@ canvas {
         margin: 0rem 3rem !important;
     }
 
-    .key-help {
+    #control-help {
         font-size: 0.5rem;
     }
 }
@@ -623,7 +627,7 @@ canvas {
         top: 83%
     }
 
-    .key-help {
+    #control-help {
         font-size: 0.4rem;
         top: 1rem;
         /* display: none; */
@@ -646,7 +650,7 @@ canvas {
         right: 3%;
     }
 
-    .key-help {
+    #control-help {
         display: none;
     }
 }

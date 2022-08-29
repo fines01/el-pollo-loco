@@ -20,7 +20,7 @@ class Coin extends MovableObject {
         this.y = 50 + Math.random() * 275;
         this.loadImage(this.IMAGE_COIN);
         this.checkHitarea();
-        this.collectSound = new Audio('audio/Picked Coin Echo.wav');
+        this.collectSound = new Audio('audio/coin_collect.wav');
         this.collectSound.playbackRate = 1.5;
     }
 

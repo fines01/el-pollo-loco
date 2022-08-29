@@ -27,7 +27,7 @@ class Level {
     }
     
     /**
-     * Instanciates one background layer set per passed number of bgLayers and stores them in an array 'backgroundObkects'
+     * Instanciates one background layer set per passed number of bgLayers and stores them in an array 'backgroundObjects'
      * @param {number} bgLengts - defines horizontal length of level
      */
     addBackgroundObjects(bgLengts){
@@ -37,10 +37,10 @@ class Level {
             let bgLayerObjects = [ 
                 new BackgroundObject('img/5.Fondo/Capas/3.Fondo3/Completo.png', x+25, 0, this.levelEndX),
                 new BackgroundObject('img/5.Fondo/Capas/2.Fondo2/completo.png', x+15, 0.5, this.levelEndX),
-                new BackgroundObject('img/5.Fondo/Capas/1.suelo-fondo1/completo.png', x, 1, this.levelEndX),
+                new BackgroundObject('img/5.Fondo/Capas/1.suelo-fondo1/completo.png', x, 1.3, this.levelEndX),
                 new Cloud('img/5.Fondo/Capas/4.nubes/Completo.png', x+50, this.levelEndX),
             ];
-            this.backgroundObjects.push(...bgLayerObjects);        
+            this.backgroundObjects.push(...bgLayerObjects);     
         }
     }
 

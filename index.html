@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- GOOGLE FONTS: TODO remove later and download used font !! -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sancreek&family=Smokum&family=Spicy+Rice&family=Ultra&family=Source+Sans+Pro&family=Roboto&family=Coming+Soon&display=swap" rel="stylesheet">
-    <!-- source sans pro & ... -->
-    <!-- END Google Fonts -->
+    <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="style.css">
     <title>El Pollo Loco</title>
     <!-- Favicon -->
@@ -43,7 +38,7 @@
     <div id="screen-frame" class="">
         <h1>El Pollo Loco</h1>
         <canvas id="canvas" class="screen d-none"></canvas>
-        <h2 id="screen-text-big" onclick="beginGame()"></h2>
+        <h2 id="screen-text-big"></h2>
         <h4 id="screen-text-small" class="d-none" onclick="restartGame()">Press Enter to restart</h4>
         <p id="help-icon" onclick="toggleHelpScreen()"> <img src="img/icons/help.ico" title="toggle helpscreen"></p>
         <img id="fullscreen-icon" src="img/icons/fullscreen.ico" onclick="toggleFullScreen()" title="toggle fullscreen" alt="fullscreen icon">
@@ -68,8 +63,8 @@
                 <img id="btn-throw" class="control-btn" src="img/icons/throw.ico" title="throw bottle" alt="">
             </div>
         </div>
-        <div class="key-help">
-            <span>ENTER: Throw bottle</span> <span>SPACE: Jump</span> <span> ARROW-LEFT / RIGHT: Run</span> <span>P: Pause</span>
+        <div id="control-help" class="key-help">
+            <span>ENTER: Throw bottle</span> <span>SPACE: Jump</span> <span> ARROW-LEFT / RIGHT: Run</span> <span>P: Pause / Play</span>
         </div>
     </div>
 

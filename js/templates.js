@@ -52,7 +52,7 @@ function screenTextBigHTML( lose = undefined, value = undefined ) {
     if (lose == 'coins') return `Missed coins: ${value}`;
     else if (lose == 'character') return 'You died!'
     else if (lose == 'time') return 'Time is up!'
-    else if(!userIsOnMobileDevice && !lose) return'Press ENTER to begin!';
+    else if (!userIsOnMobileDevice && !lose) return '<span id="begin-game" onclick="beginGame()" >Press ENTER to begin!</span>';
     else if (userIsOnMobileDevice && !lose) return '<img id="btn-start" src="img/icons/play-sb.ico" ontouchstart="beginGame()"> Start Game!'
 }
 

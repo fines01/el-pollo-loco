@@ -15,16 +15,19 @@ window.addEventListener('load', () => {
     initDeviceMode();
     bindTouchButtonEvents();
     level = setLevel();
+    //toggleTouchButtons();
 });
 
 /** Sets css variables after a resize event of the window */
 window.addEventListener('resize', (e) => {
+    if (!document.fullscreenElement && fullScreenMode && !userIsOnMobileDevice) closeFullScreen(); // because Chrome does not fire a key event when using esc to leave fullscreen.
     initDeviceMode();
-    if (!document.fullscreenElement && fullScreenMode) closeFullScreen(); // because Chrome does not fire a key event when using esc to leave fullscreen.
+    // if (userIsOnMobileDevice) setFullScreenView();
+    // else toggleTouchButtons();
 });
 
 /** Binds key press events to control UI outside of the game logic */
-// let handleKeypresses = 
+// let bindKeypressEvents = 
 window.addEventListener('keydown', (e) => {
     if (e.code == 'Enter' && !world && !helpScreenMode) beginGame();
     if (e.code == 'Enter' && world && world.gameOver && !world.gamePaused) restartGame();
@@ -32,8 +35,8 @@ window.addEventListener('keydown', (e) => {
     if (e.code == 'KeyF' && world) world.setDevMode();
     if (e.code == 'KeyH') toggleHelpScreen();
     if (e.code == 'KeyC') toggleTouchOption();
-    if (e.code == 'KeyS' && !fullScreenMode) toggleFullScreen();
-    if (e.code == 'Escape' && fullScreenMode) toggleFullScreen();
+    if (e.code == 'KeyS' && !userIsOnMobileDevice && (!fullScreenMode || !document.fullscreenElement)) toggleFullScreen(); 
+    if (e.code == 'Escape' && !userIsOnMobileDevice && (document.fullscreenElement)) toggleFullScreen();
 });
 
 /** Binds touchscreen button-press events to control UI */
@@ -62,7 +65,10 @@ function initDeviceMode() {
     userIsOnMobileDevice = checkIfUserIsOnMobileDevice();
     logDevice(); // Check
     setCanvasCssVars();
-    setStartScreen();
+    if (!world) setStartScreen();
+    toggleControlHelp();
+    if (userIsOnMobileDevice) setFullScreenView();
+    else toggleTouchButtons();
 }
 
 /**
@@ -83,8 +89,7 @@ function beginGame(ms = 300) {
 function startGame() {
     hide('start-screen', 'game-over-screen', 'loser-screen', 'screen-text-big', 'screen-text-small');
     show('canvas');
-    // userIsOnMobileDevice = checkIfUserIsOnMobileDevice();
-    if (fullScreenMode || userIsOnMobileDevice) show('key-panel-top', 'key-panel-bottom');
+    if (userIsOnMobileDevice) show('key-panel-top', 'key-panel-bottom');
     else hide('key-panel-top', 'key-panel-bottom');
     world = new World();
     world.gameOver = false;
@@ -190,10 +195,19 @@ function closeHelpScreen() {
 function toggleTouchOption() {
     userIsOnMobileDevice = !userIsOnMobileDevice;
     if (helpScreenMode) showHelpScreen();
-    if (world && userIsOnMobileDevice && !world.gameOver) show('key-panel-top', 'key-panel-bottom');
-    if (world && !userIsOnMobileDevice) hide('key-panel-top', 'key-panel-bottom');
+    toggleTouchButtons();
     if (!world) setStartScreen();
     else getId('screen-text-small').innerHTML = screenTextSmallHTML();
+}
+
+function toggleTouchButtons() {
+    if (world && userIsOnMobileDevice && !world.gameOver) show('key-panel-top', 'key-panel-bottom'); // and add margin-left to .btn-toggle-touch
+    if (world && !userIsOnMobileDevice) hide('key-panel-top', 'key-panel-bottom');
+}
+
+function toggleControlHelp() {
+    if (userIsOnMobileDevice) hide('control-help');
+    else show('control-help');
 }
 
 /* --- ---responsiveness & full screen mode --- --- */
@@ -275,7 +289,7 @@ function setFullHeightScreen() {
  * adapts HTML view
  */
 function closeFullScreen() {
-    if (window.innerWidth >= canvasWidth && window.innerHeight >= canvasHeight ) {
+    if (window.innerWidth >= canvasWidth && window.innerHeight >= canvasHeight) {
         root.style.setProperty('--canvasWidth', canvasWidth + 'px');
         root.style.setProperty('--canvasHeight', canvasHeight + 'px');
     }
@@ -288,19 +302,24 @@ function closeFullScreen() {
  */
 function toggleFullScreen() {
 
-    if (!document.fullscreenElement && document.documentElement.requestFullscreen) //fullScreenMode set in set..FullScreen() 
-    document.documentElement.requestFullscreen().then(() => console.log('open fullscreen')).catch(err => console.log(err));
+    if (!document.fullscreenElement && document.documentElement.requestFullscreen) { //fullScreenMode set in set..FullScreen() 
+        document.documentElement.requestFullscreen().then(() => console.log('open fullscreen')).catch(err => console.log(err));
+    }
 
     else if (document.fullscreenElement) {
         document.exitFullscreen().then(() => console.log('close fullscreen')).catch(err => console.log(err));
     }
-    
-    if (!fullScreenMode && wideScreenAspectRatio()) setFullHeightScreen();
-    else if (!fullScreenMode) setFullWidthScreen();
-    else if (fullScreenMode && window.innerWidth > 720) closeFullScreen();
+    setFullScreenView();
     
     console.log(fullScreenMode);
 
+}
+
+function setFullScreenView() {
+    if (!fullScreenMode && wideScreenAspectRatio()) setFullHeightScreen();
+    else if (!fullScreenMode) setFullWidthScreen();
+    else if (fullScreenMode && window.innerWidth > 720) closeFullScreen();
+    toggleTouchButtons();
 }
 
 /**
