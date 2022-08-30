@@ -11,10 +11,9 @@ class Character extends MovableObject {
     imgHeight = this.height*0.55;
 
     groundLevelY = 220;
-    speedX = 4;//1.5;
-    jumpHeight = 28;
+    speedX;
     
-    animationFPS = 35; //25;
+    animationFPS = 25; //35;
     animationFrameInterval = 1000/this.animationFPS;
     animationFrameTimer = 0;
     
@@ -179,7 +178,7 @@ class Character extends MovableObject {
      * @returns {boolean}
      */
     isHittingEnemy(enemy) {
-        return (this.isColliding(enemy) && !this.isHurt() && !this.isJumpingOn(enemy) && !enemy.isDead()); // because dead enemies don't get removed immediately (for visual effects)
+        return (this.isColliding(enemy) && !this.isHurt() && !this.isJumpingOn(enemy) && !enemy.isDead()); // check death: because dead enemies don't get removed immediately (for visual effects)
     }
 
     /**

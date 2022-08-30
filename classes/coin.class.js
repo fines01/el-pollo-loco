@@ -17,7 +17,7 @@ class Coin extends MovableObject {
     constructor(levelEndX){
         super();
         this.x = 300 + Math.random() * (levelEndX - 400);
-        this.y = 50 + Math.random() * 275;
+        this.y = 70 + Math.random() * 275;
         this.loadImage(this.IMAGE_COIN);
         this.checkHitarea();
         this.collectSound = new Audio('audio/coin_collect.wav');

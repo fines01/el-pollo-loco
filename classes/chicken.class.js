@@ -21,7 +21,7 @@ class Chicken extends Enemy {
         this.x = 400 + Math.random() * (levelEndX-400);
         this.y = 340 - Math.random() * 9; 
         this.groundLevelY = this.y;
-        this.speedX = 1 + Math.random() * 3 + this.speedModifier;
+        this.speedX = 1 + Math.random() * 3;
         this.jumpHeight = Math.random() * 7;
     }
 

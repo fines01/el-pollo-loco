@@ -73,13 +73,12 @@ class MovableObject extends DrawableObject {
 
     /**
      * Applies a simple gravitation animation 
-     * @todo maybe rename speedY because it sounds stupid.
+     * @todo maybe rename speedY, acc
      */
     applyGravity() {           
             if (this.isAboveGround() || this.speedY > 0) { 
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
-                // if on ground again: play landing sound
             } 
             else {  
                 this.y = this.groundLevelY;
@@ -98,7 +97,6 @@ class MovableObject extends DrawableObject {
     }
 
     /**
-     * @todo rename prop 'speedY'?
      * initializes jump start by assigning a positive number to the speedY property, 
      * plays jumping sound (if object has one assigned)
      */

@@ -13,7 +13,7 @@ class Enemy extends MovableObject {
         super();
         this.hurtSound.playbackRate = 1.5;
         this.setVolume();
-        this.speedModifier = (levelCounter - 1) * 0.4; // todo change speed modifier 
+        this.speedModifier = (levelCounter - 1) * 0.4; //
     }
 
      /**
