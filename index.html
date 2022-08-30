@@ -37,7 +37,9 @@
     <!-- <div id="bg-overlay" class=""></div> -->
     <div id="screen-frame" class="">
         <h1>El Pollo Loco</h1>
-        <input type="range" id="volume-slider" onchange="adjustVolume()" value="80">
+        <div class="volume-container">
+            <img src="img/icons/audio-remove-24-yellow.ico" alt="volume down"><input type="range" id="volume-slider" onchange="adjustVolume()" value="80"><img src="img/icons/audio-add-24-yellow.ico" alt="volume up">
+        </div>
         <canvas id="canvas" class="screen d-none"></canvas>
         <h2 id="screen-text-big"></h2>
         <h4 id="screen-text-small" class="d-none" onclick="restartGame()">Press Enter to restart</h4>
